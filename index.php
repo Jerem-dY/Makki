@@ -25,7 +25,7 @@ $uri = $_SERVER['REQUEST_URI'];
 
 $request = $url_parser->parse_uri($uri);
 
-if ($request->code != 200) {
+if ($request['code'] != 200) {
 	http_response_code(404);
 	exit;
 }
@@ -89,15 +89,29 @@ if ($method == 'GET') {
 
 				// On adapte les attributs de la page afin de permettre au navigateur de formuler la bonne requête :
 
+				// On adapte la mise en page à la langue (sens de lecture et code de langue)
+				foreach($html->find('html') as $e)
+					$e->dir = $request['lang']['dir'];
+					$e->lang = $request['lang']['code'];
+
 				// Images
 				foreach($html->find('img') as $e)
-    				$e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$request['lang'].'/'.$e->src;
+    				$e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$request['lang']['code'].'/'.$e->src;
 				
-				foreach($html->find('link') as $e)
+				foreach($html->find('link') as $e) {
 
-				// Feuilles de style
-				if ($e->rel == "stylesheet") {
-					$e->href = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$request['lang'].'/styles/'.$e->href;
+					// Feuilles de style
+					if ($e->rel == "stylesheet") {
+						$e->href = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$request['lang']['code'].'/styles/'.$e->href;
+					}
+				}
+
+				
+
+				// Test requête
+				foreach($html->find('p') as $e)
+				if ($e->class == "textetitre") {
+					$e->outertext = $request['target'];
 				}
 
 				echo $html;

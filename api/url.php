@@ -24,10 +24,7 @@ class URLParser {
             }
         }
 
-        $this->langs = array("fr", "ar"); //TODO: A remplacer par une requête à la DB
-
-        //print_r($this->pages);
-        //print_r($this->langs); 
+        $this->langs = array("fr" => array("dir" => "ltr", "code" => "fr"), "ar" => array("dir" => "rtl", "code" => "ar")); //TODO: A remplacer par une requête à la DB
     }
 
     /**
@@ -69,12 +66,12 @@ class URLParser {
         }
 
         //TODO: remplacer par une requête à la DB pour récupérer les codes de toutes les langues gérées
-        if (!in_array($elements[0], $this->langs)) {
+        if (!isset($this->langs[$elements[0]])) {
             echo "BAD LANG: " . $elements[0];
             $output['code'] = 404;
         }
         else {
-            $output['lang'] = $elements[0];
+            $output['lang'] = $this->langs[$elements[0]];
         }
 
         // Exemples d'urls valides :
@@ -98,7 +95,7 @@ class URLParser {
 
             if ($size > 2) {
         
-                $output['target'] = $elements[2];
+                $output['target'] = urldecode($elements[2]);
 
                 // On accept un seul '/' traînant et pas d'autres éléments
                 // fr/lexique/أباجُور/		✅
