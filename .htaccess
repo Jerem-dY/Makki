@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteRule .* index.php
+RewriteRule .* - [E=HTTP_CONTENT_TYPE:%{HTTP:Content-Type},L]
+<RequireAny>
+    Require method DELETE GET POST PUT OPTIONS
+</RequireAny>
