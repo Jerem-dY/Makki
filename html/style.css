@@ -273,7 +273,7 @@ button {
 
 }
 
-.themtq1 {
+.themtq1, .themtq2, .themtq3 {
 
     background-color: #ead4c1;
     width: 280px;  
@@ -286,30 +286,47 @@ button {
 
 }
 
+.resultats, .resultats_donnees {
 
-.themtq2 {
-
-    background-color: #ead4c1;
-    width: 280px;    
-    border-radius: 10px;
+    width: 600px;  
     margin: 15px;
     padding: 6px;
-    border-width: 1px;
-    border-style:solid;
-    border-color: #301703;
+    background-color: #ead4c1;
+
+}
+
+.similaires {
+
+    background-color: #ead4c1;
+    width: 280px;
+    margin: 15px;
+    padding: 6px;
+    
+
+}
+
+.similaires_donnees {
+
+    background-color: #ead4c1;
+    width: 280px;
+    margin: 15px;
+    padding: 6px;
 
 }
 
 
-.themtq3 {
 
-    background-color: #ead4c1;
-    width: 280px;  
-    border-radius: 10px;
-    margin: 15px;
-    padding: 6px;
-    border-width: 1px;
-    border-style:solid;
-    border-color: #301703;
+.mots_titres {
 
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.mots_donnees {
+
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    
 }
