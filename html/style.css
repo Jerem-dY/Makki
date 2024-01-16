@@ -260,22 +260,23 @@ button {
 
 .thematiqbloc {
 
-    margin-left: auto;
-    margin-right: auto;
     background-color: #f1e5db;
     padding: 10px;
     width: 979px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     flex: 1;
     text-align:center;
+    background-color: red;
+
 
 }
 
 .themtq1 {
 
     background-color: #ead4c1;
-    left: 0;
     width: 280px;  
-    display:inline-block;
     border-radius: 10px;
     margin: 15px;
     padding: 6px;
@@ -289,9 +290,7 @@ button {
 .themtq2 {
 
     background-color: #ead4c1;
-    margin:auto;
     width: 280px;    
-    display:inline-block;
     border-radius: 10px;
     margin: 15px;
     padding: 6px;
@@ -305,9 +304,7 @@ button {
 .themtq3 {
 
     background-color: #ead4c1;
-    right: 0;
     width: 280px;  
-    display:inline-block;
     border-radius: 10px;
     margin: 15px;
     padding: 6px;
