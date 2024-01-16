@@ -1,6 +1,8 @@
 <?php 
 
-class URLParser {
+require("tools.php");
+
+class RequestParser {
 
     function __construct(string $config_file) {
 
@@ -29,8 +31,12 @@ class URLParser {
 
     /**
      * Cette méthode traite une uri et renvoie un tableau associatif des données qu'elle contient.
+     * 
+     * @param string $uri L'URI à traiter
+     * 
+     * @return array Un tableau associatif donnée => valeur dans l'URI 
      */
-    public function parse_uri(string $uri) {
+    public function parse_uri(string $uri): array {
 
         $output = array();
 
@@ -115,6 +121,57 @@ class URLParser {
         }
 
         return $output;
+    }
+
+    /**
+     * Méthode permettant de récupérer les types MIME d'un champ `Accept`.
+     * 
+     * @param string $str La chaîne de caractères à traiter
+     * 
+     * @return array Les types acceptés par le client dans l'ordre de préférence
+     */
+    function parse_mime(string $str): array {
+
+        $output = array();
+        $inter = array();
+
+        // On découpe la chaîne d'entrée :
+        // text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+        // devient array("text/html", "application/xhtml+xml", "application/xml;q=0.9", "image/avif", "image/webp", "*/*;q=0.8")
+        $mimes = explode(',', $str);
+    
+        // Ensuite, on redécoupe chaque type pour extraire son coefficient q=x, permettant de définir un ordre de préférence (si pas présent=1.0)
+        foreach($mimes as $m) {
+            $sep = explode(";q=", $m);
+    
+            if (sizeof($sep) < 2) {
+                array_push($sep, 1.0);
+            }
+    
+            array_push($inter, $sep);
+        }
+    
+        // On trie les types par rapport à leur coefficient (ordre décroissant)
+        usort($inter, "cmp_sec");
+    
+        // On ne récupère que les éléments textes, mais dans le bon ordre
+        foreach($inter as $item) {
+            array_push($output, $item[0]);
+        }
+    
+        return $output;
+    }
+
+    /**
+     * Méthode permettant de récupérer les langues d'un champ `Accept-Language` (alias de `parse_mime()` !).
+     * 
+     * @param string $str La chaîne de caractères à traiter
+     * 
+     * @return array Les langues acceptés par le client dans l'ordre de préférence
+     */
+    function parse_lang(string $str): array {
+
+        return $this->parse_mime($str);
     }
 }
 
