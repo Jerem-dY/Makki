@@ -51,16 +51,16 @@ html, body {
     vertical-align:middle;
     color: #301703;
     text-align: justify;
-    font-size:13px;
+    font-size:15px;
 
 }
 
 .textetitre {
 
     vertical-align:middle;
-    color: #191970;
+    color: #301703;
     text-align: justify; 
-    font-size:20px;
+    font-size:23px;
     font-weight: bold;
 
 }
@@ -76,6 +76,8 @@ html, body {
 
 .logo {
 	
+  display: flex;
+	justify-content: center;
 	width: 110px;
 	height: 110px;
   margin-left: 20px;
@@ -252,7 +254,8 @@ footer {
     padding: 6px;
     border-width: 1px;
     border-style:solid;
-    border-color: #301703;
+    border-color: #7d3c08;
+
 
 }
 
@@ -382,6 +385,14 @@ input:placeholder-shown {
 .open {
   @include animation(slide 1s);
   display: block;
+}
+
+.thematiqueseule {
+
+  margin: 15px;
+  padding: 6px;
+  background-color: #ead4c1;
+
 }
 
 
