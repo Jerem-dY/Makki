@@ -58,11 +58,10 @@ html, body {
 .textetitre {
 
     vertical-align:middle;
-    color: #301703;
+    color: #191970;
     text-align: justify; 
     font-size:20px;
     font-weight: bold;
-
 
 }
 
@@ -79,7 +78,8 @@ html, body {
 	
 	width: 110px;
 	height: 110px;
-    margin-left: 20px;
+  margin-left: 20px;
+  filter: drop-shadow(1px 3px 3px #301703c1);
 
 }
 
@@ -102,7 +102,7 @@ header {
     radial-gradient(var(--_s) 100%,var(--_g)) calc(var(--s)/2) calc(3*var(--s)/4),
     radial-gradient(var(--_s) 0   ,var(--_g)) calc(var(--s)/2) 0,
     radial-gradient(var(--_s) 0   ,var(--_g)) 0                calc(3*var(--s)/4),
-    repeating-linear-gradient(90deg,#ead4c1 calc(25%/-6) calc(25%/6),#ead4c1 0 calc(25%/2));
+    repeating-linear-gradient(90deg,#B0C4DE calc(25%/-6) calc(25%/6),#B0C4DE 0 calc(25%/2));
     background-size: var(--s) calc(3*var(--s)/2);
     animation: g4  50s infinite linear;
       }
@@ -231,33 +231,6 @@ footer {
 
 }
 
-button {
-
-    font-family: 'El Messiri', sans-serif;
-    font-size: 12px;         
-    background-color: #f5e7db;
-    border-radius: 8px;
-    border-style:solid;
-    border-color: #301703;
-    border-width: 1px;
-    text-align: center;
-    width: 70px;
-    height:30px;
-    cursor: pointer;
-    float: right;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-
-}
-
-.connexion button:hover {
-
-    background-color: #fdeee2;
-    color: #7d3c08;
-
-}
-
 .thematiqbloc {
 
     background-color: #f1e5db;
@@ -268,8 +241,6 @@ button {
     flex-wrap: wrap;
     flex: 1;
     text-align:center;
-    background-color: red;
-
 
 }
 
@@ -302,7 +273,6 @@ button {
     margin: 15px;
     padding: 6px;
     
-
 }
 
 .similaires_donnees {
@@ -313,8 +283,6 @@ button {
     padding: 6px;
 
 }
-
-
 
 .mots_titres {
 
@@ -330,3 +298,92 @@ button {
     text-align: center;
     
 }
+
+@import "bourbon";
+
+.login-wrapper {
+  width: 160px;
+  margin: 40px auto 0;
+}
+
+button {
+  padding: 8px 15px;
+  width: 160px;
+  border: 0;
+  outline: 0;
+  top: 15px;
+  right: 20px;
+  width: 160px;
+  position:absolute;
+  color: #fff;
+  background: #301703;
+  font-size: 14px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  box-shadow: 0 4px 0 darken(#301703, 5%);
+  font-family: 'El Messiri', sans-serif;
+  &:active {
+    margin-top: 2px;
+    box-shadow: 0 2px 0 darken(#301703, 5%);
+  }
+}
+
+.login-container {
+  position: absolute;
+  right: 20px;
+  width: 160px;
+  top:45px;
+}
+
+input:placeholder-shown {
+  font-style: italic;
+}
+
+.login-form {
+  display: none;
+  padding: 20px;
+  margin-top: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background: #f1e5db;
+  box-shadow: 0 4px 0 darken(#ddd, 5%);
+  input {
+    width: 100%;
+    margin-bottom: 10px;
+    border: 0;
+    outline: 0;
+    background: #B0C4DE;
+    font-weight: 300;
+    border-radius: 2px;
+    font-family: 'El Messiri', sans-serif;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  input[type="submit"] {
+    width: 103%;
+    color: #ffF;
+    background: #301703;
+    font-style: normal;
+    box-shadow: 0 4px 0 darken(#301703, 5%);
+  }
+}
+
+@include keyframes(slide) {
+  0% {
+    opacity: 0;
+    @include transform(translateY(20px));
+  }
+  100% {
+    opacity: 1;
+    @include transform(translateY(0));
+  }
+}
+
+.open {
+  @include animation(slide 1s);
+  display: block;
+}
+
+
+
