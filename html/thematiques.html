@@ -4,6 +4,8 @@
 		<meta charset="UTF-8" />
 		<title>Lexique libanais de Makki</title>
         <link rel="stylesheet" href="style.css" />
+        <script src="scripts/jquery.js"></script>
+        <link rel="stylesheet" href="style.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
@@ -12,12 +14,21 @@
     <header>
         <div class="titre">
             <h1>Lexique libanais de Makki</h1>
-            <img class ="logo" src="images/logo2.png"/>                       
+            <img class ="logo" src="images/logo.png"/>                       
         </div>
-      
-        <div class="connexion">
-            <button href="#">Connexion</button>
+
+        <div class="login-wrapper">
+            <button id="login-button">Connexion</button>
+            <div class="login-container">
+              <form class="login-form">
+                <input type="text" placeholder="Nom d'utilisateur" required>
+                <input type="password" placeholder="Mot de passe" required>
+                  <input type="submit" value="Se connecter" />
+              </form>
+            </div>
         </div>
+    
+        <script src="scripts/bouton.js"></script>
     </header>
 
     <body>
@@ -76,8 +87,35 @@
                        texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ...  
                         ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte
                     </p>
+                </div>               
+            </div>
+
+            <div class ="thematiqbloc"> 
+
+                <div class="themtq1"><p>Musique ~</p></div>
+                <div class="themtq2"><p>Médecine ~</p></div>
+                <div class="themtq3"><p>Autre thématique ~</p></div>
+            </br>
+                <div class="themtq1">
+                    <p> 
+                        texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte 
+                        ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte 
+                     </p>
                 </div>
 
+                <div class="themtq2">
+                    <p> 
+                        texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ...  
+                        ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte                        
+                    </p>
+                </div>
+
+                <div class="themtq3">
+                    <p>
+                       texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ...  
+                        ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte ... ... texte
+                    </p>
+                </div>               
             </div>
     
         </div>
