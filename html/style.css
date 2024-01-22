@@ -24,6 +24,11 @@ html, body {
       
 }
 
+@font-face {
+  font-family: 'El Messiri';
+  src: url("./font/ElMessiri-VariableFont_wght.ttf");
+}
+
 .content {
 
     margin-left: auto;
