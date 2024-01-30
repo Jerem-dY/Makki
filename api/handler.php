@@ -1,11 +1,12 @@
 <?php 
 
 require("parser.php");
+require("db.php");
 require("simple_html_dom/simple_html_dom.php");
 
 class RequestHandler {
 
-    function __construct(string $uri, string $request_config) {
+    function __construct(string $uri, string $request_config, string $headers) {
 
         $parser = new RequestParser($request_config);
 
@@ -13,18 +14,56 @@ class RequestHandler {
         $this->header       = array();
         $this->method       = $_SERVER['REQUEST_METHOD'];
         $this->mime         = $parser->parse_mime($_SERVER['HTTP_ACCEPT']);
-        $this->lang         = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $this->acc_lang     = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $this->lang         = array();
         $this->request      = $parser->parse_uri($uri);
         $this->content_type = "text/html";
+        $this->there        = pathinfo($_SERVER['PHP_SELF'])['dirname'];
+        $this->db           = new DB("config/db.json");
 
-        if ($this->request['code'] != 200) {
-            http_response_code($this->request['code']);
+        if (sizeof($this->request) == 0) {
+            http_response_code(404);
             exit;
         }
 
-        if ($this->method == 'GET') {
+        // On s'occupe de charger les headers par défaut
+        $headers = file_get_contents($headers);
 
-            // Si aucune page exacte est précisée ('accueil.html' par exemple) cela signifie que c'est une ressource type image/css/etc. (voir url.json)
+        if ($headers != false) {
+            $data = json_decode($headers, true);
+
+            foreach(array_keys($data) as $h) {
+                $this->add_header($h, $data[$h]);
+            }
+        }
+
+        /* Négociation de langue */
+        $literals = $this->db->query("select distinct ?literal {?s ?p ?literal filter isLiteral(?literal)}"); # On sélectionne toutes les valeurs littérales
+        $lang_available = array();
+
+        foreach($literals['result']['rows'] as $l) {
+            if (isset($l['literal lang'])) {
+                $lang_available[$l['literal lang']] = 1;
+            }
+        }
+
+        $lang_available = array_keys($lang_available);
+
+        // Ordre de priorité : langue dans l'URI puis langues dans Accept-Language puis langue par défaut (le français)
+        if(isset($this->request['lang']) and in_array($this->request['lang'], $lang_available)) {
+            array_push($this->lang, $this->request['lang']);
+        }
+        foreach($this->acc_lang as $l) { # Langues dans l'en-tête HTTP 'Accept-Language'
+            if (in_array($lang_available, $l)) {
+                array_push($this->lang, $l);
+            }
+        }
+
+        array_push($this->lang, "fr"); # Langue par défaut
+
+        /*if ($this->method == 'GET') {
+
+            // Si aucune page exacte n'est précisée ('accueil.html' par exemple) cela signifie que c'est une ressource type image/css/etc. (voir url.json)
             if ($this->request['page'] == "") {
                 
                 if ($this->request['type'] == 'images') {
@@ -102,14 +141,6 @@ class RequestHandler {
                             }
                         }
         
-                        
-        
-                        /* Test requête
-                        foreach($html->find('p') as $e)
-                        if ($e->class == "textetitre") {
-                            $e->outertext = $request['target'];
-                        }*/
-        
                         $this->output .= $html;
                     }
                     else {
@@ -133,7 +164,7 @@ class RequestHandler {
         }
         else {
             echo "WUT?!";
-        }
+        }*/
 
     }
 

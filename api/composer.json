@@ -1,0 +1,6 @@
+{
+    "require": {
+        "semsol/arc2": "2.5.1",
+		"paillechat/php-enum" : "^2.0"
+    }
+}

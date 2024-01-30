@@ -1,6 +1,7 @@
 <?php 
 
 require("tools.php");
+require_once("vendor/autoload.php");
 
 class RequestParser {
 
@@ -44,10 +45,10 @@ class RequestParser {
         // cela permet de faire la différence entre les deux et de récupérer le chemin d'accès à la ressource seul,
         // Permettant ainsi de ne pas nécessiter de connaissance a priori du nom du serveur (pratique pour migrer le site)
         // Ex : 
-        // uri = 		"i3l.univ-grenoble-alpes.fr/~makki/fr/lexique"
+        // uri = 		"i3l.univ-grenoble-alpes.fr/~makki/lexique"
         // PHP_SELF = 	"i3l.univ-grenoble-alpes.fr/~makki/index.php"
         // On récupère `dirname` de PHP_SELF, soit "i3l.univ-grenoble-alpes.fr/~makki"
-        // En faisant la différence, on obtient : "/fr/lexique"
+        // En faisant la différence, on obtient : "/lexique"
         $php_loc = pathinfo($_SERVER['PHP_SELF'])['dirname'];
 
         $r = substr($uri, strlen($php_loc));
@@ -56,68 +57,18 @@ class RequestParser {
         $query_s = parse_url($r, PHP_URL_QUERY);
         $path = parse_url($r, PHP_URL_PATH);
 
+        // On récupère les champs 'lang', 'collection' et 'target' depuis 
+        preg_match("{^\/(?>(?P<lang>[\w]{2})\/|)(?P<collection>[\w]+)(?>(?>\/(?P<target>[\w. +_]+))|[\w]+|)}", $path, $output);
+
         // Si une query a été fournie, on la récupère sous la forme d'un tableau associatif
         if ($query_s != null) {
-            $output['query'] = array();
-            parse_str($query_s, $output['query']);
+            $output['query'] = $this->parse_query($query_s);
         }
 
-        // On récupère les éléments séparés par un slash '/', et on se débarasse du premier élément
-        $elements = explode("/", $path);
-        array_shift($elements);
-        $size = sizeof($elements);
-
-        if ($size == 0) {
-            $output['code'] = 404;
-        }
-
-        //TODO: remplacer par une requête à la DB pour récupérer les codes de toutes les langues gérées
-        if (!isset($this->langs[$elements[0]])) {
-            echo "BAD LANG: " . $elements[0];
-            $output['code'] = 404;
-        }
-        else {
-            $output['lang'] = $this->langs[$elements[0]];
-        }
-
-        // Exemples d'urls valides :
-        // [lang]/[page]/[target]?[query]
-        // fr/lexique/أباجُور/
-        // fr/theme/commun
-        // fr/images/bebe.png
-        // fr/scripts/jquery.js
-        // fr/styles/style.css
-
-        if ($size > 1) {
-
-            if (isset($this->pages[$elements[1]])) {
-                $output['page'] = $this->pages[$elements[1]];
-                $output['type'] = $elements[1];
+        foreach(array_keys($output) as $key) {
+            if ($output[$key] == '') {
+                unset($output[$key]);
             }
-            else {
-                echo "BAD PAGE: " . $elements[1];
-                $output['code'] = 404;
-            }
-
-            if ($size > 2) {
-        
-                $output['target'] = urldecode($elements[2]);
-
-                // On accept un seul '/' traînant et pas d'autres éléments
-                // fr/lexique/أباجُور/		✅
-                // fr/lexique/أباجُور		✅
-                // fr/lexique/أباجُور//		❌
-                // fr/lexique/أباجُور/a/	❌
-                // fr/lexique/أباجُور/a/b	❌
-                if ($size == 4 && $elements[3] != '' || $size > 4) {
-                    echo "BAD TARGET: " . $elements[3];
-                    $output['code'] = 404;
-                }
-            }
-        }
-
-        if(!isset($output['code'])) {
-            $output['code'] = 200;
         }
 
         return $output;
@@ -130,7 +81,7 @@ class RequestParser {
      * 
      * @return array Les types acceptés par le client dans l'ordre de préférence
      */
-    function parse_mime(string $str): array {
+    public function parse_mime(string $str): array {
 
         $output = array();
         $inter = array();
@@ -143,6 +94,7 @@ class RequestParser {
         // Ensuite, on redécoupe chaque type pour extraire son coefficient q=x, permettant de définir un ordre de préférence (si pas présent=1.0)
         foreach($mimes as $m) {
             $sep = explode(";q=", $m);
+            $sep[0] = explode("/", $sep[0]);
     
             if (sizeof($sep) < 2) {
                 array_push($sep, 1.0);
@@ -169,10 +121,51 @@ class RequestParser {
      * 
      * @return array Les langues acceptés par le client dans l'ordre de préférence
      */
-    function parse_lang(string $str): array {
+    public function parse_lang(string $str): array {
 
         return $this->parse_mime($str);
     }
+
+    /**
+     * Méthode permettant de récupérer les variables d'une requête de la façon la plus répandue (càd stocker dans un tableau quand une variable est présente plusieurs fois).
+     * Honteusement volé sur https://www.php.net/manual/en/function.parse-str.php#76792 pour gagner du temps.
+     * 
+     * @param string $str La chaîne de caractères à traiter
+     * 
+     * @return array Un tableau associatif liant un nom de variable à sa ou ses valeurs
+     */
+    public function parse_query(string $str): array {
+
+        $output = array();
+      
+        // On découpe la chaîne pour récupérer chaque déclaration
+        $pairs = explode('&', $str);
+      
+        foreach ($pairs as $i) {
+
+          // On récupère le nom et la valeur
+          list($name,$value) = explode('=', $i, 2);
+          
+          // Si la variable existe déjà, on la transforme en tableau pour accueillir la nouvelle
+          if( isset($output[$name]) ) {
+
+            if( is_array($output[$name]) ) {
+              $output[$name][] = $value;
+            }
+            else {
+              $output[$name] = array($output[$name], $value);
+            }
+          }
+          
+          // Si elle n'existe pas, on ajoute simplement le couple clé => valeur
+          else {
+            $output[$name] = $value;
+          }
+        }
+      
+        return $output;
+      }
+
 }
 
 ?>

@@ -2,12 +2,11 @@
 
 require("api/handler.php");
 
-header("Access-Control-Allow-Origin: *");
-
 $request_config = "config/url.json";
 $uri = $_SERVER['REQUEST_URI'];
+$headers = "config/headers.json";
 
-$handler = new RequestHandler($uri, $request_config);
+$handler = new RequestHandler($uri, $request_config, $headers);
 $handler->send_header();
 
 if ($handler->output != '') {
