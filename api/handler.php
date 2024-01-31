@@ -37,7 +37,11 @@ class RequestHandler {
             }
         }
 
-        /* Négociation de langue */
+        /** 
+         * NEGOCIATION DE LANGUE 
+         */
+
+        // On commence par récupérer les langues disponibles
         $literals = $this->db->query("select distinct ?literal {?s ?p ?literal filter isLiteral(?literal)}"); # On sélectionne toutes les valeurs littérales
         $lang_available = array();
 
@@ -61,96 +65,137 @@ class RequestHandler {
 
         array_push($this->lang, "fr"); # Langue par défaut
 
-        /*if ($this->method == 'GET') {
+        /**
+         * GESTION DES TYPES DE REQUÊTE
+         */
+        if ($this->method == 'GET') {
 
-            // Si aucune page exacte n'est précisée ('accueil.html' par exemple) cela signifie que c'est une ressource type image/css/etc. (voir url.json)
-            if ($this->request['page'] == "") {
                 
-                if ($this->request['type'] == 'images') {
-        
-                    $img_path = "html/images/".$this->request['target'];
-        
-                    if (file_exists($img_path)) {
-                        
-                        $this->add_header("Content-Type", image_type_to_mime_type(exif_imagetype($img_path)));
-                        $this->add_header("Content-Length", filesize($img_path));
-        
-                        $res = file_get_contents($img_path);
-        
-                        if ($res == false) {
-                            echo "ERROR";
-                        }
-                        else {
-                            $this->output .= $res;
-                        }
-                        
+            if (isset($this->request['collection']) && $this->request['collection'] == 'images') {
+    
+                $img_path = "html/images/".$this->request['target'];
+    
+                if (file_exists($img_path)) {
+                    
+                    $this->add_header("Content-Type", image_type_to_mime_type(exif_imagetype($img_path)));
+                    $this->add_header("Content-Length", filesize($img_path));
+    
+                    $res = file_get_contents($img_path);
+    
+                    if ($res == false) {
+                        echo "ERROR";
                     }
                     else {
-                        http_response_code(404);
+                        $this->output .= $res;
                     }
                     
-                }
-                else if ($this->request['type'] == 'styles') {
-        
-                    $css_path = "html/".$this->request['target'];
-        
-                    if (file_exists($css_path)) {
-                        
-                        $this->add_header("Content-Type", "text/css");
-                        $this->add_header("Content-Length", filesize($css_path));
-        
-                        $res = file_get_contents($css_path);
-        
-                        if ($res == false) {
-                            echo "ERROR";
-                        }
-                        else {
-                            $this->output .= $res;
-                        }
-                        
-                    }
-                    else {
-                        http_response_code(404);
-                    }
-                    
-                }
-            }
-            else {
-                if ($this->content_type == "text/html") {
-                    if (file_exists("html/".$this->request['page'])) {
-        
-                        $html = file_get_html("html/".$this->request['page']);
-        
-                        // On adapte les attributs de la page afin de permettre au navigateur de formuler la bonne requête :
-        
-                        // On adapte la mise en page à la langue (sens de lecture et code de langue)
-                        //TODO: penser à étudier le fait que même en français, certains mots restent en arabe (voir s'il est utile de changer le sens de lecture ponctuellement)
-                        foreach($html->find('html') as $e)
-                            $e->dir = $this->request['lang']['dir'];
-                            $e->lang = $this->request['lang']['code'];
-        
-                        // Images
-                        foreach($html->find('img') as $e)
-                            $e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$this->request['lang']['code'].'/'.$e->src;
-                        
-                        foreach($html->find('link') as $e) {
-        
-                            // Feuilles de style
-                            if ($e->rel == "stylesheet") {
-                                $e->href = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$this->request['lang']['code'].'/styles/'.$e->href;
-                            }
-                        }
-        
-                        $this->output .= $html;
-                    }
-                    else {
-                        echo "NO SUCH PAGE BITCH";
-                    }
-                
                 }
                 else {
-                    echo $this->content_type;
+                    http_response_code(404);
                 }
+            }  
+            else if (isset($this->request['collection']) &&  $this->request['collection'] == 'styles') {
+    
+                $css_path = "html/".$this->request['target'];
+    
+                if (file_exists($css_path)) {
+                    
+                    $ext = pathinfo($css_path, PATHINFO_EXTENSION);
+
+                    if ($ext == "css") {
+                        $mime = "text/css";
+                    }
+                    else if ($ext == "ttf") {
+                        $mime = "font/ttf";
+                    }
+
+                    $this->add_header("Content-Type", $mime);
+                    $this->add_header("Content-Length", filesize($css_path));
+    
+                    $res = file_get_contents($css_path);
+    
+                    if ($res == false) {
+                        echo "ERROR";
+                    }
+                    else {
+                        $this->output .= $res;
+                    }
+
+                    
+                }
+                else {
+                    http_response_code(404);
+                }
+                
+            }
+            else if (isset($this->request['collection']) &&  $this->request['collection'] == 'scripts') {
+    
+                $scr_path = "html/scripts/".$this->request['target'];
+    
+                if (file_exists($scr_path)) {
+                    
+                    $this->add_header("Content-Type", "application/javascript");
+                    $this->add_header("Content-Length", filesize($scr_path));
+    
+                    $res = file_get_contents($scr_path);
+    
+                    if ($res == false) {
+                        echo "ERROR";
+                    }
+                    else {
+                        $this->output .= $res;
+                    }
+                    
+                }
+                else {
+                    http_response_code(404);
+                }
+                
+            }
+            else {
+                # Remplacer l'accès à une page pré-faite par un générateur de page qui correspond
+                if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
+                    if (isset($this->request['target'])) {
+                        $page = "mots.html";
+                    }
+                    else if (isset($this->request['query'])) {
+                        $page = "recherche.html";
+                    }
+                    else {
+                        $page = "accueil.html";
+                    }
+                }
+                else {
+                    $page = "accueil.html";
+                }
+    
+                $html = file_get_html("html/".$page);
+
+                // On adapte les attributs de la page afin de permettre au navigateur de formuler la bonne requête :
+
+                // On adapte la mise en page à la langue (sens de lecture et code de langue)
+                //TODO: penser à étudier le fait que même en français, certains mots restent en arabe (voir s'il est utile de changer le sens de lecture ponctuellement)
+                foreach($html->find('html') as $e)
+                    #$e->dir = $this->request['lang']['dir'];
+                    $e->lang = $this->lang[0];
+
+                // Images
+                foreach($html->find('img') as $e)
+                    $e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$e->src;
+                
+                foreach($html->find('link') as $e) {
+
+                    // Feuilles de style
+                    if ($e->rel == "stylesheet") {
+                        $e->href = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/styles/'.$e->href;
+                    }
+                }
+                foreach($html->find('script') as $e) {
+                    // Scripts
+                    $e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$e->src;
+                }
+
+                $this->output .= $html;
             }
         }
         else if ($this->method == 'POST') {
@@ -164,7 +209,7 @@ class RequestHandler {
         }
         else {
             echo "WUT?!";
-        }*/
+        }
 
     }
 
