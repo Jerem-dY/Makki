@@ -18,7 +18,7 @@
                         <ul>
                             <li><a class="trad" id="themtq1" href="themtq1.html">Lexique commun <img class="commun" src="images/bebe.png"/></a></li>
                             <li><a class="trad" id="themtq2" href="themtq2.html">Faunes et Flores <img class="fleur" src="images/flores.png"/></a></li>
-                            <li><a class="trad" id="themtq3"class="arrondie" href="themtq3.html">Jeux enfants et adultes <img class="jeu" src="images/de.png"/></a></li>
+                            <li><a class="arrondie trad" id="themtq3" href="themtq3.html">Jeux enfants et adultes <img class="jeu" src="images/de.png"/></a></li>
                         </ul>
                     </li>
     
@@ -37,9 +37,38 @@
         
         <div class="content">
     
-            <p class="texte trad" id="contact">Pour contacter:
-            </p>
+            <div class="formulaire">
+                <p class="texte trad" id="contact">Pour contacter:</p>
+            </div>
 
+                <div class="wrapper"> 
+                    <h2>Nous contacter</h2> 
+
+                        <div class="input_field"> 
+                            <input type="text" placeholder="Votre prénom et nom" id="name" required> 
+                        </div> 
+
+                        <div class="input_field"> 
+                            <input type="text" placeholder="Sujet" id="sujet" required> 
+                        </div> 
+
+                        <div class="input_field"> 
+                            <input type="text" placeholder="Si relié à une Université mentionner ici" id="universite"> 
+                        </div> 
+
+                        <div class="input_field"> 
+                            <input type="text" placeholder="Votre email" id="email" required> 
+                        </div>
+
+                        <div class="input_field"> 
+                            <textarea placeholder="Votre message" id="message" required></textarea> 
+                        </div> 
+
+                        <div class="btn"> 
+                            <input type="submit"> 
+                        </div> 
+                </div> 
+            
         </div>
 
     </body>  
