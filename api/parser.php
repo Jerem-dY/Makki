@@ -5,29 +5,7 @@ require_once("vendor/autoload.php");
 
 class RequestParser {
 
-    function __construct(string $config_file) {
-
-        //TODO: ajouter au constructeur un paramètre 'db'
-
-        $str = file_get_contents($config_file);
-
-        if ($str == false) {
-            echo "No config file";
-            $this->config = array();
-        }
-        else {
-
-            $config = json_decode($str, true); 
-
-            if(isset($config["pages"])) {
-                $this->pages = $config["pages"];
-            }
-            else {
-                echo "No 'pages' configuration.";
-            }
-        }
-
-        $this->langs = array("fr" => array("dir" => "ltr", "code" => "fr"), "ar" => array("dir" => "rtl", "code" => "ar")); //TODO: A remplacer par une requête à la DB
+    function __construct() {
     }
 
     /**
@@ -37,7 +15,7 @@ class RequestParser {
      * 
      * @return array Un tableau associatif donnée => valeur dans l'URI 
      */
-    public function parse_uri(string $uri): array {
+    public function parse_uri(string $uri, string $server): array {
 
         $output = array();
 
@@ -49,9 +27,10 @@ class RequestParser {
         // PHP_SELF = 	"i3l.univ-grenoble-alpes.fr/~makki/index.php"
         // On récupère `dirname` de PHP_SELF, soit "i3l.univ-grenoble-alpes.fr/~makki"
         // En faisant la différence, on obtient : "/lexique"
-        $php_loc = pathinfo($_SERVER['PHP_SELF'])['dirname'];
 
-        $r = substr($uri, strlen($php_loc));
+
+        $r = substr($uri, strlen($server)-1); # Le `-1` permet d'inclure le '/' 
+
 
         // On récupère les champs de requête (recherche, etc.) et le chemin vers la ressource
         $query_s = parse_url($r, PHP_URL_QUERY);

@@ -1,12 +1,12 @@
 <?php 
 
-require("parser.php");
-require("db.php");
-require("simple_html_dom/simple_html_dom.php");
+require_once("parser.php");
+require_once("db.php");
+require_once("serializers/html.php");
 
 class RequestHandler {
 
-    function __construct(string $uri, string $request_config, string $headers) {
+    function __construct(string $uri, string $request_config, string $server, string $headers) {
 
         $parser = new RequestParser($request_config);
 
@@ -16,12 +16,13 @@ class RequestHandler {
         $this->mime         = $parser->parse_mime($_SERVER['HTTP_ACCEPT']);
         $this->acc_lang     = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
         $this->lang         = array();
-        $this->request      = $parser->parse_uri($uri);
+        $this->there        = $server;
+        $this->request      = $parser->parse_uri($uri, $this->there);
         $this->content_type = "text/html";
-        $this->there        = pathinfo($_SERVER['PHP_SELF'])['dirname'];
         $this->db           = new DB("config/db.json");
 
         if (sizeof($this->request) == 0) {
+            echo $uri;
             http_response_code(404);
             exit;
         }
@@ -91,6 +92,7 @@ class RequestHandler {
                     
                 }
                 else {
+                    echo $uri;
                     http_response_code(404);
                 }
             }  
@@ -124,6 +126,7 @@ class RequestHandler {
                     
                 }
                 else {
+                    echo $uri;
                     http_response_code(404);
                 }
                 
@@ -148,54 +151,33 @@ class RequestHandler {
                     
                 }
                 else {
+                    echo $uri;
                     http_response_code(404);
                 }
                 
             }
-            else {
+            else if (in_array(array('text', 'html'), $this->mime) || in_array(array('*', '*'), $this->mime)) {
                 # Remplacer l'accès à une page pré-faite par un générateur de page qui correspond
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
                     if (isset($this->request['target'])) {
-                        $page = "mots.html";
+                        $page = "mot";
                     }
                     else if (isset($this->request['query'])) {
-                        $page = "recherche.html";
+                        $page = "recherche";
                     }
                     else {
-                        $page = "accueil.html";
+                        $page = "accueil";
                     }
                 }
                 else {
-                    $page = "accueil.html";
+                    $page = "accueil";
                 }
     
-                $html = file_get_html("html/".$page);
-
-                // On adapte les attributs de la page afin de permettre au navigateur de formuler la bonne requête :
-
-                // On adapte la mise en page à la langue (sens de lecture et code de langue)
-                //TODO: penser à étudier le fait que même en français, certains mots restent en arabe (voir s'il est utile de changer le sens de lecture ponctuellement)
-                foreach($html->find('html') as $e)
-                    #$e->dir = $this->request['lang']['dir'];
-                    $e->lang = $this->lang[0];
-
-                // Images
-                foreach($html->find('img') as $e)
-                    $e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$e->src;
-                
-                foreach($html->find('link') as $e) {
-
-                    // Feuilles de style
-                    if ($e->rel == "stylesheet") {
-                        $e->href = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/styles/'.$e->href;
-                    }
-                }
-                foreach($html->find('script') as $e) {
-                    // Scripts
-                    $e->src = pathinfo($_SERVER['PHP_SELF'])['dirname'].'/'.$e->src;
-                }
-
-                $this->output .= $html;
+                $html = new HTMLSerializer("config/pages.json");
+                $this->output .= $html->make_html($page, $this->there);
+            }
+            else {
+                echo "OH NO!";
             }
         }
         else if ($this->method == 'POST') {
@@ -224,5 +206,6 @@ class RequestHandler {
         }
     }
 }
+
 
 ?>
