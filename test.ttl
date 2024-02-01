@@ -1,0 +1,196 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix lex: <lexique/> .
+
+lex:terme
+	rdf:type rdfs:Class .
+
+lex:definition
+	rdf:type rdf:Property ;
+	rdfs:domain lex:term ;
+	rdfs:range lex:seme .
+
+lex:sup
+	rdf:type rdf:Property ;
+	rdfs:domain lex:seme ;
+	rdfs:domain lex:terme ;
+	rdfs:range xsd:string .
+	
+lex:etymo
+	rdf:type rdf:Property ;
+	rdfs:subPropertyOf lex:sup .
+
+lex:pron
+	rdf:type rdf:Property ;
+	rdfs:subPropertyOf lex:sup .
+	
+lex:seme
+	rdf:type rdfs:Class .
+	
+##############################################
+
+<lexique/definitions/0>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:description """Afin de, afin que, pour 
+- Je suis venu pour te voir"""@fr ;
+	dc:description """حَتَّى، لِـ"""@ar .
+
+<lexique/definitions/1>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:description """En attendant que, jusqu’à ce que
+- Attends jusqu’à ce que je vienne"""@fr ;
+	dc:description """حَتَّى، بِانتِظار"""@ar .
+
+<lexique/definitions/2>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:description """Avoir des gestes et un comportement maniérés"""@fr ;
+	dc:description """تَصَنَّعَ فِـي حَرَكاتِهِ وفِـي تَصَرُّفِاتِه"""@ar .
+
+<lexique/definitions/3>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:description """Avoir de l’élégance dans la manière de parler ou de marcher"""@fr ;
+	dc:description """تَكَلَّفَ الأناقَةَ فِـي الكَلام ِأو فِـي الـمَشْي"""@ar .
+	
+<lexique/definitions/4>
+	rdf:type lex:seme ;
+	
+	lex:etymo """du fr. trousse"""@fr ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:subject "technique"@fr ;
+	dc:subject "تِقَنِيّات"@ar ;
+	dc:description """Boîte de vitesse dans un véhicule"""@fr ;
+	dc:description """ُلبَةُ السُّرعَةِ فِـي مَركَبَة"""@ar .
+
+<lexique/definitions/5>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:relation "قرطل"@ar ;
+	dc:coverage "Nord du Liban"@fr , "Tripoli" ;
+	dc:description """Panier"""@fr ;
+	dc:description """سَلَّة"""@ar .
+
+<lexique/definitions/6>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:relation "أطرَمِيز، مِرِطبان"@ar ;
+	dc:coverage "Nord du Liban"@fr , "Tripoli" ;
+	dc:description """[Out./Ust.] Bocal"""@fr ;
+	dc:description """[أدَوات] باقُول، بُوقال"""@ar .
+
+<lexique/definitions/7>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:subject "faune" ;
+	dc:relation "بَطرِيز أبيض،"@ar, "بَلشَفِيك أبيض،"@ar, "عاقُوص أبيض،"@ar, "عِقِّيص أبيض،"@ar, "مْواسطَة بيضا"@ar ;
+	dc:coverage "Tripoli" ;
+	dc:description """[Zool./Mar. ; poiss.] Sigan marbré, cordonnier blanc, poisson-lapin blanc 
+(*) Siganus rivulatus, fam. Siganidae  
+(**) Ce poisson est entré en Méditerranée depuis la Mer Rouge par le canal de Suez 
+(Æ) Marbled spinefoot, red sea rabbitfish"""@fr ;
+	dc:description """[حَيَوانٌ بَـحرِيّ؛ أسـماك] أبُو شَوْكَة رَملِيّ 
+(*) فَصِيلَةُ الأرنَبِيّات  
+(**)دَخَلَ هذا النّوع من السَّمَك إلـى البَحرِ الـمُتَوَسِّط مِن البَحرِ الأحـمَر عَبـرَ قَناةِ السُّويس"""@ar .
+
+<lexique/definitions/8>
+	rdf:type lex:seme ;
+	
+	dc:creator "Hassan Makki" ;
+	dc:publisher "Editions Geuthner" ; 
+	dc:relation "بَطرِيز أسود،"@ar, "بَلشَفِيك أسود،"@ar, "عاقُوص أسود،"@ar, "عِقِّيص أسود،"@ar, "مواسطَة سَوْدا"@ar ;
+	dc:coverage "Tripoli" ;
+	dc:description """[Zool./Mar. ; poiss.] Sigan sombre, poisson-lapin noir 
+(*) Siganus luridus, fam. Siganidae
+(**) Cf.  « abou šawké abayḍ »  
+(Æ) Dusky spinefoot"""@fr ;
+	dc:description """[حَيَوانٌ بَـحرِيّ؛ أسـماك] أبُو شَوْكَة صَخرِيّ 
+(*) فَصِيلَةُ الأرنَبِيّات 
+(**) اُنظُر 'أبو شَوكِة أبيَض'
+(•) يُسَمَّى 'صُنَيفِيّ' فِـي بِلادِ الـخَلِيج 
+"""@ar .
+
+#############################################
+
+
+<lexique/0>
+	rdf:type lex:terme ;
+	
+	dc:title "تَ"@ar ;
+	dc:title "، تـا"@ar ;
+
+	lex:definition <lexique/definitions/0> ;
+	lex:definition <lexique/definitions/1> ;
+	
+	dc:source "Tâ' revu YZ.doc" .
+
+<lexique/1>
+	rdf:type lex:terme ;
+	
+	dc:title "تْأبَّد"@ar ;
+	
+	lex:definition <lexique/definitions/2> ;
+	lex:definition <lexique/definitions/3> ;
+	
+	dc:source "Tâ' revu YZ.doc" .
+
+<lexique/2>
+	rdf:type lex:terme ;
+	
+	dc:title "تْـرُوسّ السُّرعَة"@ar ;
+	lex:definition <lexique/definitions/4> ;
+	
+	dc:source "Tâ' revu YZ.doc" .
+
+<lexique/3>
+	rdf:type lex:terme ;
+	
+	dc:title "أرطَـل"@ar ;
+	lex:definition <lexique/definitions/5> ;
+	
+	dc:source "Alif revu YZ.doc" .
+
+<lexique/4>
+	rdf:type lex:terme ;
+	
+	dc:title "أرطَـمِـيـز"@ar ;
+	lex:definition <lexique/definitions/6> ;
+	
+	dc:source "Alif revu YZ.doc" .
+	
+<lexique/5>
+	rdf:type lex:terme ;
+	
+	dc:title "أبُـو شَـوْكِـة أبـيَـض"@ar ;
+	lex:definition <lexique/definitions/7> ;
+	
+	dc:source "Alif revu YZ.doc" .
+
+<lexique/6>
+	rdf:type lex:terme ;
+	
+	dc:title "أبُـو شَـوْكِـة أسـوَد"@ar ;
+	lex:definition <lexique/definitions/8> ;
+	
+	dc:source "Alif revu YZ.doc" .

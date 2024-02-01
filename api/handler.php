@@ -3,6 +3,17 @@
 require_once("parser.php");
 require_once("db.php");
 require_once("serializers/html.php");
+require_once("upload.php");
+require_once("vendor/autoload.php");
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+// TODO:
+// - faire un fichier excel des traductions avec les 'class' HTML pour les transmettre à Léa
+// - mettre au point le système de connexion (table dans la base de données, authentification) (note : penser à remplacer le bouton de connexion par un de déconnexion !)
+// - voir avec Léa pour la page d'administration
+// - faire un système d'upload de fichiers rdf pour alimenter la DB
+// - voir avec Inès pour la mise au point d'une conversion xlsx (traductions) => rdf
 
 class RequestHandler {
 
@@ -43,6 +54,8 @@ class RequestHandler {
          */
 
         // On commence par récupérer les langues disponibles
+        // Il s'agit d'un premier tri ; pour chaque élément il faudra faire attention à effectuer les vérifications nécessaires
+        #TODO: ne récupérer que les littérales qui appartiennent à l'interface
         $literals = $this->db->query("select distinct ?literal {?s ?p ?literal filter isLiteral(?literal)}"); # On sélectionne toutes les valeurs littérales
         $lang_available = array();
 
@@ -169,11 +182,14 @@ class RequestHandler {
                         $page = "accueil";
                     }
                 }
+                else if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
+                    $page = "administration";
+                }
                 else {
                     $page = "accueil";
                 }
     
-                $html = new HTMLSerializer("config/pages.json");
+                $html = new HTMLSerializer("config/pages.json", $this->db);
                 $this->output .= $html->make_html($page, $this->there);
             }
             else {
@@ -181,7 +197,88 @@ class RequestHandler {
             }
         }
         else if ($this->method == 'POST') {
-            echo "THIS IS A POST REQUEST";
+            
+            if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
+
+                if (isset($_FILES["uploadtrad"])) {
+                    $uploader = new FileUploader(array("xlsx"));
+
+                    $uploader->upload($_FILES["uploadtrad"]);
+
+                    $ttl = "@prefix dcterms: <http://purl.org/dc/terms/> .\r\n@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\r\n@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\r\n";
+
+                    foreach($uploader->get_filenames() as $file){
+
+                        $spreadsheet = IOFactory::load($file);
+                        $fname = explode('/', $file);
+                        $fname = end($fname);
+                        $f_no_ext = explode('.', $fname);
+                        $f_no_ext = current($f_no_ext);
+                        $translations = array();
+
+                        $nb_sheets = $spreadsheet->getSheetCount();
+
+                        for ($i = 0 ; $i < $nb_sheets ; $i++) {
+                            $sheet = $spreadsheet->getSheet($i);
+                            $lang = $sheet->getTitle();
+                            
+                            foreach($sheet->getRowIterator() as $row) {
+
+                                $id = null;
+                                $val = null;
+
+                                foreach ($row->getCellIterator() as $cell) {
+
+                                    if ($row->getRowIndex() > 1){
+
+                                        $content = $cell->getValue();
+                                        $col = $cell->getColumn();
+
+                                        if ($col == "A") {
+                                            $id = $content;
+                                        }
+                                        else if ($col == "B") {
+                                            $val = addslashes($content);
+                                        }
+
+                                    }
+                                }
+
+                                if ($id != null && $val != null) {
+                                    $full_id = "<traductions/".strtr($f_no_ext, "_ ", "--")."/".strtr($id, "_ ", "--").">";
+                                    array_push($translations, array($full_id, $fname, $val, $id,$lang));
+                                }
+                            }
+
+                        }
+
+                        unset($spreadsheet);
+
+                        foreach($translations as $tr) {
+                            $full_id = $tr[0];
+                            $f = $tr[1];
+                            $val = $tr[2];
+                            $html_id = $tr[3];
+                            $lang = $tr[4];
+                            $ttl .=  "$full_id\r\n\trdf:type <traductions> ;\r\n\tdcterms:date \"".date('d/m/Y H:i', time())."\" ;\r\n\tdcterms:language \"$lang\" ;\r\n\tdcterms:source \"$f\" ;\r\n\tdcterms:identifier \"$html_id\" ;\r\n\tdcterms:alternative \"\"\"$val\"\"\"@$lang .\r\n\r\n";
+                        }
+
+                        unset($translations);
+                    }
+
+                    $ttl_parser = ARC2::getTurtleParser();
+                    $ttl_parser->parse($ttl);
+                    $protocol = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
+
+                    # ==> https://github.com/semsol/arc2/issues/122
+                    $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $protocol.$this->there, 0);
+
+                    $uploader->delete();
+                }
+                else {
+                    echo "bleuargh";
+                }
+            }
         }
         else if ($this->method == 'PUT') {
             echo "THIS IS A PUT REQUEST";

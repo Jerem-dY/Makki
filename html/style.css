@@ -313,7 +313,17 @@ footer {
   margin: 40px auto 0;
 }
 
-button {
+table, td, th {
+  border: 1px solid black;
+  text-align:center
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+button[id="login-button"] {
   padding: 8px 15px;
   width: 160px;
   border: 0;

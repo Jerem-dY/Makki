@@ -4,10 +4,11 @@ require_once(__DIR__."/../simple_html_dom/simple_html_dom.php");
 
 class HTMLSerializer {
 
-    function __construct(string $pages_path) {
+    function __construct(string $pages_path, $db) {
 
         $paths = file_get_contents($pages_path);
         $this->pages = array("header" => "html/header.html", "footer" => "html/footer.html");
+        $this->db = $db;
 
         if ($paths != false) {
             $data = json_decode($paths, true);
@@ -68,8 +69,29 @@ class HTMLSerializer {
             $e->src = $protocol.$base_url.$e->src;
         }
 
+        if ($page == "administration") {
+            $output = $this->make_table_trad($output);
+        }
+
         return $output->innertext;
 
+    }
+
+    function make_table_trad($html) {
+
+        foreach($html->find('table#table_fichier_trad>tbody') as $t) {
+
+            $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?language ?file ?date WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?file ?language ?date");
+
+            foreach($rows['result']['rows'] as $r) {
+                $lang = $r['language'];
+                $file = $r['file'];
+                $date = $r['date'];
+                $t->innertext .= "<tr><td>$lang</td><td>$file</td><td>$date</td><td><button>blutton</button></td></tr>";
+            }
+        }
+
+        return $html;
     }
 }
 

@@ -1,6 +1,6 @@
 <?php 
 
-require("tools.php");
+require_once("tools.php");
 require_once("vendor/autoload.php");
 
 class RequestParser {

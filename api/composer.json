@@ -1,6 +1,7 @@
 {
     "require": {
-        "semsol/arc2": "2.5.1",
-		"paillechat/php-enum" : "^2.0"
+        "semsol/arc2": "*",
+		"paillechat/php-enum" : "^2.0",
+		"phpoffice/phpspreadsheet" : "1.19.0"
     }
 }

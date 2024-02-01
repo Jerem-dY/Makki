@@ -19,6 +19,12 @@ class DB {
     public function query(string $q): array {
 
         $out = $this->store->query($q);
+
+        if ($errs = $this->store->getErrors()) {
+            echo "Query errors: ";
+            return $errs;
+        }
+
         return $out;
     }
 }

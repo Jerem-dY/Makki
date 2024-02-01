@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Lexique libanais de Makki</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="scripts/jquery.js"></script>
+	</head>
+
+    <body>
+		<h1 class="trad" id="titre_fichiers_trad">Fichiers de traduction</h1>
+		<table id="table_fichier_trad">
+			<thead>
+				<tr>
+					<th class="trad" id="fichier_trad_langue">Langue</th>
+					<th class="trad" id="fichier_trad">Fichier</th>
+					<th class="trad" id="fichier_trad_date">Date</th>
+					<th class="trad" id="fichier_trad_suppr">Supprimer</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>bla</td>
+					<td>bli</td>
+					<td>blo</td>
+					<td><button>blutton</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<form method="POST" action="./administration" enctype="multipart/form-data">
+			<input type="file" id="upload_trad" name="uploadtrad[]" accept=".xlsx,application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet" multiple="multiple" />
+			<input type="submit" name="submit_file_trad" value="Téléverser les fichiers" />
+		</form>
+	</body>
+</html>
