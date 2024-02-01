@@ -472,3 +472,22 @@ input:placeholder-shown {
     cursor: pointer; 
     font-family:'El Messiri', sans-serif;
 } 
+
+.uga {
+  margin-right: 50px;
+  margin-left: 10px;
+  margin-top: 3px;
+}
+
+.logo_partenaires {
+
+  display: flex;
+  justify-content: center;
+
+}
+
+.partenaires {
+
+	max-height: 80px;
+
+}
