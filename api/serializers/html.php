@@ -22,7 +22,7 @@ class HTMLSerializer {
         }
     }
 
-    public function make_html(string $page, string $base_url): string {
+    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -34,11 +34,20 @@ class HTMLSerializer {
 
         $html = $output->find('html', 0);
         $body = $html->find('body', 0);
-        #$html->removeChild($body);
 
-        #$html->appendChild($header->find('header', 0));
-        $body->innertext = $header->find('header', 0)->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
-        #$html->appendChild($body);
+        $bar = $header->find('.barre', 0);
+        $lang_list = $bar->find('ul#lang_liste', 0);
+
+        $lang_list->innertext = "";
+        $sorted_langs = $langs;
+        asort($sorted_langs);
+        $last = end($sorted_langs);
+        foreach($sorted_langs as $l) {
+            $lang_list->innertext .= "<li><a ". ($last == $l ? "class=\"arrondie\"" : "") ." href=\"".$protocol."/".$base_url.$l."/". ($request['collection'] ?: "") ."/\">$l</a></li>";
+        }
+
+
+        $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
 
 
         // On adapte la mise en page à la langue (sens de lecture et code de langue)
@@ -52,6 +61,12 @@ class HTMLSerializer {
 
         $output = $output->save();
         $output = str_get_html($output);
+
+        $prepare_trad = function ($value) {
+            return "{ ?in dcterms:alternative ?txt FILTER( lang(?txt) = \"$value\" ) }";
+        };
+
+        //print_r($langs);
 
         // Images
         foreach($output->find('img') as $e)
@@ -67,6 +82,23 @@ class HTMLSerializer {
         foreach($output->find('script') as $e) {
             // Scripts
             $e->src = $protocol.$base_url.$e->src;
+        }
+        foreach($output->find('.trad') as $e) {
+            $id = $e->id;
+            $query = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?txt WHERE { ?in dcterms:identifier \"$id\" . ";
+            $mini_q = array_map($prepare_trad, $langs);
+            $query .= implode(" UNION ", $mini_q) . "}";
+
+            $rows = $this->db->query($query)['result']['rows'];
+
+            if (sizeof($rows) > 0) {
+                $e->lang = $rows[0]['txt lang'];
+                $e->innertext = $rows[0]['txt'];
+            }
+            else {
+                $e->innertext = "NOT_FOUND:".strtoupper($id);
+            }
+            
         }
 
         if ($page == "administration") {

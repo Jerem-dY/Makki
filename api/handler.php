@@ -28,6 +28,7 @@ class RequestHandler {
         $this->acc_lang     = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
         $this->lang         = array();
         $this->there        = $server;
+        $this->protocol     = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
         $this->request      = $parser->parse_uri($uri, $this->there);
         $this->content_type = "text/html";
         $this->db           = new DB("config/db.json");
@@ -56,34 +57,33 @@ class RequestHandler {
         // On commence par récupérer les langues disponibles
         // Il s'agit d'un premier tri ; pour chaque élément il faudra faire attention à effectuer les vérifications nécessaires
         #TODO: ne récupérer que les littérales qui appartiennent à l'interface
-        $literals = $this->db->query("select distinct ?literal {?s ?p ?literal filter isLiteral(?literal)}"); # On sélectionne toutes les valeurs littérales
+        $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
         $lang_available = array();
 
-        foreach($literals['result']['rows'] as $l) {
-            if (isset($l['literal lang'])) {
-                $lang_available[$l['literal lang']] = 1;
+        foreach($rows['result']['rows'] as $l) {
+            if (isset($l['language'])) {
+                array_push($lang_available, $l['language']);
             }
         }
-
-        $lang_available = array_keys($lang_available);
 
         // Ordre de priorité : langue dans l'URI puis langues dans Accept-Language puis langue par défaut (le français)
         if(isset($this->request['lang']) and in_array($this->request['lang'], $lang_available)) {
             array_push($this->lang, $this->request['lang']);
         }
         foreach($this->acc_lang as $l) { # Langues dans l'en-tête HTTP 'Accept-Language'
-            if (in_array($lang_available, $l)) {
-                array_push($this->lang, $l);
+            $selected = current(explode("-", $l[0]));
+            if (in_array($selected, $lang_available) && !in_array($selected, $this->lang)) {
+                array_push($this->lang, $selected);
             }
         }
 
-        array_push($this->lang, "fr"); # Langue par défaut
+        if (!in_array("fr", $this->lang))
+            array_push($this->lang, "fr"); # Langue par défaut
 
         /**
          * GESTION DES TYPES DE REQUÊTE
          */
         if ($this->method == 'GET') {
-
                 
             if (isset($this->request['collection']) && $this->request['collection'] == 'images') {
     
@@ -190,7 +190,7 @@ class RequestHandler {
                 }
     
                 $html = new HTMLSerializer("config/pages.json", $this->db);
-                $this->output .= $html->make_html($page, $this->there);
+                $this->output .= $html->make_html($page, $this->there, $this->lang, $this->request, $this->protocol);
             }
             else {
                 echo "OH NO!";
@@ -268,10 +268,10 @@ class RequestHandler {
 
                     $ttl_parser = ARC2::getTurtleParser();
                     $ttl_parser->parse($ttl);
-                    $protocol = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
+                    
 
                     # ==> https://github.com/semsol/arc2/issues/122
-                    $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $protocol.$this->there, 0);
+                    $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $this->protocol.$this->there, 0);
 
                     $uploader->delete();
                 }

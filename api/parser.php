@@ -37,7 +37,7 @@ class RequestParser {
         $path = parse_url($r, PHP_URL_PATH);
 
         // On récupère les champs 'lang', 'collection' et 'target' depuis 
-        preg_match("{^(?>\/(?>(?P<lang>[\w]{2})\/|)(?P<collection>[\w]+)(?>(?>\/(?P<target>[\w. +_-]+))|[\w]+|)$)|\/{0,1}$}", $path, $output);
+        preg_match("{^(?>\/(?>(?P<lang>[\w]{2})(?>\/|$)|)(?>(?P<collection>[\w]+)(?>(?>\/(?P<target>[\w. +_-]+))|)|[\w]+|))|^\/}", $path, $output);
 
         // Si une query a été fournie, on la récupère sous la forme d'un tableau associatif
         if ($query_s != null && strlen($query_s) > 0) {
