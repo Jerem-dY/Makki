@@ -37,10 +37,9 @@ class RequestParser {
         $path = parse_url($r, PHP_URL_PATH);
 
         // On récupère les champs 'lang', 'collection' et 'target' depuis 
-        $match = preg_match("{^(?>\/(?>(?P<lang>[\w]{2})(?>\/|$)|)(?>(?P<collection>[\w]+)(?>(?>\/(?P<target>[\w. +_-]+))|)|[\w]+|))$|^\/$}", $path, $output);
+        $match = preg_match("{^(?>\/(?>(?P<lang>[\w]{2})(?>\/|$)|)(?>(?P<collection>[\w]+)(?>(?>\/(?P<target>[\w. +_-]+))|)|[\w]+|)(?>|$)\/?)$|^\/$}", $path, $output);
 
         if ($match == false) {
-          echo "FALSE!!!";
           return array();
         }
 

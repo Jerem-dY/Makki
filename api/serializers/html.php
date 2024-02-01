@@ -39,17 +39,17 @@ class HTMLSerializer {
         $lang_list = $bar->find('ul#lang_liste', 0);
 
         $accueil_link = $header->find('#accueil', 0);
-        $accueil_link->href = $protocol.$base_url;
+        $accueil_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "");
 
         $licence_link = $footer->find('#licence', 0);
-        $licence_link->href = $protocol.$base_url."licences";
+        $licence_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."licences";
 
         $lang_list->innertext = "";
         $sorted_langs = $langs;
         asort($sorted_langs);
         $last = end($sorted_langs);
         foreach($sorted_langs as $l) {
-            $lang_list->innertext .= "<li><a ". ($last == $l ? "class=\"arrondie\"" : "") ." href=\"".$protocol."/".$base_url.$l."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">$l</a></li>";
+            $lang_list->innertext .= "<li><a ". ($last == $l ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.$l."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">$l</a></li>";
         }
 
 
@@ -99,14 +99,14 @@ class HTMLSerializer {
         }
 
         if ($page == "administration") {
-            $output = $this->make_table_trad($output);
+            $output = $this->make_table_trad($output, $protocol, $base_url);
         }
 
         return $output->innertext;
 
     }
 
-    function make_table_trad($html) {
+    function make_table_trad($html, $protocol, $base_url) {
 
         foreach($html->find('table#table_fichier_trad>tbody') as $t) {
 
@@ -116,7 +116,12 @@ class HTMLSerializer {
                 $lang = $r['language'];
                 $file = $r['file'];
                 $date = $r['date'];
-                $t->innertext .= "<form method=\"DELETE\" action=\".\"><tr><td name=\"lang\">$lang</td><td name=\"file\">$file</td><td name=\"date\">$date</td><td><input type=\"submit\" value=\"Delete\" name=\"delete_trad\"/></td></tr></form>";
+                $t->innertext .= "<tr>
+                                    <td>$lang</td>
+                                    <td>$file</td>
+                                    <td>$date</td>
+                                    <td><button class=\"delete_trad\" data-url=\"".$protocol.$base_url."traductions\" data-lang=\"".$lang."\" data-file=\"".$file."\" data-date=\"".$date."\">Delete</button></td>
+                                </tr>";
             }
         }
 

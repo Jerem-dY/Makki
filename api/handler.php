@@ -290,7 +290,44 @@ class RequestHandler {
             echo "THIS IS A PUT REQUEST";
         }
         else if ($this->method == 'DELETE') {
-            echo "THIS IS A DELETE REQUEST";
+
+            parse_str(file_get_contents('php://input'), $_DELETE);
+
+            if (isset($_DELETE['type']) ){
+
+                if ($_DELETE['type'] == "delete_trad" && isset($_DELETE['date']) && isset($_DELETE['file']) && isset($_DELETE['lang'])) {
+
+                    $date = $_DELETE['date'];
+                    $file = $_DELETE['file'];
+                    $lang = $_DELETE['lang'];
+
+                    $this->db->store->query("@prefix dcterms: <http://purl.org/dc/terms/> .
+                    @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                    
+                    DELETE {
+                      ?truc dcterms:date \"$date\" .
+                      ?truc dcterms:language \"$lang\" .
+                      ?truc dcterms:source \"$file\" .
+                      ?truc dcterms:alternative ?txt .
+                    }
+                    
+                    WHERE {
+                    
+                      ?truc dcterms:date \"$date\" .
+                      ?truc dcterms:language \"$lang\" .
+                      ?truc dcterms:source \"$file\" .
+                      ?truc dcterms:alternative ?txt .
+                    
+                     FILTER( lang(?txt) = \"$lang\")
+                    
+                    }");
+
+                    if ($errs = $this->db->store->getErrors()) {
+                        http_response_code(400);
+                    }
+                }
+            }
         }
         else {
             echo "WUT?!";
