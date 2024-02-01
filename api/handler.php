@@ -21,23 +21,18 @@ class RequestHandler {
 
         $parser = new RequestParser($request_config);
 
-        $this->output       = "";
-        $this->header       = array();
-        $this->method       = $_SERVER['REQUEST_METHOD'];
-        $this->mime         = $parser->parse_mime($_SERVER['HTTP_ACCEPT']);
-        $this->acc_lang     = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        $this->lang         = array();
-        $this->there        = $server;
-        $this->protocol     = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
-        $this->request      = $parser->parse_uri($uri, $this->there);
-        $this->content_type = "text/html";
-        $this->db           = new DB("config/db.json");
-
-        if (sizeof($this->request) == 0) {
-            echo $uri;
-            http_response_code(404);
-            exit;
-        }
+        $this->output           = "";
+        $this->header           = array();
+        $this->method           = $_SERVER['REQUEST_METHOD'];
+        $this->mime             = $parser->parse_mime($_SERVER['HTTP_ACCEPT']);
+        $this->acc_lang         = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $this->lang             = array();
+        $this->there            = $server;
+        $this->protocol         = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
+        $this->request          = $parser->parse_uri($uri, $this->there);
+        $this->content_type     = "text/html";
+        $this->db               = new DB("config/db.json");
+        $this->html_serializer  = new HTMLSerializer("config/pages.json", $this->db);
 
         // On s'occupe de charger les headers par défaut
         $headers = file_get_contents($headers);
@@ -48,6 +43,11 @@ class RequestHandler {
             foreach(array_keys($data) as $h) {
                 $this->add_header($h, $data[$h]);
             }
+        }
+
+        if (sizeof($this->request) == 0) {
+            $this->redirect();
+            return;
         }
 
         /** 
@@ -170,7 +170,7 @@ class RequestHandler {
                 
             }
             else if (in_array(array('text', 'html'), $this->mime) || in_array(array('*', '*'), $this->mime)) {
-                # Remplacer l'accès à une page pré-faite par un générateur de page qui correspond
+
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
                     if (isset($this->request['target'])) {
                         $page = "mot";
@@ -185,12 +185,18 @@ class RequestHandler {
                 else if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
                     $page = "administration";
                 }
+                else if (isset($this->request['collection']) && $this->request['collection'] == "licences") {
+                    $page = "licences";
+                }
+                else if (isset($this->request['collection'])) {
+                    $this->redirect();
+                    return;
+                }
                 else {
                     $page = "accueil";
                 }
     
-                $html = new HTMLSerializer("config/pages.json", $this->db);
-                $this->output .= $html->make_html($page, $this->there, $this->lang, $this->request, $this->protocol);
+                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol);
             }
             else {
                 echo "OH NO!";
@@ -301,6 +307,11 @@ class RequestHandler {
         foreach(array_keys($this->header) as $h) {
             header($h.': '.$this->header[$h], true);
         }
+    }
+
+    function redirect() {
+        $this->add_header('Location', $this->protocol . $this->there);
+        http_response_code(303);
     }
 }
 
