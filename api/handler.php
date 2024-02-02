@@ -326,7 +326,7 @@ class RequestHandler {
 
     function redirect(string $location = "") {
 
-        $location = $location == "" ? $this->protocol . $this->there : $location;
+        $location = $location == "" ? $this->protocol . $this->there . (isset($this->request['lang']) ? $this->request['lang'].'/' : "" ) : $location;
         $this->add_header('Location', $location);
         http_response_code(303);
     }
@@ -358,6 +358,8 @@ class RequestHandler {
             $mod = $etag[0];
             $etag = $etag[1];
 
+            $this->add_header("Expires", "0");
+
             if (
                 (
                     ($if_none_match && $if_none_match == "\"".$etag."\"") || (!$if_none_match)
@@ -372,7 +374,6 @@ class RequestHandler {
             $this->add_header("Content-Length", filesize($filepath));
             $this->add_header("Cache-Control", "max-age=1, must-revalidate");
             $this->add_header("Last-Modified", $mod);
-            $this->add_header("Expires", "0");
             $this->add_header("ETag", "\"".$etag."\"");
 
             $res = file_get_contents($filepath);
