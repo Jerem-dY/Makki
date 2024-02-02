@@ -4,6 +4,7 @@ require_once("parser.php");
 require_once("db.php");
 require_once("serializers/html.php");
 require_once("upload.php");
+require_once("jwt.php");
 require_once("vendor/autoload.php");
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -33,8 +34,9 @@ class RequestHandler {
         $this->protocol         = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
         $this->request          = $parser->parse_uri($uri, $this->there);
         $this->content_type     = "text/html";
-        $this->db               = new DB("config/db.json");
+        $this->db               = new DB("config/db.json", "config/db.sql");
         $this->html_serializer  = new HTMLSerializer("config/pages.json", $this->db);
+        $this->auth             = $this->retrieve_session();
 
         // On s'occupe de charger les headers par défaut
         $headers = file_get_contents($headers);
@@ -88,7 +90,7 @@ class RequestHandler {
         if ($this->method == 'GET') {
                 
             if (isset($this->request['collection']) && in_array($this->request['collection'], self::RESOURCES_COLL)) {
-                
+
                 $collection = $this->request['collection'];
                 $rs_path = "html/".$collection."/".$this->request['target'];
 
@@ -108,39 +110,6 @@ class RequestHandler {
                 http_response_code($this->cache($rs_path, $mime));
                 return;
             }  
-            /*else if (isset($this->request['collection']) &&  $this->request['collection'] == 'styles') {
-    
-                $css_path = "html/".$this->request['target'];
-    
-                if (file_exists($css_path)) {
-                    
-                    $ext = pathinfo($css_path, PATHINFO_EXTENSION);
-
-                    if ($ext == "css") {
-                        $mime = "text/css";
-                    }
-                    else if ($ext == "ttf") {
-                        $mime = "font/ttf";
-                    }
-
-                    http_response_code($this->cache($css_path, $mime));
-                    return;
-
-                    
-                }
-                else {
-                    echo $uri;
-                    http_response_code(404);
-                }
-                
-            }
-            else if (isset($this->request['collection']) &&  $this->request['collection'] == 'scripts') {
-    
-                $scr_path = "html/scripts/".$this->request['target'];
-                http_response_code($this->cache($scr_path, "application/javascript"));
-                return;
-                
-            }*/
             else if (in_array(array('text', 'html'), $this->mime) || in_array(array('*', '*'), $this->mime)) {
 
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
@@ -155,6 +124,12 @@ class RequestHandler {
                     }
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
+
+                    if (!$this->auth) {
+                        $this->unauthorized();
+                        return;
+                    }
+
                     $page = "administration";
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "licences") {
@@ -168,15 +143,35 @@ class RequestHandler {
                     $page = "accueil";
                 }
     
-                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol);
+                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth);
             }
             else {
                 echo "OH NO!";
             }
         }
         else if ($this->method == 'POST') {
+
+            if (isset($_POST['bouton_co'])) {
+                
+                $mdp = $_POST['mdp'];
+                $login = $_POST['utilisateur'];
+
+                $id = $this->db->check_credentials($login, $mdp);
+
+                if ($this->db->check_admin_id($id)) {
+                    $this->make_session($id);
+                }
+
+                $this->redirect($this->protocol.$uri);
+                return;
+            }
             
             if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
+
+                if (!$this->auth) {
+                    $this->unauthorized();
+                    return;
+                }
 
                 if (isset($_FILES["uploadtrad"])) {
                     $uploader = new FileUploader(array("xlsx"));
@@ -266,8 +261,18 @@ class RequestHandler {
         }
         else if ($this->method == 'PUT') {
             echo "THIS IS A PUT REQUEST";
+
+            if (!$this->auth) {
+                $this->unauthorized();
+                return;
+            }
         }
         else if ($this->method == 'DELETE') {
+
+            if (!$this->auth) {
+                $this->unauthorized();
+                return;
+            }
 
             parse_str(file_get_contents('php://input'), $_DELETE);
 
@@ -324,11 +329,22 @@ class RequestHandler {
         }
     }
 
+    function get_homepage(): string {
+        return $this->protocol . $this->there . (isset($this->request['lang']) ? $this->request['lang'].'/' : "" );
+    }
+
     function redirect(string $location = "") {
 
-        $location = $location == "" ? $this->protocol . $this->there . (isset($this->request['lang']) ? $this->request['lang'].'/' : "" ) : $location;
+        $location = $location == "" ? $this->get_homepage() : $location;
         $this->add_header('Location', $location);
         http_response_code(303);
+    }
+
+    function unauthorized() {
+        http_response_code(401);
+        $url = $this->get_homepage();
+        $this->output = "<html><meta http-equiv=\"refresh\" content=\"1;url=$url\" /><p>UNAUTHORIZED</p></html>";
+        return;
     }
 
     function make_etag(string $filepath) {
@@ -389,6 +405,40 @@ class RequestHandler {
         }
         else {
             return 404;
+        }
+    }
+
+    function make_session(int $id) {
+
+        $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
+        $jwt = JWT::encode($id, '+6 minutes');
+        $jws = JWS::encode($jwt, "aaaaaaaaaaaaaaaaaaaaaaa");
+
+        $dec = json_decode($jwt, true);
+
+        setcookie("makki_user", $jws, $dec['exp'], "/", $GLOBALS['iss'], false, true);
+    }
+
+    function retrieve_session(): bool {
+
+        if (isset($_COOKIE["makki_user"])) {
+
+            $jwt = JWS::decode($_COOKIE["makki_user"], "aaaaaaaaaaaaaaaaaaaaaaa");
+
+            if (check_errors($jwt)) {
+                return false;
+            }
+
+            $decoded = JWT::decode($jwt, '');
+
+            if (check_errors($decoded)) {
+                return false;
+            }
+
+            return $this->db->check_admin_id($decoded);
+        }
+        else {
+            return false;
         }
     }
 }

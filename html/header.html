@@ -13,10 +13,10 @@
         <div class="login-wrapper">
             <button id="login-button">Connexion</button>
             <div class="login-container">
-              <form class="login-form">
-                <input class ="trad_placeholder" type="text" placeholder="Nom d'utilisateur" id="utilisateur" required>
-                <input class ="trad_placeholder" type="password" placeholder="Mot de passe" id="mdp" required>
-                  <input class ="trad_value" type="submit" value="Se connecter" id="bouton_co" />
+              <form class="login-form" method="POST">
+                <input class ="trad_placeholder" type="text" placeholder="Nom d'utilisateur" id="utilisateur" name="utilisateur" required>
+                <input class ="trad_placeholder" type="password" placeholder="Mot de passe" id="mdp" name="mdp" required>
+                  <input class ="trad_value" type="submit" name="bouton_co" value="Se connecter" id="bouton_co" />
               </form>
             </div>
         </div>

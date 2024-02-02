@@ -22,7 +22,7 @@ class HTMLSerializer {
         }
     }
 
-    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol): string {
+    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -52,7 +52,10 @@ class HTMLSerializer {
             $lang_list->innertext .= "<li><a ". ($last == $l ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.$l."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">$l</a></li>";
         }
 
-
+        if ($connected) {
+            $header->find('.login-wrapper', 0)->outertext = "";
+        }
+        
         $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
 
         $output = $output->save();
