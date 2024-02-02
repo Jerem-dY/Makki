@@ -17,6 +17,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class RequestHandler {
 
+    const RESOURCES_COLL = array("images", "scripts", "styles", "fonts");
+
     function __construct(string $uri, string $request_config, string $server, string $headers) {
 
         $parser = new RequestParser($request_config);
@@ -85,48 +87,28 @@ class RequestHandler {
          */
         if ($this->method == 'GET') {
                 
-            if (isset($this->request['collection']) && $this->request['collection'] == 'images') {
-    
-                $img_path = "html/images/".$this->request['target'];
-                $etag = $this->make_etag($img_path);
-    
-                if ($etag != false) {
+            if (isset($this->request['collection']) && in_array($this->request['collection'], self::RESOURCES_COLL)) {
+                
+                $collection = $this->request['collection'];
+                $rs_path = "html/".$collection."/".$this->request['target'];
 
-                    $if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
-                    $if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
-
-                    $mod = $etag[0];
-                    $etag = $etag[1];
-
-                    if ((($if_none_match && $if_none_match == $etag) || (!$if_none_match)) &&
-                        ($if_modified_since && $if_modified_since == $mod))
-                    {
-                        http_response_code(304);
-                        return;
-                    }
-
-                    $this->add_header("Content-Type", image_type_to_mime_type(exif_imagetype($img_path)));
-                    $this->add_header("Content-Length", filesize($img_path));
-                    $this->add_header("Cache-Control", "must-understand");
-                    $this->add_header("Last-Modified", $mod);
-                    $this->add_header("ETag", "\"".$etag."\"");
-
-                    $res = file_get_contents($img_path);
-
-                    if ($res == false) {
-                        echo "ERROR";
-                    }
-                    else {
-                        $this->output .= $res;
-                    }
-                    
+                if($collection == 'images') {
+                    $mime = image_type_to_mime_type(exif_imagetype($rs_path));
                 }
-                else {
-                    echo $uri;
-                    http_response_code(404);
+                else if($collection == 'fonts') {
+                    $mime = "font/ttf";
                 }
+                else if($collection == 'styles') {
+                    $mime = "text/css";
+                }
+                else if($collection == 'scripts') {
+                    $mime = "application/javascript";
+                }
+
+                http_response_code($this->cache($rs_path, $mime));
+                return;
             }  
-            else if (isset($this->request['collection']) &&  $this->request['collection'] == 'styles') {
+            /*else if (isset($this->request['collection']) &&  $this->request['collection'] == 'styles') {
     
                 $css_path = "html/".$this->request['target'];
     
@@ -141,17 +123,8 @@ class RequestHandler {
                         $mime = "font/ttf";
                     }
 
-                    $this->add_header("Content-Type", $mime);
-                    $this->add_header("Content-Length", filesize($css_path));
-    
-                    $res = file_get_contents($css_path);
-    
-                    if ($res == false) {
-                        echo "ERROR";
-                    }
-                    else {
-                        $this->output .= $res;
-                    }
+                    http_response_code($this->cache($css_path, $mime));
+                    return;
 
                     
                 }
@@ -164,28 +137,10 @@ class RequestHandler {
             else if (isset($this->request['collection']) &&  $this->request['collection'] == 'scripts') {
     
                 $scr_path = "html/scripts/".$this->request['target'];
-    
-                if (file_exists($scr_path)) {
-                    
-                    $this->add_header("Content-Type", "application/javascript");
-                    $this->add_header("Content-Length", filesize($scr_path));
-    
-                    $res = file_get_contents($scr_path);
-    
-                    if ($res == false) {
-                        echo "ERROR";
-                    }
-                    else {
-                        $this->output .= $res;
-                    }
-                    
-                }
-                else {
-                    echo $uri;
-                    http_response_code(404);
-                }
+                http_response_code($this->cache($scr_path, "application/javascript"));
+                return;
                 
-            }
+            }*/
             else if (in_array(array('text', 'html'), $this->mime) || in_array(array('*', '*'), $this->mime)) {
 
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
@@ -268,7 +223,7 @@ class RequestHandler {
                                 }
 
                                 if ($id != null && $val != null) {
-                                    $full_id = "<traductions/".strtr($f_no_ext, "_ ", "--")."/".strtr($id, "_ ", "--").">";
+                                    $full_id = "<traductions/".strtr($f_no_ext, "_ ", "--")."/".strtr($id, "_ ", "--")."/$lang>";
                                     array_push($translations, array($full_id, $fname, $val, $id,$lang));
                                 }
                             }
@@ -283,7 +238,12 @@ class RequestHandler {
                             $val = $tr[2];
                             $html_id = $tr[3];
                             $lang = $tr[4];
-                            $ttl .=  "$full_id\r\n\trdf:type <traductions> ;\r\n\tdcterms:date \"".date('d/m/Y H:i', time())."\" ;\r\n\tdcterms:language \"$lang\" ;\r\n\tdcterms:source \"$f\" ;\r\n\tdcterms:identifier \"$html_id\" ;\r\n\tdcterms:alternative \"\"\"$val\"\"\"@$lang .\r\n\r\n";
+                            $ttl .=  "$full_id 
+                                dcterms:date \"".date('d/m/Y H:i', time())."\" ; 
+                                dcterms:language \"$lang\" ; 
+                                dcterms:source \"$f\" ; 
+                                dcterms:identifier \"$html_id\" ; 
+                                dcterms:alternative \"\"\"$val\"\"\"@$lang . ";
                         }
 
                         unset($translations);
@@ -297,6 +257,7 @@ class RequestHandler {
                     $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $this->protocol.$this->there, 0);
 
                     $uploader->delete();
+                    $this->redirect($this->protocol.$uri);
                 }
                 else {
                     echo "bleuargh";
@@ -323,10 +284,10 @@ class RequestHandler {
                     @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
                     
                     DELETE {
-                      ?truc dcterms:date \"$date\" .
-                      ?truc dcterms:language \"$lang\" .
-                      ?truc dcterms:source \"$file\" .
-                      ?truc dcterms:alternative ?txt .
+                        ?truc dcterms:date \"$date\" .
+                        ?truc dcterms:language \"$lang\" .
+                        ?truc dcterms:source \"$file\" .
+                        ?truc dcterms:alternative ?txt .
                     }
                     
                     WHERE {
@@ -363,8 +324,10 @@ class RequestHandler {
         }
     }
 
-    function redirect() {
-        $this->add_header('Location', $this->protocol . $this->there);
+    function redirect(string $location = "") {
+
+        $location = $location == "" ? $this->protocol . $this->there : $location;
+        $this->add_header('Location', $location);
         http_response_code(303);
     }
 
@@ -380,6 +343,51 @@ class RequestHandler {
         }
         else {
             return false;
+        }
+    }
+
+    function cache(string $filepath, string $content_type) {
+
+        $etag = $this->make_etag($filepath);
+    
+        if ($etag != false) {
+
+            $if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
+            $if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
+
+            $mod = $etag[0];
+            $etag = $etag[1];
+
+            if (
+                (
+                    ($if_none_match && $if_none_match == "\"".$etag."\"") || (!$if_none_match)
+                    ) &&
+                ($if_modified_since && $if_modified_since == $mod)
+                )
+            {
+                return 304;
+            }
+
+            $this->add_header("Content-Type", $content_type);
+            $this->add_header("Content-Length", filesize($filepath));
+            $this->add_header("Cache-Control", "max-age=1, must-revalidate");
+            $this->add_header("Last-Modified", $mod);
+            $this->add_header("Expires", "0");
+            $this->add_header("ETag", "\"".$etag."\"");
+
+            $res = file_get_contents($filepath);
+
+            if ($res == false) {
+                return 500;
+            }
+            else {
+                $this->output .= $res;
+                return 200;
+            }
+            
+        }
+        else {
+            return 404;
         }
     }
 }

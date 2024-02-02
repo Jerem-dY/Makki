@@ -67,9 +67,15 @@ class HTMLSerializer {
         foreach($output->find('link') as $e) {
 
             // Feuilles de style
-            if ($e->rel == "stylesheet") {
-                $e->href = $protocol.$base_url.'styles/'.$e->href;
-            }
+            $e->href = $protocol.$base_url.$e->href;
+        }
+        foreach($header->find('link') as $e) {
+            $e->href = $protocol.$base_url.$e->href;
+            $output->find('head', 0)->appendChild($e);
+        }
+        foreach($footer->find('link') as $e) {
+            $e->href = $protocol.$base_url.$e->href;
+            $output->find('head', 0)->appendChild($e);
         }
         foreach($output->find('script') as $e) {
             // Scripts

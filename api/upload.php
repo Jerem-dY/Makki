@@ -25,16 +25,6 @@ class FileUploader {
         $this->uploads_dir = getcwd().DIRECTORY_SEPARATOR."uploads";
         $this->uploads_path = $this->uploads_dir.DIRECTORY_SEPARATOR."up_0".DIRECTORY_SEPARATOR;//.$_SESSION["user_id"].DIRECTORY_SEPARATOR;
 
-        /*if(!is_dir($this->uploads_dir)){
-            if(!mkdir($this->uploads_dir, 0777)){
-                print "<br/>Couldn't make the directory ".$this->uploads_dir." for upload : '".$this->uploads_path."'. Aborting.<br/>";
-                http_response_code(500);
-            }
-            else {
-                chmod($ttl_file, 0777);
-            }
-        }*/
-
         if(is_dir($this->uploads_path)){
 
             if(!is_writable($this->uploads_path)){
@@ -98,9 +88,8 @@ class FileUploader {
                 if (!chmod($target_path, 0666)) {
                     echo "<br/>Something went wrong with permissions...<br/>";
                 }
-                echo "<br/>File '".$filelist['name'][$i]."' is valid, and was successfully uploaded at '".$target_path."'.<br/>";
             } else {
-                echo "<br/>Possible file upload attack! File '".$filelist['name'][$i]."' not uploaded.<br/>";
+                echo "<br/>Possible file upload attack! File '".$filelist['name'][$i]."' not uploaded at $target_path.<br/>";
             }
         }
     }
@@ -118,10 +107,8 @@ class FileUploader {
 
         foreach($this->files as $del_file){
 
-            echo "<br/>Deleting '". $del_file . "'.<br/>";
-
             if(!is_file($del_file)){
-                echo "<br/>Something went wrong...<br/>";
+                echo "<br/>Something went wrong while deleting $del_file<br/>";
             }
 
             if(!unlink($del_file)){
