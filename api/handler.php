@@ -88,14 +88,31 @@ class RequestHandler {
             if (isset($this->request['collection']) && $this->request['collection'] == 'images') {
     
                 $img_path = "html/images/".$this->request['target'];
+                $etag = $this->make_etag($img_path);
     
-                if (file_exists($img_path)) {
-                    
+                if ($etag != false) {
+
+                    $if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
+                    $if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
+
+                    $mod = $etag[0];
+                    $etag = $etag[1];
+
+                    if ((($if_none_match && $if_none_match == $etag) || (!$if_none_match)) &&
+                        ($if_modified_since && $if_modified_since == $mod))
+                    {
+                        http_response_code(304);
+                        return;
+                    }
+
                     $this->add_header("Content-Type", image_type_to_mime_type(exif_imagetype($img_path)));
                     $this->add_header("Content-Length", filesize($img_path));
-    
+                    $this->add_header("Cache-Control", "must-understand");
+                    $this->add_header("Last-Modified", $mod);
+                    $this->add_header("ETag", "\"".$etag."\"");
+
                     $res = file_get_contents($img_path);
-    
+
                     if ($res == false) {
                         echo "ERROR";
                     }
@@ -349,6 +366,21 @@ class RequestHandler {
     function redirect() {
         $this->add_header('Location', $this->protocol . $this->there);
         http_response_code(303);
+    }
+
+    function make_etag(string $filepath) {
+
+        if (is_file($filepath)) {
+
+            $filename = basename($filepath);
+            $time = filemtime($filepath); # false
+            $time = date('d/m/Y H:i:s', $time);
+
+            return array($time, base64_encode(md5($time)));
+        }
+        else {
+            return false;
+        }
     }
 }
 
