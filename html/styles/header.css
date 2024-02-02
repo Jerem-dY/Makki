@@ -26,7 +26,7 @@ html, body {
 
 @font-face {
   font-family: 'El Messiri';
-  src: url("ElMessiri-VariableFont_wght.ttf");
+  src: url("../fonts/ElMessiri-VariableFont_wght.ttf");
 }
 
 .content {
@@ -67,15 +67,6 @@ html, body {
     text-align: justify; 
     font-size:23px;
     font-weight: bold;
-
-}
-
-.chameau {
-
-    width: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    display:block;   
 
 }
 
@@ -261,49 +252,6 @@ footer {
     border-style:solid;
     border-color: #7d3c08;
 
-
-}
-
-.resultats, .resultats_donnees {
-
-    width: 600px;  
-    margin: 15px;
-    padding: 6px;
-    background-color: #ead4c1;
-
-}
-
-.similaires {
-
-    background-color: #ead4c1;
-    width: 280px;
-    margin: 15px;
-    padding: 6px;
-    
-}
-
-.similaires_donnees {
-
-    background-color: #ead4c1;
-    width: 280px;
-    margin: 15px;
-    padding: 6px;
-
-}
-
-.mots_titres {
-
-    display: flex;
-    justify-content: space-between;
-
-}
-
-.mots_donnees {
-
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    
 }
 
 @import "bourbon";
@@ -400,102 +348,4 @@ input:placeholder-shown {
 .open {
   @include animation(slide 1s);
   display: block;
-}
-
-.thematiqueseule {
-
-  margin: 15px;
-  padding: 6px;
-  background-color: #ead4c1;
-
-}
-  
-.wrapper { 
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    max-width: 700px; 
-    width: 100%; 
-    background: #fff; 
-    padding: 25px; 
-    border-radius: 5px; 
-    box-shadow: 4px 4px 2px
-        #B0C4DE; 
-    box-sizing: border-box; 
-    padding-top: 0px;
-
-} 
-  
-.wrapper h2 { 
-    text-align: center; 
-    margin-bottom: 20px; 
-    text-transform: uppercase; 
-    letter-spacing: 3px; 
-    color: #332902; 
-} 
-  
-.wrapper .input_field { 
-    margin-bottom: 10px;
-    margin-right: 20px; 
-} 
-  
-.wrapper 
-    .input_field 
-    input[type="text"], 
-.wrapper textarea { 
-    border: 1px solid #e0e0e0; 
-    font-family:'El Messiri', sans-serif;
-    width: 100%; 
-    padding: 10px; 
-} 
-  
-.wrapper textarea { 
-    resize: none; 
-    height: 100px; 
-
-} 
-  
-.wrapper .btn input[type="submit"] { 
-    border: 0px; 
-    margin-top: 15px; 
-    padding: 10px; 
-    margin-left: 100px;
-    text-align: center; 
-    width: 450px; 
-    background: #301703; 
-    color: #fcfbf7; 
-    text-transform: uppercase; 
-    letter-spacing: 5px; 
-    font-weight: bold; 
-    border-radius: 25px; 
-    cursor: pointer; 
-    font-family:'El Messiri', sans-serif;
-} 
-
-.uga {
-  margin-right: 50px;
-  margin-left: 10px;
-  margin-top: 3px;
-}
-
-.logo_partenaires {
-
-  display: flex;
-  justify-content: center;
-
-}
-
-.partenaires {
-
-	max-height: 80px;
-
-}
-
-.licence {
-
-  text-decoration: none;
-  color: #fdeee2;  
-
-
 }

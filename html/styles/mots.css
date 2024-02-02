@@ -1,0 +1,49 @@
+.thematiqueseule {
+
+    margin: 15px;
+    padding: 6px;
+    background-color: #ead4c1;
+  
+  }
+
+.resultats, .resultats_donnees {
+
+    width: 600px;  
+    margin: 15px;
+    padding: 6px;
+    background-color: #ead4c1;
+
+}
+
+.similaires {
+
+    background-color: #ead4c1;
+    width: 280px;
+    margin: 15px;
+    padding: 6px;
+    
+}
+
+.similaires_donnees {
+
+    background-color: #ead4c1;
+    width: 280px;
+    margin: 15px;
+    padding: 6px;
+
+}
+
+.mots_titres {
+
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.mots_donnees {
+
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    
+}

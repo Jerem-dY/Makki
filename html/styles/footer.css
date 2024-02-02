@@ -1,0 +1,19 @@
+.logo_partenaires {
+
+  display: flex;
+  justify-content: center;
+
+}
+
+.partenaires {
+
+	max-height: 80px;
+
+}
+
+.licence {
+
+  text-decoration: none;
+  color: #fdeee2;  
+
+}
