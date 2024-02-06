@@ -47,3 +47,13 @@
     text-align: center;
     
 }
+
+hr {
+
+    height: 1px;
+    margin: -0.5em 0;
+    background-color: #fdeee2;
+    border-color: #fdeee2;
+
+    
+}

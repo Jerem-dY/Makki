@@ -229,31 +229,6 @@ footer {
 
 }
 
-.thematiqbloc {
-
-    padding: 10px;
-    width: 979px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex: 1;
-    text-align:center;
-
-}
-
-.themtq1, .themtq2, .themtq3 {
-
-    background-color: #ead4c1;
-    width: 280px;  
-    border-radius: 10px;
-    margin: 15px;
-    padding: 6px;
-    border-width: 1px;
-    border-style:solid;
-    border-color: #7d3c08;
-
-}
-
 @import "bourbon";
 
 .login-wrapper {
@@ -313,7 +288,7 @@ button[id="login-button"] {
 input:placeholder-shown {
 
   font-style: italic;
-
+  
 }
 
 .login-form {
@@ -354,7 +329,6 @@ input:placeholder-shown {
 }
 
 @include keyframes(slide) {
-
   0% {
     opacity: 0;
     @include transform(translateY(20px));
@@ -363,7 +337,6 @@ input:placeholder-shown {
     opacity: 1;
     @include transform(translateY(0));
   }
-
 }
 
 .open {
@@ -372,3 +345,4 @@ input:placeholder-shown {
   display: block;
   
 }
+
