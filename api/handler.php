@@ -374,7 +374,10 @@ class RequestHandler {
             $mod = $etag[0];
             $etag = $etag[1];
 
-            $this->add_header("Expires", "0");
+            $t = new DateTimeImmutable();
+            $duration = 60*60*24*7;
+
+            $this->add_header("Expires", $t->modify("$duration seconds")->getTimestamp());
 
             if (
                 (
@@ -388,7 +391,7 @@ class RequestHandler {
 
             $this->add_header("Content-Type", $content_type);
             $this->add_header("Content-Length", filesize($filepath));
-            $this->add_header("Cache-Control", "max-age=1, must-revalidate");
+            $this->add_header("Cache-Control", "max-age=$duration, must-revalidate");
             $this->add_header("Last-Modified", $mod);
             $this->add_header("ETag", "\"".$etag."\"");
 
