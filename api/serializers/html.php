@@ -93,23 +93,26 @@ class HTMLSerializer {
         foreach($output->find('.trad') as $e) {
             $id = $e->id;
 
-            $ts = $this->fecth_translation($id, $langs);
+            $ts = $this->fecth_translation($id, $langs, $base_url, $protocol);
             $e->lang = $ts[0];
+            $e->dir = $ts[2];
             $e->innertext = $ts[1];
             
         }
         foreach($output->find('.trad_placeholder') as $e) {
             $id = $e->id;
 
-            $ts = $this->fecth_translation($id, $langs);
+            $ts = $this->fecth_translation($id, $langs, $base_url, $protocol);
             $e->lang = $ts[0];
+            $e->dir = $ts[2];
             $e->placeholder = $ts[1];
         }
         foreach($output->find('.trad_value') as $e) {
             $id = $e->id;
 
-            $ts = $this->fecth_translation($id, $langs);
+            $ts = $this->fecth_translation($id, $langs, $base_url, $protocol);
             $e->lang = $ts[0];
+            $e->dir = $ts[2];
             $e->value = $ts[1];
         }
 
@@ -157,25 +160,25 @@ class HTMLSerializer {
         return $html;
     }
 
-    function fecth_translation(string $id, array $langs): array {
+    function fecth_translation(string $id, array $langs, string $base_url, string $protocol): array {
 
         if (sizeof($langs) > 0) {
-            $prepare_trad = function ($value) {
-                return "{ ?in dcterms:alternative ?txt FILTER( lang(?txt) = \"$value\" ) }";
+            $prepare_trad = function ($value, $base_url, $protocol) {
+                return "{ ?in dcterms:alternative ?txt . ?in <$protocol".$base_url."traductions/dir> ?dir FILTER( lang(?txt) = \"$value\" ) }";
             };
     
-            $query = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?txt WHERE { ?in dcterms:identifier \"$id\" . ";
-            $mini_q = array_map($prepare_trad, $langs);
+            $query = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?txt ?dir WHERE { ?in dcterms:identifier \"$id\" . ";
+            $mini_q = array_map($prepare_trad, $langs, array_fill(0, sizeof($langs), $base_url), array_fill(0, sizeof($langs), $protocol));
             $query .= implode(" UNION ", $mini_q) . "}";
     
             $rows = $this->db->query($query)['result']['rows'];
     
             if (sizeof($rows) > 0) {
-                return array($rows[0]['txt lang'], $rows[0]['txt']);
+                return array($rows[0]['txt lang'], $rows[0]['txt'], isset($rows[0]['dir']) ? $rows[0]['dir'] : "ltr");
             }
         }
 
-        return array("", "NOT_FOUND:".strtoupper($id));
+        return array("", "NOT_FOUND:".strtoupper($id), "ltr");
     }
 }
 

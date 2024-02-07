@@ -206,6 +206,8 @@ class RequestHandler {
                         for ($i = 0 ; $i < $nb_sheets ; $i++) {
                             $sheet = $spreadsheet->getSheet($i);
                             $lang = $sheet->getTitle();
+                            $orientation = $sheet->getCell("E1")->getValue();
+                            $orientation = in_array($orientation, ['ltr', 'rtl']) ? $orientation : 'ltr';
                             
                             foreach($sheet->getRowIterator() as $row) {
 
@@ -231,7 +233,7 @@ class RequestHandler {
 
                                 if ($id != null && $val != null) {
                                     $full_id = "<traductions/".strtr($f_no_ext, "_ ", "--")."/".strtr($id, "_ ", "--")."/$lang>";
-                                    array_push($translations, array($full_id, $f_no_ext, $val, $id,$lang));
+                                    array_push($translations, array($full_id, $f_no_ext, $val, $id, $lang, $orientation));
                                 }
                             }
 
@@ -245,12 +247,14 @@ class RequestHandler {
                             $val = $tr[2];
                             $html_id = $tr[3];
                             $lang = $tr[4];
+                            $orientation = $tr[5];
 
                             $ttl .=  "$full_id 
                                 dcterms:date \"".date('d/m/Y H:i', time())."\" ; 
                                 dcterms:language \"$lang\" ; 
                                 dcterms:source \"$f\" ; 
                                 dcterms:identifier \"$html_id\" ; 
+                                <traductions/dir> \"$orientation\" ;
                                 dcterms:alternative \"\"\"$val\"\"\"@$lang . ";
                         }
 
@@ -315,6 +319,7 @@ class RequestHandler {
                         ?truc dcterms:date \"$date\" .
                         ?truc dcterms:language \"$lang\" .
                         ?truc dcterms:source \"$file\" .
+                        ?truc <traductions/dir> ?dir .
                         ?truc dcterms:alternative ?txt .
                     }
                     
@@ -324,6 +329,7 @@ class RequestHandler {
                       ?truc dcterms:language \"$lang\" .
                       ?truc dcterms:source \"$file\" .
                       ?truc dcterms:alternative ?txt .
+                      ?truc <traductions/dir> ?dir .
                       FILTER( lang(?txt) = \"$lang\")
                     
                     }");
