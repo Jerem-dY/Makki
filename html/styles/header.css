@@ -200,7 +200,7 @@ to {
 
 .commun {
 
-    width: 30px;
+  width: 30px;
 
 }
 
@@ -346,3 +346,8 @@ input:placeholder-shown {
   
 }
 
+#barre_recherche {
+
+  text-align: center;
+
+}
