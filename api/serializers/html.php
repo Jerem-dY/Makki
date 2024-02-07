@@ -58,9 +58,15 @@ class HTMLSerializer {
         
         $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
 
+
         $output = $output->save();
         $output = str_get_html($output);
 
+        if ($page == "administration") {
+            $output = $this->make_table_trad($output, $protocol, $base_url);
+        }
+        $output = $output->save();
+        $output = str_get_html($output);
         //print_r($langs);
 
         // Images
@@ -107,10 +113,6 @@ class HTMLSerializer {
             $e->value = $ts[1];
         }
 
-        if ($page == "administration") {
-            $output = $this->make_table_trad($output, $protocol, $base_url);
-        }
-
         return $output->innertext;
 
     }
@@ -129,7 +131,25 @@ class HTMLSerializer {
                                     <td>$lang</td>
                                     <td>$file</td>
                                     <td>$date</td>
-                                    <td><button class=\"delete_trad\" data-url=\"".$protocol.$base_url."traductions\" data-lang=\"".$lang."\" data-file=\"".$file."\" data-date=\"".$date."\">Delete</button></td>
+                                    <td><button class=\"trad delete_trad\" data-url=\"".$protocol.$base_url."traductions\" data-lang=\"".$lang."\" data-file=\"".$file."\" data-date=\"".$date."\" id=\"btn_suppr\">Delete</button></td>
+                                </tr>";
+            }
+        }
+
+        return $html;
+    }
+
+    function make_table_data($html, $protocol, $base_url) {
+
+        foreach($html->find('table#table_fichier_data>tbody') as $t) {
+
+            $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?file WHERE { ?in dcterms:source ?file . FILTER(REGEX(?in, \"lexique/.*/n([0-9a-f]+)-([0-9a-f]+)-([0-9a-f]+)-([0-9a-f]+)-([0-9a-f]+)\")) } GROUP BY ?file");
+
+            foreach($rows['result']['rows'] as $r) {
+                $file = $r['file'];
+                $t->innertext .= "<tr>
+                                    <td>$file</td>
+                                    <td><button class=\"delete_data trad\" data-url=\"".$protocol.$base_url."lexique\" data-file=\"".$file."\" id=\"btn_suppr\">Delete</button></td>
                                 </tr>";
             }
         }
@@ -139,18 +159,20 @@ class HTMLSerializer {
 
     function fecth_translation(string $id, array $langs): array {
 
-        $prepare_trad = function ($value) {
-            return "{ ?in dcterms:alternative ?txt FILTER( lang(?txt) = \"$value\" ) }";
-        };
-
-        $query = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?txt WHERE { ?in dcterms:identifier \"$id\" . ";
-        $mini_q = array_map($prepare_trad, $langs);
-        $query .= implode(" UNION ", $mini_q) . "}";
-
-        $rows = $this->db->query($query)['result']['rows'];
-
-        if (sizeof($rows) > 0) {
-            return array($rows[0]['txt lang'], $rows[0]['txt']);
+        if (sizeof($langs) > 0) {
+            $prepare_trad = function ($value) {
+                return "{ ?in dcterms:alternative ?txt FILTER( lang(?txt) = \"$value\" ) }";
+            };
+    
+            $query = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?txt WHERE { ?in dcterms:identifier \"$id\" . ";
+            $mini_q = array_map($prepare_trad, $langs);
+            $query .= implode(" UNION ", $mini_q) . "}";
+    
+            $rows = $this->db->query($query)['result']['rows'];
+    
+            if (sizeof($rows) > 0) {
+                return array($rows[0]['txt lang'], $rows[0]['txt']);
+            }
         }
 
         return array("", "NOT_FOUND:".strtoupper($id));

@@ -24,6 +24,22 @@
 			<input type="file" id="upload_trad" name="uploadtrad[]" accept=".xlsx,application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet" multiple="multiple" />
 			<input type="submit" name="submit_file_trad" value="Téléverser les fichiers" />
 		</form>
+
+		<h1 class="trad" id="titre_fichiers_data">Fichiers de données</h1>
+		<table id="table_fichier_data">
+			<thead>
+				<tr>
+					<th class="trad" id="fichier_data">Fichier</th>
+					<th class="trad" id="fichier_data_suppr">Supprimer</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<form method="POST" enctype="multipart/form-data">
+			<input type="file" id="upload_data" name="uploaddata[]" accept=".ttl,.rdf,.xml" multiple="multiple" />
+			<input type="submit" name="submit_file_data" value="Téléverser les fichiers" />
+		</form>
 	</body>
 	
 	<script src="scripts/admin.js"></script>

@@ -14,9 +14,10 @@ const NORMALIZE_CHARS = array(
 
 class FileUploader {
 
-    function __construct(array $valid_ext) {
+    function __construct(array $valid_ext, int $max_size=500000) {
 
         $this->valid_ext = $valid_ext;
+        $this->max_size = $max_size;
 
         /**
          * Etape 1 : on crée le dossier qui va accueillir les fichiers à traiter, s'il n'existe pas déjà.
@@ -66,7 +67,7 @@ class FileUploader {
             }
         }
 
-        if($size > 500000){
+        if($size > $this->max_size){
             print "<br/>Upload size is too big : ".$size.". Aborting.<br/>";
             http_response_code(400);
         }

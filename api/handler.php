@@ -81,7 +81,7 @@ class RequestHandler {
             }
         }
 
-        if (!in_array("fr", $this->lang))
+        if (!in_array("fr", $this->lang) && in_array("fr", $lang_available))
             array_push($this->lang, "fr"); # Langue par défaut
 
         /**
@@ -174,7 +174,7 @@ class RequestHandler {
                 }
 
                 if (isset($_FILES["uploadtrad"])) {
-                    $uploader = new FileUploader(array("xlsx"));
+                    $uploader = new FileUploader(array("xlsx"), 500000);
 
                     $uploader->upload($_FILES["uploadtrad"]);
 
@@ -188,6 +188,18 @@ class RequestHandler {
                         $f_no_ext = explode('.', $fname);
                         $f_no_ext = current($f_no_ext);
                         $translations = array();
+
+                        $pre_q = "@prefix dcterms: <http://purl.org/dc/terms/> .
+                            @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                            @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                            
+                            SELECT ?out WHERE {?in dcterms:source ?out . FILTER(REGEX(?out, \"$f_no_ext( \([0-9]+\)|)\"))} GROUP BY ?out";
+                        $rows = $this->db->store->query($pre_q);
+
+                        $occs = count($rows['result']['rows']);
+                        if ($occs > 0) {
+                            $f_no_ext .= " ($occs)";
+                        }
 
                         $nb_sheets = $spreadsheet->getSheetCount();
 
@@ -219,7 +231,7 @@ class RequestHandler {
 
                                 if ($id != null && $val != null) {
                                     $full_id = "<traductions/".strtr($f_no_ext, "_ ", "--")."/".strtr($id, "_ ", "--")."/$lang>";
-                                    array_push($translations, array($full_id, $fname, $val, $id,$lang));
+                                    array_push($translations, array($full_id, $f_no_ext, $val, $id,$lang));
                                 }
                             }
 
@@ -233,6 +245,7 @@ class RequestHandler {
                             $val = $tr[2];
                             $html_id = $tr[3];
                             $lang = $tr[4];
+
                             $ttl .=  "$full_id 
                                 dcterms:date \"".date('d/m/Y H:i', time())."\" ; 
                                 dcterms:language \"$lang\" ; 
@@ -244,12 +257,22 @@ class RequestHandler {
                         unset($translations);
                     }
 
-                    $ttl_parser = ARC2::getTurtleParser();
-                    $ttl_parser->parse($ttl);
-                    
-
                     # ==> https://github.com/semsol/arc2/issues/122
                     $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $this->protocol.$this->there, 0);
+
+                    $uploader->delete();
+                    $this->redirect($this->protocol.$uri);
+                }
+                else if (isset($_FILES["uploaddata"])) {
+                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"), 1000000);
+
+                    $uploader->upload($_FILES["uploaddata"]);
+
+                    foreach($uploader->get_filenames() as $file){
+                        
+                        $this->db->store->insert(mb_convert_encoding(file_get_contents($file), "UTF-8"), $this->protocol.$this->there, 0);
+
+                    }
 
                     $uploader->delete();
                     $this->redirect($this->protocol.$uri);
@@ -301,14 +324,16 @@ class RequestHandler {
                       ?truc dcterms:language \"$lang\" .
                       ?truc dcterms:source \"$file\" .
                       ?truc dcterms:alternative ?txt .
-                    
-                     FILTER( lang(?txt) = \"$lang\")
+                      FILTER( lang(?txt) = \"$lang\")
                     
                     }");
 
                     if ($errs = $this->db->store->getErrors()) {
                         http_response_code(400);
                     }
+                }
+                else if ($_DELETE['type'] == "delete_data" && isset($_DELETE['file'])) {
+
                 }
             }
         }
@@ -338,6 +363,11 @@ class RequestHandler {
         $location = $location == "" ? $this->get_homepage() : $location;
         $this->add_header('Location', $location);
         http_response_code(303);
+    }
+
+    function disconnect() {
+        $this->redirect();
+        setcookie("makki_user", "", 1, "/", $GLOBALS['iss'], false, true);
     }
 
     function unauthorized() {
@@ -391,7 +421,7 @@ class RequestHandler {
 
             $this->add_header("Content-Type", $content_type);
             $this->add_header("Content-Length", filesize($filepath));
-            $this->add_header("Cache-Control", "max-age=$duration, must-revalidate");
+            $this->add_header("Cache-Control", "max-age=$duration, no-cache");
             $this->add_header("Last-Modified", $mod);
             $this->add_header("ETag", "\"".$etag."\"");
 
@@ -414,7 +444,7 @@ class RequestHandler {
     function make_session(int $id) {
 
         $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
-        $jwt = JWT::encode($id, '+6 minutes');
+        $jwt = JWT::encode($id, '+30 minutes');
         $jws = JWS::encode($jwt, "aaaaaaaaaaaaaaaaaaaaaaa");
 
         $dec = json_decode($jwt, true);
