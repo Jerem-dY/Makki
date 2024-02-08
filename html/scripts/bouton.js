@@ -8,3 +8,9 @@ $(".login-wrapper").on("mouseleave", function() {
     $('.login-form').removeClass('open');
   }
 });
+
+$(document).ready(function() {
+  $('*').each(function(index, element) {
+    $(element).addClass("loaded");
+  });
+});

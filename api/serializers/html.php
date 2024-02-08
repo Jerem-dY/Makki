@@ -41,6 +41,9 @@ class HTMLSerializer {
         $accueil_link = $header->find('#accueil', 0);
         $accueil_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "");
 
+        $contact_link = $header->find('#contact', 0);
+        $contact_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."contact";
+
         $licence_link = $footer->find('#licence', 0);
         $licence_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."licences";
 
@@ -134,7 +137,7 @@ class HTMLSerializer {
                                     <td>$lang</td>
                                     <td>$file</td>
                                     <td>$date</td>
-                                    <td><button class=\"trad delete_trad\" data-url=\"".$protocol.$base_url."traductions\" data-lang=\"".$lang."\" data-file=\"".$file."\" data-date=\"".$date."\" id=\"btn_suppr\">Delete</button></td>
+                                    <td><button class=\"trad delete_trad boutons_fichiers\" data-url=\"".$protocol.$base_url."traductions\" data-lang=\"".$lang."\" data-file=\"".$file."\" data-date=\"".$date."\" id=\"btn_suppr\">Delete</button></td>
                                 </tr>";
             }
         }
@@ -152,7 +155,7 @@ class HTMLSerializer {
                 $file = $r['file'];
                 $t->innertext .= "<tr>
                                     <td>$file</td>
-                                    <td><button class=\"delete_data trad\" data-url=\"".$protocol.$base_url."lexique\" data-file=\"".$file."\" id=\"btn_suppr\">Delete</button></td>
+                                    <td><button class=\"delete_data trad boutons_fichiers\" data-url=\"".$protocol.$base_url."lexique\" data-file=\"".$file."\" id=\"btn_suppr\">Delete</button></td>
                                 </tr>";
             }
         }

@@ -1,5 +1,8 @@
 html, body {
-	
+
+    opacity : 0;
+    transition : opacity 1s ease;
+
     background-color: #fdeee2; 
     padding:0;
     margin:0;   
@@ -22,6 +25,10 @@ html, body {
         var(--c1);
     background-size: var(--s) var(--s);   
       
+}
+
+.loaded {
+  opacity : 1;
 }
 
 @font-face {

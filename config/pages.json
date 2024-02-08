@@ -3,6 +3,7 @@
     "theme" : "html/thematiques.html",
     "recherche" : "html/recherche.html",
     "accueil" : "html/accueil.html",
+    "contact" : "html/contact.html",
     "administration" : "html/administration.html",
 	"licences" : "html/licences.html"
 }

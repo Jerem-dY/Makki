@@ -28,7 +28,7 @@ class RequestHandler {
         $this->header           = array();
         $this->method           = $_SERVER['REQUEST_METHOD'];
         $this->mime             = $parser->parse_mime($_SERVER['HTTP_ACCEPT']);
-        $this->acc_lang         = $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $this->acc_lang         = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $parser->parse_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']) : array();
         $this->lang             = array();
         $this->there            = $server;
         $this->protocol         = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
@@ -130,6 +130,9 @@ class RequestHandler {
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "recherche") {
                     $page = "recherche";
+                }
+                else if (isset($this->request['collection']) && $this->request['collection'] == "contact") {
+                    $page = "contact";
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
 
