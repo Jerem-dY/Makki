@@ -14,7 +14,7 @@ const NORMALIZE_CHARS = array(
 
 class FileUploader {
 
-    function __construct(array $valid_ext, int $max_size=500000) {
+    function __construct(array $valid_ext, int $user_id, int $max_size=500000) {
 
         $this->valid_ext = $valid_ext;
         $this->max_size = $max_size;
@@ -24,7 +24,7 @@ class FileUploader {
          *  
          * */
         $this->uploads_dir = getcwd().DIRECTORY_SEPARATOR."uploads";
-        $this->uploads_path = $this->uploads_dir.DIRECTORY_SEPARATOR."up_0".DIRECTORY_SEPARATOR;//.$_SESSION["user_id"].DIRECTORY_SEPARATOR;
+        $this->uploads_path = $this->uploads_dir.DIRECTORY_SEPARATOR."$user_id".DIRECTORY_SEPARATOR;//.$_SESSION["user_id"].DIRECTORY_SEPARATOR;
 
         if(is_dir($this->uploads_path)){
 

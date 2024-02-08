@@ -21,8 +21,9 @@
 			</tbody>
 		</table>
 		<form method="POST" enctype="multipart/form-data">
-			<input type="file" id="upload_trad" name="uploadtrad[]" accept=".xlsx,application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet" multiple="multiple" />
-			<input type="submit" name="submit_file_trad" value="Téléverser les fichiers" />
+			<label for="upload_trad" class="trad" id="fichier_trad_choisir">Choisir les fichiers...</label>
+			<input type="file" id="upload_trad" name="uploadtrad[]" accept=".xlsx,application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet" multiple="multiple" hidden />
+			<input type="submit" name="submit_file_trad" class="trad_value" id="fichier_trad_envoyer" value="Téléverser les fichiers" />
 		</form>
 
 		<h1 class="trad" id="titre_fichiers_data">Fichiers de données</h1>
@@ -37,8 +38,9 @@
 			</tbody>
 		</table>
 		<form method="POST" enctype="multipart/form-data">
-			<input type="file" id="upload_data" name="uploaddata[]" accept=".ttl,.rdf,.xml" multiple="multiple" />
-			<input type="submit" name="submit_file_data" value="Téléverser les fichiers" />
+			<label for="upload_data" class="trad" id="fichier_data_choisir">Choisir les fichiers...</label>
+			<input type="file" id="upload_data" name="uploaddata[]" accept=".ttl,.rdf,.xml" multiple="multiple" hidden />
+			<input type="submit" name="submit_file_data" class="trad_value" id="fichier_data_envoyer" value="Téléverser les fichiers" />
 		</form>
 	</body>
 	

@@ -36,7 +36,10 @@ class RequestHandler {
         $this->content_type     = "text/html";
         $this->db               = new DB("config/db.json", "config/db.sql");
         $this->html_serializer  = new HTMLSerializer("config/pages.json", $this->db);
-        $this->auth             = $this->retrieve_session();
+
+        $session = $this->retrieve_session();
+        $this->auth = $session[0];
+        $this->id   = $session[1];
 
         // On s'occupe de charger les headers par défaut
         $headers = file_get_contents($headers);
@@ -117,11 +120,16 @@ class RequestHandler {
                         $page = "mot";
                     }
                     else if (isset($this->request['query'])) {
-                        $page = "recherche";
+                        $page = "mot";
                     }
                     else {
-                        $page = "accueil";
+                        //TODO: Afficher une liste de tous les mots dans l'ordre alphabétique
+                        $this->redirect();
+                        return;
                     }
+                }
+                else if (isset($this->request['collection']) && $this->request['collection'] == "recherche") {
+                    $page = "recherche";
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
 
@@ -174,7 +182,7 @@ class RequestHandler {
                 }
 
                 if (isset($_FILES["uploadtrad"])) {
-                    $uploader = new FileUploader(array("xlsx"), 500000);
+                    $uploader = new FileUploader(array("xlsx"), $this->id, 500000);
 
                     $uploader->upload($_FILES["uploadtrad"]);
 
@@ -268,7 +276,7 @@ class RequestHandler {
                     $this->redirect($this->protocol.$uri);
                 }
                 else if (isset($_FILES["uploaddata"])) {
-                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"), 1000000);
+                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 1000000);
 
                     $uploader->upload($_FILES["uploaddata"]);
 
@@ -458,26 +466,26 @@ class RequestHandler {
         setcookie("makki_user", $jws, $dec['exp'], "/", $GLOBALS['iss'], false, true);
     }
 
-    function retrieve_session(): bool {
+    function retrieve_session(): array {
 
         if (isset($_COOKIE["makki_user"])) {
 
             $jwt = JWS::decode($_COOKIE["makki_user"], "aaaaaaaaaaaaaaaaaaaaaaa");
 
             if (check_errors($jwt)) {
-                return false;
+                return [false, -1];
             }
 
             $decoded = JWT::decode($jwt, '');
 
             if (check_errors($decoded)) {
-                return false;
+                return [false, -1];
             }
 
-            return $this->db->check_admin_id($decoded);
+            return $this->db->check_admin_id($decoded) ? [true, $decoded] : [false, -1];
         }
         else {
-            return false;
+            return [false, -1];
         }
     }
 }
