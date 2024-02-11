@@ -14,3 +14,8 @@ $(document).ready(function() {
     $(element).addClass("loaded");
   });
 });
+
+$("form.login-form").on("submit", function(event) {
+  $("#utilisateur").val( window.btoa(encodeURIComponent($("#utilisateur").val())) );
+  $("#mdp").val( window.btoa(encodeURIComponent($("#mdp").val())) );
+});

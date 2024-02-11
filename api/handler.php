@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class RequestHandler {
 
-    const RESOURCES_COLL = array("images", "scripts", "styles", "fonts");
+    const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
 
     function __construct(string $uri, string $request_config, string $server, string $headers) {
 
@@ -38,8 +38,9 @@ class RequestHandler {
         $this->html_serializer  = new HTMLSerializer("config/pages.json", $this->db);
 
         $session = $this->retrieve_session();
-        $this->auth = $session[0];
-        $this->id   = $session[1];
+        $this->auth      = $session[0];
+        $this->id        = $session[1]['usr'];
+        $this->session   = $session[1]['sid'];
 
         // On s'occupe de charger les headers par défaut
         $headers = file_get_contents($headers);
@@ -95,19 +96,51 @@ class RequestHandler {
             if (isset($this->request['collection']) && in_array($this->request['collection'], self::RESOURCES_COLL)) {
 
                 $collection = $this->request['collection'];
-                $rs_path = "html/".$collection."/".$this->request['target'];
 
-                if($collection == 'images') {
-                    $mime = image_type_to_mime_type(exif_imagetype($rs_path));
+                if ($collection == "clefs") {
+
+                    $rs_path = "secure/public_keys.json";
+                    $mime = "application/json";
+
+                    if (!is_file($rs_path)) {
+                        make_keyset();
+                    }
+
+                    if (isset($this->request['target'])) {
+
+                        $kid = $this->request['target'];
+                        $keys = json_decode(file_get_contents($rs_path), true);
+
+                        foreach($keys['keys'] as $k) {
+                            if ($k['kid'] == $kid) {
+                                $this->output = json_encode($k);
+                                $this->add_header("Content-Type", $mime);
+                                $this->add_header("Content-Length", strlen($this->output));
+                                return;
+                            }
+                        }
+                        
+                        http_response_code(404);
+                        return;
+
+                    }
+                    
                 }
-                else if($collection == 'fonts') {
-                    $mime = "font/ttf";
-                }
-                else if($collection == 'styles') {
-                    $mime = "text/css";
-                }
-                else if($collection == 'scripts') {
-                    $mime = "application/javascript";
+                else {
+                    $rs_path = "html/".$collection."/".$this->request['target'];
+
+                    if($collection == 'images') {
+                        $mime = image_type_to_mime_type(exif_imagetype($rs_path));
+                    }
+                    else if($collection == 'fonts') {
+                        $mime = "font/ttf";
+                    }
+                    else if($collection == 'styles') {
+                        $mime = "text/css";
+                    }
+                    else if($collection == 'scripts') {
+                        $mime = "application/javascript";
+                    }
                 }
 
                 http_response_code($this->cache($rs_path, $mime));
@@ -153,8 +186,11 @@ class RequestHandler {
                 else {
                     $page = "accueil";
                 }
-    
-                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth);
+                
+                $token = $this->make_nonce();
+
+
+                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token);
             }
             else {
                 echo "OH NO!";
@@ -162,10 +198,27 @@ class RequestHandler {
         }
         else if ($this->method == 'POST') {
 
+            if (!isset($_POST['nonce']) || !isset($_COOKIE['makki_nonce'])) {
+                $this->unauthorized();
+                return;
+            }
+
+            $cookie = $this->retrieve_nonce($_COOKIE['makki_nonce']);
+            $frm = $this->retrieve_nonce($_POST['nonce']);
+
+            // On vérifie que :
+            // si connecté, le champ `usr` du cookie nonce doit correspondre au champ `sid` du cookie d'authentification
+            // le nonce doit être présent dans les donneés du formulaire
+            // le champ `sid` du nonce du formulaire doit correspondre à celui du cookie 
+            if(($this->auth && $cookie['usr'] != $this->session) || $frm['sid'] != $cookie['sid']) {
+                $this->unauthorized();
+                return;
+            }
+
             if (isset($_POST['bouton_co'])) {
                 
-                $mdp = $_POST['mdp'];
-                $login = $_POST['utilisateur'];
+                $mdp = base64_decode($_POST['mdp']);
+                $login = base64_decode($_POST['utilisateur']);
 
                 $id = $this->db->check_credentials($login, $mdp);
 
@@ -438,7 +491,7 @@ class RequestHandler {
 
             $this->add_header("Content-Type", $content_type);
             $this->add_header("Content-Length", filesize($filepath));
-            $this->add_header("Cache-Control", "max-age=$duration, no-cache");
+            $this->add_header("Cache-Control", "no-cache");
             $this->add_header("Last-Modified", $mod);
             $this->add_header("ETag", "\"".$etag."\"");
 
@@ -460,20 +513,45 @@ class RequestHandler {
 
     function make_session(int $id) {
 
+        if (!file_exists("secure/clefs.json")) {
+            make_keyset();
+        }
+
+        $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
+
+        if ($clefs["exp"] < time()) {
+            make_keyset();
+            $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
+        }
+
         $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
         $jwt = JWT::encode($id, '+30 minutes');
-        $jws = JWS::encode($jwt, "aaaaaaaaaaaaaaaaaaaaaaa");
+        $jws = JWS::encode($jwt, base64_decode($clefs['keys']['sig-session']['key']));
+        $jwe = JWE::encode($jws, get_public_key(base64_decode($clefs['keys']['enc-session']['key'])));
 
         $dec = json_decode($jwt, true);
 
-        setcookie("makki_user", $jws, $dec['exp'], "/", $GLOBALS['iss'], false, true);
+        setcookie("makki_user", $jwe, $dec['exp'], "/", $GLOBALS['iss'], false, true);
     }
 
     function retrieve_session(): array {
 
         if (isset($_COOKIE["makki_user"])) {
 
-            $jwt = JWS::decode($_COOKIE["makki_user"], "aaaaaaaaaaaaaaaaaaaaaaa");
+            if (!is_file("secure/clefs.json")) {
+                make_keyset();
+                return [false, -1];
+            }
+
+            $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
+
+            if (!$clefs || $clefs["exp"] < time()) {
+                make_keyset();
+                return [false, -1];
+            }
+
+            $jws = JWE::decode($_COOKIE["makki_user"], base64_decode($clefs['keys']['enc-session']['key']));
+            $jwt = JWS::decode($jws, base64_decode($clefs['keys']['sig-session']['key']));
 
             if (check_errors($jwt)) {
                 return [false, -1];
@@ -485,12 +563,65 @@ class RequestHandler {
                 return [false, -1];
             }
 
-            return $this->db->check_admin_id($decoded) ? [true, $decoded] : [false, -1];
+            return $this->db->check_admin_id($decoded['usr']) ? [true, $decoded] : [false, -1];
         }
         else {
             return [false, -1];
         }
     }
+
+    function make_nonce(): string {
+
+        if (!file_exists("secure/clefs.json")) {
+            make_keyset();
+        }
+
+        $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
+
+        if ($clefs["exp"] < time()) {
+            make_keyset();
+            $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
+        }
+
+        $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
+        $jwt = JWT::encode($this->auth ? $this->session : "", '+60 minutes');
+        $jws = JWS::encode($jwt, base64_decode($clefs['keys']['sig-csrf']['key']));
+
+        $dec = json_decode($jwt, true);
+
+        setcookie("makki_nonce", $jws, $dec['exp'], "/", $GLOBALS['iss'], false, true);
+
+        return $jws;
+    }
+
+    function retrieve_nonce(string $nonce) {
+
+        if (!isset($nonce)) {
+            return false;
+        }
+
+        $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
+
+        if (!$clefs || $clefs["exp"] < time()) {
+            make_keyset();
+            return false;
+        }
+
+        $jwt = JWS::decode($nonce, base64_decode($clefs['keys']['sig-csrf']['key']));
+
+        if (check_errors($jwt)) {
+            return false;
+        }
+
+        $decoded = JWT::decode($jwt, '');
+
+        if (check_errors($decoded)) {
+            return false;
+        }
+
+        return $decoded;
+    }
+
 }
 
 

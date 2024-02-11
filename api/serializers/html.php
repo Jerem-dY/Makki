@@ -22,7 +22,7 @@ class HTMLSerializer {
         }
     }
 
-    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected): string {
+    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token=""): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -61,9 +61,16 @@ class HTMLSerializer {
         
         $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
 
-
         $output = $output->save();
         $output = str_get_html($output);
+
+        if ($token != "") {
+            $nonce = "<input type=\"hidden\" id=\"nonce\" name=\"nonce\" value=\"$token\">";
+
+            foreach($output->find("form") as $form) {
+                $form->innertext = $nonce . $form->innertext;
+            }
+        }
 
         if ($page == "administration") {
             $output = $this->make_table_trad($output, $protocol, $base_url);

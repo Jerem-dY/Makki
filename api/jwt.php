@@ -8,6 +8,106 @@ define('decryptionError', 'decryptionError');
 $iss = "your.domain.name";
 
 
+function make_keyset() {
+
+    /** Etape 1 : on définit la date d'expiration du trousseau (1 mois) */
+    $exp = new DateTimeImmutable();
+    // On définit la date d'expiration à minuit afin que cela affecte le moins possible les utilisateurs
+    $exp = $exp->modify('+ 1 month')->setTime(0, 0)->getTimestamp(); 
+
+    /** Etape 2 : On génère les clés */
+    $keys = array("exp" => $exp, "keys" => array());
+
+    
+
+    // Token de session (signature)
+    $key = generate_sym_key();
+    $id  = "sig-session";
+    $use = "sig";
+
+    $keys['keys'][$id] = array("key" => base64_encode($key), "kid" => $id, "use" => $use);
+
+    
+    // Token de session (chiffrement)
+    $key = generate_asym_key()[0];
+    $id  = "enc-session";
+    $use = "enc";
+
+    $keys['keys'][$id] = array("key" => base64_encode($key), "kid" => $id, "use" => $use);
+
+    // Token anti-CSRF (signature)
+    $key = generate_sym_key();
+    $id  = "sig-csrf";
+    $use = "sig";
+
+    $keys['keys'][$id] = array("key" => base64_encode($key), "kid" => $id, "use" => $use);
+    
+
+    // Chiffrement et déchiffrement d'identifiants (chiffrement)
+    $k = generate_asym_key("enc-login");
+    $key = $k[0];
+    $public = $k[1];
+    $id  = "enc-login";
+    $use = "enc";
+
+    $keys['keys'][$id] = array("key" => base64_encode($key), "use" => $use); 
+
+
+    /** Etape 3 : on enregistre les clés */
+    if (!is_dir("secure")) {
+        mkdir("secure", 0770);
+    }
+    file_put_contents("secure/clefs.json", json_encode($keys));
+    file_put_contents("secure/public_keys.json", json_encode(array("keys" => array($public))));
+
+}
+
+
+function generate_sym_key(int $length=512): string {
+    return openssl_random_pseudo_bytes($length);
+}
+
+
+function generate_asym_key(string $id="", int $length=4096, string $key_use="enc"): array {
+
+    $config = array(
+        "private_key_bits" => $length,
+        "private_key_type" => OPENSSL_KEYTYPE_RSA,
+    );
+
+    /** On génère la pair de clés */
+    $key = openssl_pkey_new($config);
+    
+    if (!$key) {
+        return array(false, false);
+    }
+
+    if (!openssl_pkey_export($key, $private_key, null, $config)) {
+        return array(false, false);
+    }
+
+    $details = openssl_pkey_get_details($key);
+
+    $public_key = array(
+        "kty" => "RSA",
+        "kid" => $id,
+        "use" => $key_use,
+        "n" => base64_encode($details['rsa']['n']),
+        "e" => base64_encode($details['rsa']['e'])
+
+    );
+
+    return array($private_key, $public_key);
+
+}
+
+
+function get_public_key(string $private_key) {
+    $pkey = openssl_pkey_get_private($private_key);
+    return openssl_pkey_get_public(openssl_pkey_get_details($pkey)['key']);
+}
+
+
 function check_errors($value): bool {
     if ($value == validationError || $value == expirationError || $value == encryptionError || $value == decryptionError)
         return true;
@@ -69,7 +169,12 @@ class JWS implements JsonWebProcess {
     public static function decode(string $data, $key) {
 
         // On sépare les différents éléments de la chaîne : l'en-tête, la charge utile (le message) et la signature (un hash des deux premiers)
-        list($header_64, $payload_64, $mac_64) = explode(".", $data);
+        $data = explode(".", $data);
+
+        if (sizeof($data) != 3) {
+            return decryptionError;
+        }
+        list($header_64, $payload_64, $mac_64) = $data;
         $concat = $header_64 . "." . $payload_64;
 
         // On récupère la version utf-8 de chaque élément en décodant la base64
@@ -79,7 +184,7 @@ class JWS implements JsonWebProcess {
 
         // On valide le contenu en vérifiant que le hash des données est bien équivalent à celui transmis.
         $validation = hash_hmac(self::$hashmethod, $concat, $key);
-        if ($mac != $validation) {
+        if (!hash_equals($validation, $mac)) {
             return validationError;
         }
 
@@ -151,7 +256,11 @@ class JWE implements JsonWebProcess {
      */
     public static function decode(string $data, $key) {
 
-        list($header_64, $encrypted_key_64, $iv_64, $sealed_data_64, $tag_64) = explode(".", $data);
+        $data = explode(".", $data);
+        if (sizeof($data) != 5) {
+            return decryptionError;
+        }
+        list($header_64, $encrypted_key_64, $iv_64, $sealed_data_64, $tag_64) = $data;
 
         $header = base64_decode($header_64);
         $encrypted_key = base64_decode($encrypted_key_64);
@@ -182,11 +291,12 @@ class JWT implements JsonWebProcess {
         $exp = $iat->modify($key)->getTimestamp(); // '+6 minutes'
 
         return json_encode([
-            'iat'  => $iat->getTimestamp(), // Issued at
-            'iss'  => $GLOBALS['iss'], // Issuer
-            'nbf'  => $nbf->getTimestamp(), // Not before
-            'exp'  => $exp,  // Expire
-            'usr' => $payload, // User name
+            'iat' => $iat->getTimestamp(),               // Issued at
+            'iss' => $GLOBALS['iss'],                    // Issuer
+            'nbf' => $nbf->getTimestamp(),               // Not before
+            'exp' => $exp,                               // Expire
+            'usr' => $payload,                           // User name
+            'sid' => base64_encode(generate_sym_key(64)) // Session ID
         ]);
     }
 
@@ -201,7 +311,7 @@ class JWT implements JsonWebProcess {
             return validationError;
         }
 
-        return $decoded['usr'];
+        return ['usr' => $decoded['usr'], 'sid' => $decoded['sid']];
     }
 
 }
