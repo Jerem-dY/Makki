@@ -43,7 +43,7 @@ def convert_to_rdf(input_json, source_file_name):
 
             subject=";\n".join([f'dc:subject "{subject[0]}"@{subject[1]}' for subject in lexeme_info.get("subject", [])]) + ' ;' if lexeme_info.get("subject") else "",
 
-            example=";\n".join([f'dc:example "{example[0]}"@{example[1]}' for example in lexeme_info.get("example", [])]) + ' ;' if lexeme_info.get("example") else "",
+            example=";\n".join([f'dc:example \"\"\"{example[0]}\"\"\"@{example[1]}' for example in lexeme_info.get("example", [])]) + ' ;' if lexeme_info.get("example") else "",
 
             source= source_file_name,
 

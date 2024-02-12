@@ -10,12 +10,15 @@
         dc:identifier "n804bd9b3-b256-c202-4022-84d37e4cc599" ;
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أأَع"@ar ;
+        
+        
+        
         dc:subject "Impér."@fr;
-        dc:subject "لِلأمر"@ar ;
+dc:subject "لِلأمر"@ar ;
         dc:abstract """Pas touche ! 
-        (*)Pour dissuader les tout-petits de toucher qqch de sale ou dégoûtant"""@fr;
-        dc:abstract """لا تَلمُس!
-        (*)لِثَنـيِ الأطفالِ عَن لَمسِ شَيءٍ قذر ومقزّز."""@ar .
+(*)Pour dissuader les tout-petits de toucher qqch de sale ou dégoûtant"""@fr;
+dc:abstract """لا تَلمُس!
+(*)لِثَنـيِ الأطفالِ عَن لَمسِ شَيءٍ قذر ومقزّز."""@ar .
         
 <lexique/أأَع#n6047a75e-2709-c0f7-fb70-166b2f0a0a8c>
         dc:creator "Hassan Makki" ;
@@ -248,8 +251,8 @@ dc:abstract """↔ أبدا"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أبـدَق"@ar ;
         
-        dc:example "Il n’y a pas plus malin ou rusé que lui"@fr;
-dc:example "ما فِـي ~ مِنُّه"@ar ;
+        dc:example """Il n’y a pas plus malin ou rusé que lui"""@fr;
+dc:example """ما فِـي ~ مِنُّه"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -508,8 +511,8 @@ dc:abstract """اللهُ أعلَم!"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِبْـقَـى"@ar ;
         
-        dc:example "Tu lui diras à l’occasion"@fr;
-dc:example "~ قُلُّه"@ar ;
+        dc:example """Tu lui diras à l’occasion"""@fr;
+dc:example """~ قُلُّه"""@ar ;
         
         
         dc:abstract """À l’occasion"""@fr;
@@ -522,11 +525,11 @@ dc:abstract """فِـي الـمُناسَبَة، حِينَ تَحِينُ ا�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أبـلَـق"@ar ;
         
-        dc:example "Quel culotté ! quel arrogant !"@fr;
-dc:example "Sans gêne, avec culot, avec arrogance et insolence (text. œil avide)"@fr;
-dc:example "ما ~ عَيْنُه!"@ar;
-dc:example "بِعِين بَلقا  
-• +م بَلقَا، بَلقَة ج بِلِقِين"@ar ;
+        dc:example """Quel culotté ! quel arrogant !"""@fr;
+dc:example """Sans gêne, avec culot, avec arrogance et insolence (text. œil avide)"""@fr;
+dc:example """ما ~ عَيْنُه!"""@ar;
+dc:example """بِعِين بَلقا  
+• +م بَلقَا، بَلقَة ج بِلِقِين"""@ar ;
         
         
         dc:abstract """(Qqn) Culotté, arrogant(Qqn) Avide"""@fr;
@@ -724,8 +727,8 @@ dc:abstract """(شَخص) مُتَحَدِّرٌ مِن عائِلَةٍ عَر�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أبـهَـر"@ar ;
         
-        dc:example "Le soleil l’a ébloui (text. lui a ébloui les yeux)"@fr;
-dc:example "الشَّمس أبـهَرُتلُه عيونُه"@ar ;
+        dc:example """Le soleil l’a ébloui (text. lui a ébloui les yeux)"""@fr;
+dc:example """الشَّمس أبـهَرُتلُه عيونُه"""@ar ;
         
         
         dc:abstract """Éblouir qqn"""@fr;
@@ -819,8 +822,8 @@ dc:abstract """لَفظَةٌ تُقالُ لِتَشجِيعِ الطِّفلِ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أبُـو"@ar ;
         
-        dc:example "C’est environ 50 dollars"@fr;
-dc:example "هَيْدا أبو خَـمسِين دولار"@ar ;
+        dc:example """C’est environ 50 dollars"""@fr;
+dc:example """هَيْدا أبو خَـمسِين دولار"""@ar ;
         
         
         dc:abstract """Environ, à peu près"""@fr;
@@ -1768,9 +1771,9 @@ dc:abstract """
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أبُـونـا"@ar ;
         
-        dc:example "As-tu évoqué le sujet au père Youssef ?"@fr;
-dc:example "حكِيت مَع ~ يُوسف بالـمَوضُوع ؟ 
-• ج أبَواتنا"@ar ;
+        dc:example """As-tu évoqué le sujet au père Youssef ?"""@fr;
+dc:example """حكِيت مَع ~ يُوسف بالـمَوضُوع ؟ 
+• ج أبَواتنا"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -1825,9 +1828,9 @@ dc:abstract """أنتَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إتّ"@ar ;
         
-        dc:example "C’est lui qui endosse la responsabilité de l’affaire"@fr;
-dc:example "طالعَة الشَّغلِة من إتُّـه 
-• ج إتّات"@ar ;
+        dc:example """C’est lui qui endosse la responsabilité de l’affaire"""@fr;
+dc:example """طالعَة الشَّغلِة من إتُّـه 
+• ج إتّات"""@ar ;
         
         
         dc:abstract """Responsabilité"""@fr;
@@ -1866,10 +1869,10 @@ dc:abstract """"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اتّـاكَـل"@ar ;
         
-        dc:example "Le poisson frit se mange avec les doigts"@fr;
-dc:example "Les pâtisseries se mangent avec délice"@fr;
-dc:example "السَّمَك الـمِقلِي بيِتّاكَل بالأصابع"@ar;
-dc:example "الـحَلوَيات بْتِتّاكَل أكل"@ar ;
+        dc:example """Le poisson frit se mange avec les doigts"""@fr;
+dc:example """Les pâtisseries se mangent avec délice"""@fr;
+dc:example """السَّمَك الـمِقلِي بيِتّاكَل بالأصابع"""@ar;
+dc:example """الـحَلوَيات بْتِتّاكَل أكل"""@ar ;
         
         
         dc:abstract """Peur se manger, être mangeable"""@fr;
@@ -1895,8 +1898,8 @@ dc:abstract """تَثاءَبَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اتّـاوَز"@ar ;
         
-        dc:example "Ils se lancent des pierres"@fr;
-dc:example "عَم يِتّاوَزوا حْجارَة"@ar ;
+        dc:example """Ils se lancent des pierres"""@fr;
+dc:example """عَم يِتّاوَزوا حْجارَة"""@ar ;
         
         
         dc:abstract """Se lancer qqch"""@fr;
@@ -2000,10 +2003,10 @@ dc:abstract """قَرابَة"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اضَّـبـضَـب"@ar ;
         
-        dc:example "Rentre chez toi et va te coucher !!"@fr;
-dc:example "Casse-toi, tu n’es pas à la hauteur !!"@fr;
-dc:example "رُوح ~ بِبَيتَك ونام!!"@ar;
-dc:example "رُوح ~!!"@ar ;
+        dc:example """Rentre chez toi et va te coucher !!"""@fr;
+dc:example """Casse-toi, tu n’es pas à la hauteur !!"""@fr;
+dc:example """رُوح ~ بِبَيتَك ونام!!"""@ar;
+dc:example """رُوح ~!!"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَـجازًا"@ar ;
@@ -2446,8 +2449,8 @@ dc:abstract """كَلّاسَة، قَمِينُ الـجِير، أَتُّون
         dc:source "Alif_revu_YZ.json" ;
         dc:title "آتَـى"@ar ;
         
-        dc:example "L’air ou le climat convient bien à untel"@fr;
-dc:example "الـهَوا أو الطّقس ~ فلان"@ar ;
+        dc:example """L’air ou le climat convient bien à untel"""@fr;
+dc:example """الـهَوا أو الطّقس ~ فلان"""@ar ;
         
         
         dc:abstract """Aller bien à qqn, convenir bien à qqn"""@fr;
@@ -2501,8 +2504,8 @@ dc:abstract """سِمَة
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أتِـيـكـات"@ar ;
         
-        dc:example "Untel est très à cheval sur l’étiquette ou selon les bonnes manières"@fr;
-dc:example "فلان كتير عَالأتِيكات"@ar ;
+        dc:example """Untel est très à cheval sur l’étiquette ou selon les bonnes manières"""@fr;
+dc:example """فلان كتير عَالأتِيكات"""@ar ;
         lex:etymo "Cf. « étikéte »  (1)"@fr ;
         
         dc:abstract """Étiquette, cérémonial en usage dans une cour ou une réception officielle, bonnes manières"""@fr;
@@ -2528,8 +2531,8 @@ dc:abstract """↔ أتِيكات"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إجـا"@ar ;
         
-        dc:example "C’est le moment d’aller dormir (text. le temps de dormir est venu)"@fr;
-dc:example "~ وَقت النَّوم"@ar ;
+        dc:example """C’est le moment d’aller dormir (text. le temps de dormir est venu)"""@fr;
+dc:example """~ وَقت النَّوم"""@ar ;
         
         
         dc:abstract """Venir, s’amener"""@fr;
@@ -2542,14 +2545,14 @@ dc:abstract """جاءَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إجـا"@ar ;
         
-        dc:example "Il a retrouvé la bonne mine (text. sa [bonne] santé est revenue)"@fr;
-dc:example "(Prov.) Laisse le miel dans les jarres en attendant le bon prix"@fr;
-dc:example "Il ou elle a atteint l’orgasme"@fr;
-dc:example "(Expr. populaire) Nul ne meurt avant son heure"@fr;
-dc:example "إجِت صَحّتُه"@ar;
-dc:example "خَلِّي العَسَل بِـجرارُه تَتِجِي أسعارُه"@ar;
-dc:example "~ ضَهرُه؛ ~ ضهرها"@ar;
-dc:example "ما حَدا بِيمُوت لَيِجِي أجَلُه"@ar ;
+        dc:example """Il a retrouvé la bonne mine (text. sa [bonne] santé est revenue)"""@fr;
+dc:example """(Prov.) Laisse le miel dans les jarres en attendant le bon prix"""@fr;
+dc:example """Il ou elle a atteint l’orgasme"""@fr;
+dc:example """(Expr. populaire) Nul ne meurt avant son heure"""@fr;
+dc:example """إجِت صَحّتُه"""@ar;
+dc:example """خَلِّي العَسَل بِـجرارُه تَتِجِي أسعارُه"""@ar;
+dc:example """~ ضَهرُه؛ ~ ضهرها"""@ar;
+dc:example """ما حَدا بِيمُوت لَيِجِي أجَلُه"""@ar ;
         
         
         dc:abstract """S’améliorer, être en meilleur état"""@fr;
@@ -2829,8 +2832,8 @@ dc:abstract """(شَخص) أحمَق، أبلَه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أجـدَب"@ar ;
         
-        dc:example "Y a-t-il plus idiot ou plus imbécile que lui?"@fr;
-dc:example "ما فِـي ~ مِنّه؟"@ar ;
+        dc:example """Y a-t-il plus idiot ou plus imbécile que lui?"""@fr;
+dc:example """ما فِـي ~ مِنّه؟"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -2859,15 +2862,15 @@ dc:abstract """مَأتَمُ دَفنُ الـمَيْت"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إجِـر"@ar ;
         
-        dc:example "Pied de chaise, pied d’armoire, pied de table"@fr;
-dc:example "Animal à deux pattes"@fr;
-dc:example "Tes pieds ; mes pieds"@fr;
-dc:example "(Prov.) Il faut tailler son manteau selon son drap (text. étends les pieds à la mesure de ton tapis)"@fr;
-dc:example "~ الكرسي، ~ الـخزانة، ~ الطّاولة"@ar;
-dc:example "حَيَوان بِإجِرتِـين"@ar;
-dc:example "جْريك ؛ جْرَيِّي"@ar;
-dc:example "عَقَدّ بساطَك مِدّ إجرِيك 
-• +ج إجرِين، جْرِين، جْريّات"@ar ;
+        dc:example """Pied de chaise, pied d’armoire, pied de table"""@fr;
+dc:example """Animal à deux pattes"""@fr;
+dc:example """Tes pieds ; mes pieds"""@fr;
+dc:example """(Prov.) Il faut tailler son manteau selon son drap (text. étends les pieds à la mesure de ton tapis)"""@fr;
+dc:example """~ الكرسي، ~ الـخزانة، ~ الطّاولة"""@ar;
+dc:example """حَيَوان بِإجِرتِـين"""@ar;
+dc:example """جْريك ؛ جْرَيِّي"""@ar;
+dc:example """عَقَدّ بساطَك مِدّ إجرِيك 
+• +ج إجرِين، جْرِين، جْريّات"""@ar ;
         
         
         dc:abstract """Jambe d’une personne, pied d’une personne ou d’un objet, patte d’un animal"""@fr;
@@ -2880,10 +2883,10 @@ dc:abstract """رِجلُ الإنسانِ أو الشّيء، قَدَمُ ال
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إجِـر"@ar ;
         
-        dc:example "Aujourd’hui je suis obligé de rester ici"@fr;
-dc:example "Tant qu’il est lié ici, il ne peut rien faire ailleurs"@fr;
-dc:example "اليوم إجرِي مَكسُورَة هُون"@ar;
-dc:example "طالـما إجرُه مَكسُورَة هون، ما فِـي يِعمِل شِي بِغِير مَـحَلّ"@ar ;
+        dc:example """Aujourd’hui je suis obligé de rester ici"""@fr;
+dc:example """Tant qu’il est lié ici, il ne peut rien faire ailleurs"""@fr;
+dc:example """اليوم إجرِي مَكسُورَة هُون"""@ar;
+dc:example """طالـما إجرُه مَكسُورَة هون، ما فِـي يِعمِل شِي بِغِير مَـحَلّ"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -3442,8 +3445,8 @@ dc:abstract """سُعال، سُعلَة"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِحـتَـبَـك"@ar ;
         
-        dc:example "La salle s’est remplie de monde"@fr;
-dc:example "اِحتَبَكـِت الصّالَة بالنّاس"@ar ;
+        dc:example """La salle s’est remplie de monde"""@fr;
+dc:example """اِحتَبَكـِت الصّالَة بالنّاس"""@ar ;
         
         
         dc:abstract """Se remplir, être plein (lieu)"""@fr;
@@ -3667,8 +3670,8 @@ dc:abstract """(شَخص) أصلَع(شَخص) أمرَد، أجرَد(شَخص)
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَحِـم،"@ar ;
         
-        dc:example "Il rentre sans avertissement ni autorisation"@fr;
-dc:example "داخل لا ~ ولا دستور"@ar ;
+        dc:example """Il rentre sans avertissement ni autorisation"""@fr;
+dc:example """داخل لا ~ ولا دستور"""@ar ;
         
         
         dc:abstract """Son de voix de qqn pour se faire remarquer ou avertir de sa présence en toussotant ou en se raclant la gorge"""@fr;
@@ -3694,9 +3697,9 @@ dc:abstract """↔ أحم"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أحـمَـر"@ar ;
         
-        dc:example "Situation due à une grande fatigue ou à une chaleur intense (text. mort rouge due ..)"@fr;
-dc:example "موت ~ من كِتـرِة التَّعَب أو كِتـرِة الشُّوب  
-• ج حُـمُر"@ar ;
+        dc:example """Situation due à une grande fatigue ou à une chaleur intense (text. mort rouge due ..)"""@fr;
+dc:example """موت ~ من كِتـرِة التَّعَب أو كِتـرِة الشُّوب  
+• ج حُـمُر"""@ar ;
         
         
         dc:abstract """Dureté ou sévérité d’une situation"""@fr;
@@ -3725,8 +3728,8 @@ dc:abstract """اكثَرُ حُـمرَةً مِناكثَرُ حُـمرَةً
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أحـمَـر"@ar ;
         
-        dc:example "Y a-t-il plus idiot ou plus imbécile que lui?"@fr;
-dc:example "فِـي ~ مِنُّه؟"@ar ;
+        dc:example """Y a-t-il plus idiot ou plus imbécile que lui?"""@fr;
+dc:example """فِـي ~ مِنُّه؟"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -3769,8 +3772,8 @@ dc:abstract """(لَون) مائِلٌ إلى اللَونِ الأحمَر"""@a
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أحْـمَـش"@ar ;
         dc:coverage "Sud du Liban"@fr ;
-        dc:example "Il a bandé"@fr;
-dc:example "~ مَعُه"@ar ;
+        dc:example """Il a bandé"""@fr;
+dc:example """~ مَعُه"""@ar ;
         
         
         dc:abstract """Bander, être en érection (pénis)"""@fr;
@@ -3944,8 +3947,8 @@ dc:abstract """آه!
         dc:source "Alif_revu_YZ.json" ;
         dc:title "آخ"@ar ;
         
-        dc:example "Ah si seulement! (je pouvais gagner) un demi- million"@fr;
-dc:example "~ عَشِي نُص مليُون!"@ar ;
+        dc:example """Ah si seulement! (je pouvais gagner) un demi- million"""@fr;
+dc:example """~ عَشِي نُص مليُون!"""@ar ;
         
         
         dc:abstract """Ah!
@@ -3973,8 +3976,8 @@ dc:abstract """سلاح صغير"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أخـبَـس"@ar ;
         
-        dc:example "Il n’y a pas plus hypocrite que lui"@fr;
-dc:example "ما فِـي ~ منّه"@ar ;
+        dc:example """Il n’y a pas plus hypocrite que lui"""@fr;
+dc:example """ما فِـي ~ منّه"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -3990,9 +3993,9 @@ dc:abstract """أخبَثُ مِن،  أكثَرُ خُبثًا مِن(شَخص)
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إخـت"@ar ;
         
-        dc:example "Cette voiture est unique (text. elle n’a pas de sœur, c.-à-d. il n’y a pas une autre qui lui ressemble)"@fr;
-dc:example "هَالسَّيّارَة ما فِـي إختـها 
-• ج أُخوِة  +ج خويّات"@ar ;
+        dc:example """Cette voiture est unique (text. elle n’a pas de sœur, c.-à-d. il n’y a pas une autre qui lui ressemble)"""@fr;
+dc:example """هَالسَّيّارَة ما فِـي إختـها 
+• ج أُخوِة  +ج خويّات"""@ar ;
         
         
         dc:abstract """(Qqch au féminin) Qui ressemble à, qui est une copie de"""@fr;
@@ -4005,8 +4008,8 @@ dc:abstract """(شَيءٌ بِالـمُؤنَّث) شَبِيهةٌ بِـ، �
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إخـت"@ar ;
         
-        dc:example "Quelle situation merdique, fâcheuse !"@fr;
-dc:example "إخت إخت هَالـحالة!"@ar ;
+        dc:example """Quelle situation merdique, fâcheuse !"""@fr;
+dc:example """إخت إخت هَالـحالة!"""@ar ;
         
         dc:subject "Loc. ; injur."@fr;
 dc:subject "عِبارَة ؛ لِلشَّتم"@ar ;
@@ -4062,8 +4065,8 @@ dc:abstract """أظهَرَ (فُلانٌ) غُمُوضًا أو ارتِباك�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِخْـتَـرَب"@ar ;
         
-        dc:example "Il nous arrive malheur (text. notre maison est ruinée)"@fr;
-dc:example "~ بَيتنا"@ar ;
+        dc:example """Il nous arrive malheur (text. notre maison est ruinée)"""@fr;
+dc:example """~ بَيتنا"""@ar ;
         
         
         dc:abstract """Être mis en ruine ou en désordre (qqch)Arriver malheur à qqn, être ruiné (qqn)"""@fr;
@@ -4076,8 +4079,8 @@ dc:abstract """خَرِبَ (شَيءٌ)أُصِيبَ (فُلانٌ) بِـمُ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أخـتِـرمـا"@ar ;
         
-        dc:example "Il a envoyé la marchandise depuis l’Italie à bord d’un bateau qui fera escale à Beyrouth"@fr;
-dc:example "شحن البضاعَة من إيطاليا ~ إلَى بيروت"@ar ;
+        dc:example """Il a envoyé la marchandise depuis l’Italie à bord d’un bateau qui fera escale à Beyrouth"""@fr;
+dc:example """شحن البضاعَة من إيطاليا ~ إلَى بيروت"""@ar ;
         
         
         dc:abstract """Envoi de marchandises à bord de bateaux vers un port d’escale"""@fr;
@@ -4103,11 +4106,11 @@ dc:abstract """(شَخص) مُسنّ، عَجُوز، طَاعِنُ فِـي ا
         dc:source "Alif_revu_YZ.json" ;
         dc:title "آخِـد"@ar ;
         
-        dc:example "Combien as-tu pris avec toi?"@fr;
-dc:example "La course avait pris deux heures"@fr;
-dc:example "قَدِّيش ~ مَعَك؟"@ar;
-dc:example "الـمشوار كان ~ ساعتين
-• م آخدِة  ج آخدِين"@ar ;
+        dc:example """Combien as-tu pris avec toi?"""@fr;
+dc:example """La course avait pris deux heures"""@fr;
+dc:example """قَدِّيش ~ مَعَك؟"""@ar;
+dc:example """الـمشوار كان ~ ساعتين
+• م آخدِة  ج آخدِين"""@ar ;
         
         
         dc:abstract """(Qqn) Preneur, prenant, ayant pris"""@fr;
@@ -4120,12 +4123,12 @@ dc:abstract """(شَخص) آخِذ، الذي أخَذَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَخَـد"@ar ;
         
-        dc:example "Prends ton temps (m. ; f.)"@fr;
-dc:example "Prendre sa revanche"@fr;
-dc:example "(Expr.) C’est n’importe quoi, c’est du travail bâclé, ce n’est pas sérieux (text. prend ma main et suis moi)"@fr;
-dc:example "خُود وَقتَك ؛ خِدِي وَقتِك"@ar;
-dc:example "~ بِالطّار"@ar;
-dc:example "خُود إيدَك ولْـحَقنِـي"@ar ;
+        dc:example """Prends ton temps (m. ; f.)"""@fr;
+dc:example """Prendre sa revanche"""@fr;
+dc:example """(Expr.) C’est n’importe quoi, c’est du travail bâclé, ce n’est pas sérieux (text. prend ma main et suis moi)"""@fr;
+dc:example """خُود وَقتَك ؛ خِدِي وَقتِك"""@ar;
+dc:example """~ بِالطّار"""@ar;
+dc:example """خُود إيدَك ولْـحَقنِـي"""@ar ;
         
         
         dc:abstract """Prendre"""@fr;
@@ -4138,10 +4141,10 @@ dc:abstract """أخَذَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَخَـد"@ar ;
         
-        dc:example "Il a épousé sa cousine"@fr;
-dc:example "Elle a épousé son fiancé"@fr;
-dc:example "~ بِنت عَمُّه"@ar;
-dc:example "أخَدِت خَطِيبها"@ar ;
+        dc:example """Il a épousé sa cousine"""@fr;
+dc:example """Elle a épousé son fiancé"""@fr;
+dc:example """~ بِنت عَمُّه"""@ar;
+dc:example """أخَدِت خَطِيبها"""@ar ;
         
         
         dc:abstract """Épouser qqn, prendre qqn pour épouse
@@ -4412,9 +4415,9 @@ dc:abstract """حارِسٌ لَيْلِيّ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أخـضَـر"@ar ;
         
-        dc:example "Il a tout anéanti (text. il a mangé le vert et le sec)"@fr;
-dc:example "أكَل الأخضر واليابِس 
-كعبه أخضر"@ar ;
+        dc:example """Il a tout anéanti (text. il a mangé le vert et le sec)"""@fr;
+dc:example """أكَل الأخضر واليابِس 
+كعبه أخضر"""@ar ;
         
         
         dc:abstract """Ce qui est bon et utileQui a le talon vert (pour dire qu’il est porte-bonheur)"""@fr;
@@ -4654,10 +4657,10 @@ dc:abstract """أَخَوِيًّا"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إخَّـيّ!"@ar ;
         
-        dc:example "Ouf que je me sens bien reposé !"@fr;
-dc:example "Oh bien fait pour lui !"@fr;
-dc:example "~ شُو مِرتاح!"@ar;
-dc:example "~ بْيِستاهِل!"@ar ;
+        dc:example """Ouf que je me sens bien reposé !"""@fr;
+dc:example """Oh bien fait pour lui !"""@fr;
+dc:example """~ شُو مِرتاح!"""@ar;
+dc:example """~ بْيِستاهِل!"""@ar ;
         
         
         dc:abstract """Ouf !
@@ -4674,10 +4677,10 @@ dc:abstract """آه!
         dc:source "Alif_revu_YZ.json" ;
         dc:title "خَيّ"@ar ;
         
-        dc:example "Ouf que je me sens bien reposé !"@fr;
-dc:example "Oh bien fait pour lui !"@fr;
-dc:example "~ شُو مِرتاح!"@ar;
-dc:example "~ بْيِستاهِل!"@ar ;
+        dc:example """Ouf que je me sens bien reposé !"""@fr;
+dc:example """Oh bien fait pour lui !"""@fr;
+dc:example """~ شُو مِرتاح!"""@ar;
+dc:example """~ بْيِستاهِل!"""@ar ;
         
         
         dc:abstract """Ouf !
@@ -4708,12 +4711,12 @@ dc:abstract """طَعام قِوامُهُ الطَّحِينُ والزَّيت
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أدار"@ar ;
         
-        dc:example "(Prov.) Février le perfide est passé et mars le grondant est arrivé"@fr;
-dc:example "(Prov.) Mars, le grondant, apporte les tremblements de terre et les pluies et sept chutes de neiges importantes sans parler des petites"@fr;
-dc:example "(Prov.) Chaque tonnerre en mars est une pluie en avril"@fr;
-dc:example "راح شباط الغدّار وإجا ~ الـهدّار"@ar;
-dc:example "~ الـهدّار، فيه الزّلزال والأمطار، فيه سبع تلجات كبار، ما عدا الزّغار"@ar;
-dc:example "كِلّ رَعدِة بـأدار، مَطرَة بنيسان"@ar ;
+        dc:example """(Prov.) Février le perfide est passé et mars le grondant est arrivé"""@fr;
+dc:example """(Prov.) Mars, le grondant, apporte les tremblements de terre et les pluies et sept chutes de neiges importantes sans parler des petites"""@fr;
+dc:example """(Prov.) Chaque tonnerre en mars est une pluie en avril"""@fr;
+dc:example """راح شباط الغدّار وإجا ~ الـهدّار"""@ar;
+dc:example """~ الـهدّار، فيه الزّلزال والأمطار، فيه سبع تلجات كبار، ما عدا الزّغار"""@ar;
+dc:example """كِلّ رَعدِة بـأدار، مَطرَة بنيسان"""@ar ;
         
         
         dc:abstract """(Mois) Mars"""@fr;
@@ -4845,8 +4848,8 @@ dc:abstract """↔ اِتْدَشَّى"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِدَّعـوَس"@ar ;
         
-        dc:example "Il s’est fait bien humilier"@fr;
-dc:example "~ دَعوَسِة"@ar ;
+        dc:example """Il s’est fait bien humilier"""@fr;
+dc:example """~ دَعوَسِة"""@ar ;
         
         dc:subject "Exag."@fr;
 dc:subject "Fig."@fr;
@@ -5061,9 +5064,9 @@ dc:abstract """نَشَرَ خَبَرًا"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أدرِس"@ar ;
         
-        dc:example "Passe-moi ton adresse !"@fr;
-dc:example "عْطِينِـي أدرِسَك! 
-• ج أدرِسات"@ar ;
+        dc:example """Passe-moi ton adresse !"""@fr;
+dc:example """عْطِينِـي أدرِسَك! 
+• ج أدرِسات"""@ar ;
         lex:etymo "Du fr. adresse"@fr ;
         
         dc:abstract """Adresse"""@fr;
@@ -5076,8 +5079,8 @@ dc:abstract """عُنوان↔ أدرِيس، أدراس"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أدرَك"@ar ;
         
-        dc:example "Il a rendu un tel responsable des dommages et intérêts"@fr;
-dc:example "~ فلان بالعِطل والضَّرَر"@ar ;
+        dc:example """Il a rendu un tel responsable des dommages et intérêts"""@fr;
+dc:example """~ فلان بالعِطل والضَّرَر"""@ar ;
         
         
         dc:abstract """Rendre qqn responsable ou garant de qqch ou des dégâts p.ex."""@fr;
@@ -5382,11 +5385,11 @@ dc:abstract """مَرسُومٌ أو أَمرٌ سُلطانِـيّ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُربـعـا"@ar ;
         
-        dc:example "Le (jour du) mercredi"@fr;
-dc:example "(Expr. populaire) Comme un cheveu dans la soupe (text. tel le mercredi au milieu de la semaine)"@fr;
-dc:example "نْـهار الأربعا، يوم الأربعا"@ar;
-dc:example "متل الأربعا بنصّ الـجمعَة  
-• ج أُربعات"@ar ;
+        dc:example """Le (jour du) mercredi"""@fr;
+dc:example """(Expr. populaire) Comme un cheveu dans la soupe (text. tel le mercredi au milieu de la semaine)"""@fr;
+dc:example """نْـهار الأربعا، يوم الأربعا"""@ar;
+dc:example """متل الأربعا بنصّ الـجمعَة  
+• ج أُربعات"""@ar ;
         
         
         dc:abstract """(Jour) Mercredi"""@fr;
@@ -5399,9 +5402,9 @@ dc:abstract """(يَوم) أربِعاء"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَربَـعـا"@ar ;
         
-        dc:example "J’ai eu trois fois le quatre  dans le jeu de cartes"@fr;
-dc:example "إجانِـي تلات أربعات بالورق
-• +ج أربعات"@ar ;
+        dc:example """J’ai eu trois fois le quatre  dans le jeu de cartes"""@fr;
+dc:example """إجانِـي تلات أربعات بالورق
+• +ج أربعات"""@ar ;
         
         
         dc:abstract """(Chiffre) Quatre, 4"""@fr;
@@ -5430,9 +5433,9 @@ dc:abstract """رَقمُ أربَعَة فِـي لُعبَةِ "البَرجِ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أربـعَـة"@ar ;
         
-        dc:example "Il est parti au galop, il galopa"@fr;
-dc:example "طِلِع بالأربعَة 
-• +ج أربعات"@ar ;
+        dc:example """Il est parti au galop, il galopa"""@fr;
+dc:example """طِلِع بالأربعَة 
+• +ج أربعات"""@ar ;
         
         
         dc:abstract """Galop"""@fr;
@@ -5445,8 +5448,8 @@ dc:abstract """حُضْر، عَدوٌ سَرِيعٌ لِلفَرَس"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أربَـعَـةِ"@ar ;
         
-        dc:example "Il s’est maquillé le mercredi « d’Ayyoub »"@fr;
-dc:example "تْكَحّل بِأربعة البَراقطة"@ar ;
+        dc:example """Il s’est maquillé le mercredi « d’Ayyoub »"""@fr;
+dc:example """تْكَحّل بِأربعة البَراقطة"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -6496,9 +6499,9 @@ dc:abstract """قاعُ شَيءٍجَوهَرُ الـمَسألَةِ أو ا�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَرضِـيِّـة"@ar ;
         
-        dc:example "Durant la semaine"@fr;
-dc:example "~ الأسبُوع، بِأرضِيّةْ الـجِمعَة 
-• ج أرضِيّات"@ar ;
+        dc:example """Durant la semaine"""@fr;
+dc:example """~ الأسبُوع، بِأرضِيّةْ الـجِمعَة 
+• ج أرضِيّات"""@ar ;
         
         
         dc:abstract """Courant ou durant une période"""@fr;
@@ -6524,9 +6527,9 @@ dc:abstract """إقلاس، استِيداعمستودع"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَرضِـيِّـة"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6555,9 +6558,9 @@ dc:abstract """أرضُ الغُرفَة"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "خَدّامة"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6573,9 +6576,9 @@ dc:abstract """إناءٌ يُستَعمَلُ فِـي غُرفَةٍمِبوَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "قَصرِيِّة"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6591,9 +6594,9 @@ dc:abstract """إناءٌ يُستَعمَلُ فِـي غُرفَةٍمِبوَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "قَعدِة"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6609,9 +6612,9 @@ dc:abstract """إناءٌ يُستَعمَلُ فِـي غُرفَةٍمِبوَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "مِستَعمَلِة"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6627,9 +6630,9 @@ dc:abstract """إناءٌ يُستَعمَلُ فِـي غُرفَةٍمِبوَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "نُونُو"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6645,9 +6648,9 @@ dc:abstract """إناءٌ يُستَعمَلُ فِـي غُرفَةٍمِبوَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "نُونِيِّة"@ar ;
         
-        dc:example "Petit pot pour le tout-petit"@fr;
-dc:example "~ الطُّفل  
-• ج أرضِيّات"@ar ;
+        dc:example """Petit pot pour le tout-petit"""@fr;
+dc:example """~ الطُّفل  
+• ج أرضِيّات"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "Out./Ust."@fr;
@@ -6676,9 +6679,9 @@ dc:abstract """"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُرطَـة"@ar ;
         
-        dc:example "Bande de voyous"@fr;
-dc:example "~ زِعران 
-• +ج أُرَط"@ar ;
+        dc:example """Bande de voyous"""@fr;
+dc:example """~ زِعران 
+• +ج أُرَط"""@ar ;
         lex:etymo "Du turc orta : milieu ou encore bataillon de janissaires"@fr ;
         dc:subject "Mépr."@fr;
 dc:subject "Dénigr."@fr;
@@ -6694,9 +6697,9 @@ dc:abstract """فَوْج، مَجمُوعَة، زُمرَة، جَماعَة،
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أوبِة"@ar ;
         
-        dc:example "Bande de voyous"@fr;
-dc:example "~ زِعران 
-• +ج أُرَط"@ar ;
+        dc:example """Bande de voyous"""@fr;
+dc:example """~ زِعران 
+• +ج أُرَط"""@ar ;
         lex:etymo "Du turc orta : milieu ou encore bataillon de janissaires"@fr ;
         dc:subject "Mépr."@fr;
 dc:subject "Dénigr."@fr;
@@ -6712,9 +6715,9 @@ dc:abstract """فَوْج، مَجمُوعَة، زُمرَة، جَماعَة،
         dc:source "Alif_revu_YZ.json" ;
         dc:title "بُوطَة"@ar ;
         
-        dc:example "Bande de voyous"@fr;
-dc:example "~ زِعران 
-• +ج أُرَط"@ar ;
+        dc:example """Bande de voyous"""@fr;
+dc:example """~ زِعران 
+• +ج أُرَط"""@ar ;
         lex:etymo "Du turc orta : milieu ou encore bataillon de janissaires"@fr ;
         dc:subject "Mépr."@fr;
 dc:subject "Dénigr."@fr;
@@ -6730,9 +6733,9 @@ dc:abstract """فَوْج، مَجمُوعَة، زُمرَة، جَماعَة،
         dc:source "Alif_revu_YZ.json" ;
         dc:title "شِلِّة"@ar ;
         
-        dc:example "Bande de voyous"@fr;
-dc:example "~ زِعران 
-• +ج أُرَط"@ar ;
+        dc:example """Bande de voyous"""@fr;
+dc:example """~ زِعران 
+• +ج أُرَط"""@ar ;
         lex:etymo "Du turc orta : milieu ou encore bataillon de janissaires"@fr ;
         dc:subject "Mépr."@fr;
 dc:subject "Dénigr."@fr;
@@ -6998,17 +7001,17 @@ dc:abstract """مُكَيِّفُ الـهَواء، جِهازُ تَبرِيد
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أركِـيـلِـة"@ar ;
         
-        dc:example "Une taffe de narghileh"@fr;
-dc:example "Narghileh avec choix du mélange de tabac (text. remplissage)"@fr;
-dc:example "Narghileh au tabac persan"@fr;
-dc:example "Narghileh au tabac au miel"@fr;
-dc:example "Narghileh avec arôme (d’un fruit)"@fr;
-dc:example "نفس ~"@ar;
-dc:example "~ تِعبايِة"@ar;
-dc:example "~ عَجَمِي"@ar;
-dc:example "~ مَعسَّل"@ar;
-dc:example "~ نَكهَة 
-• +ج أراكِيل"@ar ;
+        dc:example """Une taffe de narghileh"""@fr;
+dc:example """Narghileh avec choix du mélange de tabac (text. remplissage)"""@fr;
+dc:example """Narghileh au tabac persan"""@fr;
+dc:example """Narghileh au tabac au miel"""@fr;
+dc:example """Narghileh avec arôme (d’un fruit)"""@fr;
+dc:example """نفس ~"""@ar;
+dc:example """~ تِعبايِة"""@ar;
+dc:example """~ عَجَمِي"""@ar;
+dc:example """~ مَعسَّل"""@ar;
+dc:example """~ نَكهَة 
+• +ج أراكِيل"""@ar ;
         lex:etymo "Du persan nârkileh : narguilé"@fr ;
         
         dc:abstract """Narguilé, narghileh, pipe à la persane"""@fr;
@@ -7021,9 +7024,9 @@ dc:abstract """نَرجِيلَة، نارجِيلَة↔ أرجِيلِة، أ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "آرمَـة"@ar ;
         
-        dc:example "Enseigne du magasin"@fr;
-dc:example "~ الـمَحَلّ  
-• ج آرمات"@ar ;
+        dc:example """Enseigne du magasin"""@fr;
+dc:example """~ الـمَحَلّ  
+• ج آرمات"""@ar ;
         lex:etymo "Du persan arm : slogan ou enseigne ou encore logo"@fr ;
         
         dc:abstract """Écriteau, panneau, enseigne"""@fr;
@@ -7088,9 +7091,9 @@ dc:abstract """أصلُ الفَخذ، أُربِيَّةٌ تَتَّصِلُ �
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُرمِـيِّـة"@ar ;
         
-        dc:example "(Prov.) Tel père tel fils, telle mère telle fille (text. sur le tronc pousse la branche)"@fr;
-dc:example "عالأرميّة بتُنبُت السَّربُوخَة  
-• ج أرميّات"@ar ;
+        dc:example """(Prov.) Tel père tel fils, telle mère telle fille (text. sur le tronc pousse la branche)"""@fr;
+dc:example """عالأرميّة بتُنبُت السَّربُوخَة  
+• ج أرميّات"""@ar ;
         
         
         dc:abstract """Souche d’un arbre"""@fr;
@@ -7596,9 +7599,9 @@ dc:abstract """أسوَأُ مِن، أكثَرُ سُوءًا مِن"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَزرَق"@ar ;
         
-        dc:example "Pomme pas mûre"@fr;
-dc:example "تفّاح ~ 
-• ج زُرق"@ar ;
+        dc:example """Pomme pas mûre"""@fr;
+dc:example """تفّاح ~ 
+• ج زُرق"""@ar ;
         
         
         dc:abstract """(Fruit) Vert, pas mûr"""@fr;
@@ -7611,8 +7614,8 @@ dc:abstract """(فاكِهَة) غَيرُ ناضِجَة"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَزرَك"@ar ;
         
-        dc:example "Il est arrivé au pire moment, au moment le plus stressant"@fr;
-dc:example "إجى بِأزرك وقت"@ar ;
+        dc:example """Il est arrivé au pire moment, au moment le plus stressant"""@fr;
+dc:example """إجى بِأزرك وقت"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -7806,8 +7809,8 @@ dc:abstract """إذنٌ بِالزَّواجِ صادِرٌ من قاضِي ال
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أزنَـخ"@ar ;
         
-        dc:example "Il n’y a pas plus antipathique que lui"@fr;
-dc:example "ما فِـي ~ مِنُّه"@ar ;
+        dc:example """Il n’y a pas plus antipathique que lui"""@fr;
+dc:example """ما فِـي ~ مِنُّه"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -7966,8 +7969,8 @@ dc:abstract """↔ أصّ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إسّـا"@ar ;
         
-        dc:example "Je suis encore à la maison; il est à la maison; elle est à la maison; vous êtes à la maison; ils sont à la maison"@fr;
-dc:example "إسّانِي بالبيت؛ إسّاه بالبيت؛ إسّاها بالبيت؛ إسّاكُن بالبيت؛ إسّاهُن بالبيت"@ar ;
+        dc:example """Je suis encore à la maison; il est à la maison; elle est à la maison; vous êtes à la maison; ils sont à la maison"""@fr;
+dc:example """إسّانِي بالبيت؛ إسّاه بالبيت؛ إسّاها بالبيت؛ إسّاكُن بالبيت؛ إسّاهُن بالبيت"""@ar ;
         
         
         dc:abstract """Être encore à un endroit"""@fr;
@@ -7994,8 +7997,8 @@ dc:abstract """حالًا، الآن، فَورًا↔ إسَّه"""@ar .
         dc:title "إسّـا"@ar ;
         dc:coverage "Nord du Liban"@fr;
 dc:coverage "Tripoli"@fr ;
-        dc:example "Je viens (tout juste) de lui parler; il vient de lui parler; elle vient de lui parler; vous venez de lui parler; ils viennent de lui parler"@fr;
-dc:example "إسّانِـي حكِيتُه؛ إسّاه حِكِيه؛ إسّاها حِكيِتُه؛ إسّاكُن حِكيتُوه؛ إسّاهُن حِكيُوه"@ar ;
+        dc:example """Je viens (tout juste) de lui parler; il vient de lui parler; elle vient de lui parler; vous venez de lui parler; ils viennent de lui parler"""@fr;
+dc:example """إسّانِـي حكِيتُه؛ إسّاه حِكِيه؛ إسّاها حِكيِتُه؛ إسّاكُن حِكيتُوه؛ إسّاهُن حِكيُوه"""@ar ;
         
         
         dc:abstract """Depuis peu, il y a un petit moment de cela"""@fr;
@@ -8278,8 +8281,8 @@ dc:abstract """أدرَكَ فُلانًا، فَهِمَه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِسْـتـاهَـل"@ar ;
         
-        dc:example "Il (le) mérite"@fr;
-dc:example "يِستاهَل، بْيِستاهَل"@ar ;
+        dc:example """Il (le) mérite"""@fr;
+dc:example """يِستاهَل، بْيِستاهَل"""@ar ;
         
         
         dc:abstract """Mériter, être digne de qqch"""@fr;
@@ -8412,8 +8415,8 @@ dc:abstract """تَبَيَّنَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِسْـتَـحـلَـى"@ar ;
         
-        dc:example "Il a eu envie d’acheter"@fr;
-dc:example "~ يِشتِرِي"@ar ;
+        dc:example """Il a eu envie d’acheter"""@fr;
+dc:example """~ يِشتِرِي"""@ar ;
         
         
         dc:abstract """Avoir envie de qqch, le désirer"""@fr;
@@ -8426,8 +8429,8 @@ dc:abstract """رَغِبَ في شيء، اِشْتَهاه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِسْـتَـحـمَـر"@ar ;
         
-        dc:example "Le bonhomme m’a pris pour un imbécile"@fr;
-dc:example "الزَّلَمِي اِسْتَـحمَرنِـي"@ar ;
+        dc:example """Le bonhomme m’a pris pour un imbécile"""@fr;
+dc:example """الزَّلَمِي اِسْتَـحمَرنِـي"""@ar ;
         
         
         dc:abstract """Prendre qqn pour un idiot, traiter qqn comme s’il était un imbécile"""@fr;
@@ -8900,8 +8903,8 @@ dc:abstract """لَـم يُفَكِّرْ أو لا يُفَكِّرُ بِشَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِسْـتَـضـيَـع"@ar ;
         
-        dc:example "Il a trouvé que c’est trop que de téléphoner"@fr;
-dc:example "~ يْتَلفِن"@ar ;
+        dc:example """Il a trouvé que c’est trop que de téléphoner"""@fr;
+dc:example """~ يْتَلفِن"""@ar ;
         
         
         dc:abstract """Estimer que c’est trop ou de trop"""@fr;
@@ -9188,8 +9191,8 @@ dc:abstract """اِشتاقَ لِشَخصٍ أو لِشَيءٍ، شَعَرَ 
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اسـتَـفـقَـد"@ar ;
         
-        dc:example "Visiter un malade"@fr;
-dc:example "~ الَمرِيض"@ar ;
+        dc:example """Visiter un malade"""@fr;
+dc:example """~ الَمرِيض"""@ar ;
         
         
         dc:abstract """Jeter un coup d’œil sur qqnVisiter qqn"""@fr;
@@ -9404,8 +9407,8 @@ dc:abstract """اِكتَفَى بِـ، رَضِيَ بِـ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اسـتَـكـلَـب"@ar ;
         
-        dc:example "S’abaisser comme un chien"@fr;
-dc:example "~ حالُه"@ar ;
+        dc:example """S’abaisser comme un chien"""@fr;
+dc:example """~ حالُه"""@ar ;
         
         
         dc:abstract """Mépriser qqn, traiter qqn comme un chien"""@fr;
@@ -9772,8 +9775,8 @@ dc:abstract """عامَلَ بِـهُدُوء"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اسـتَـنَّـى"@ar ;
         
-        dc:example "Patience mon vieux !"@fr;
-dc:example "~ يا زَلَمِي !"@ar ;
+        dc:example """Patience mon vieux !"""@fr;
+dc:example """~ يا زَلَمِي !"""@ar ;
         
         
         dc:abstract """Attendre, patienter"""@fr;
@@ -9995,8 +9998,8 @@ dc:abstract """تَساوِي الأرض"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اسْـتَـوْطَـى"@ar ;
         
-        dc:example "Idem"@fr;
-dc:example "~ حيط فلان"@ar ;
+        dc:example """Idem"""@fr;
+dc:example """~ حيط فلان"""@ar ;
         
         
         dc:abstract """Dénigrer qqn, l’abaisser, sous-estimer ses capacités, le déconsidérer"""@fr;
@@ -10400,8 +10403,8 @@ dc:abstract """طَرَحَ رَقمًا مِن رَقمٍ آخَرٍ فِـي �
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـقَـل"@ar ;
         
-        dc:example "Il n’y a pas plus antipathique que lui"@fr;
-dc:example "ما فِـي ~ مِنُّه"@ar ;
+        dc:example """Il n’y a pas plus antipathique que lui"""@fr;
+dc:example """ما فِـي ~ مِنُّه"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -10577,9 +10580,9 @@ dc:abstract """أكِيدُنيا، زُعرُورُ اليابان
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إسـكِـي"@ar ;
         
-        dc:example "Untel est un pro dans son métier"@fr;
-dc:example "فلان ~ بالصّنعة 
-• م أسكية  ج إسكيّة، إسكيّي"@ar ;
+        dc:example """Untel est un pro dans son métier"""@fr;
+dc:example """فلان ~ بالصّنعة 
+• م أسكية  ج إسكيّة، إسكيّي"""@ar ;
         
         
         dc:abstract """(Qqn) Vieux chevronné, bien expérimenté, professionnel"""@fr;
@@ -10649,8 +10652,8 @@ dc:abstract """مُسلِمُون
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـلَـط"@ar ;
         
-        dc:example "Il n’y a pas plus accrocheur et tenace que cet enfant !"@fr;
-dc:example "ما فِـي ~ من هالولَد!"@ar ;
+        dc:example """Il n’y a pas plus accrocheur et tenace que cet enfant !"""@fr;
+dc:example """ما فِـي ~ من هالولَد!"""@ar ;
         
         
         dc:abstract """(Enfant) Qui s’accroche à qqch et ne le lâche plus, tenace"""@fr;
@@ -10663,8 +10666,8 @@ dc:abstract """(وَلَد) مَنْ إذا تَعَلَّقَ بِشَيءٍ و
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـلَـط"@ar ;
         
-        dc:example "Qu’est-ce qu’il est insolent et dominateur cet homme là !"@fr;
-dc:example "ما أسلطُه هالرّجّال!"@ar ;
+        dc:example """Qu’est-ce qu’il est insolent et dominateur cet homme là !"""@fr;
+dc:example """ما أسلطُه هالرّجّال!"""@ar ;
         
         
         dc:abstract """(Qqn) Insolent, grossier et dominateur"""@fr;
@@ -10853,9 +10856,9 @@ dc:abstract """نَوعٌ مِن العِنَب
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـوَد"@ar ;
         
-        dc:example "Un tel a une mauvaise apparence mais le fond est bon (text. le revers est blanc)"@fr;
-dc:example "فلان ~ وتناه أبيض 
-• +م سَودا ج سُود"@ar ;
+        dc:example """Un tel a une mauvaise apparence mais le fond est bon (text. le revers est blanc)"""@fr;
+dc:example """فلان ~ وتناه أبيض 
+• +م سَودا ج سُود"""@ar ;
         
         
         dc:abstract """(Qqn) Qui a mauvaise apparence"""@fr;
@@ -10868,9 +10871,9 @@ dc:abstract """(شَخص) ذُو مَظهَرٍ سَيِّء"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـوَد"@ar ;
         
-        dc:example "Une journée triste"@fr;
-dc:example "نْـهار ~  
-• +م سَودا ج سُود"@ar ;
+        dc:example """Une journée triste"""@fr;
+dc:example """نْـهار ~  
+• +م سَودا ج سُود"""@ar ;
         
         
         dc:abstract """Triste"""@fr;
@@ -10883,9 +10886,9 @@ dc:abstract """حَزِين"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـوَد"@ar ;
         
-        dc:example "Un tel est rancunier"@fr;
-dc:example "قلب فلان ~  
-• +م سَودا ج سُود"@ar ;
+        dc:example """Un tel est rancunier"""@fr;
+dc:example """قلب فلان ~  
+• +م سَودا ج سُود"""@ar ;
         
         
         dc:abstract """Rancunier"""@fr;
@@ -10942,9 +10945,9 @@ dc:abstract """حالِك، شَدِيدُ السَّواد"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أسـوَد"@ar ;
         
-        dc:example "Elle est habillée toute en noir"@fr;
-dc:example "لابسِة ~  
-• م سَودا غَطس ج سُود غَطس"@ar ;
+        dc:example """Elle est habillée toute en noir"""@fr;
+dc:example """لابسِة ~  
+• م سَودا غَطس ج سُود غَطس"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -11116,18 +11119,18 @@ dc:abstract """"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إشـب؟"@ar ;
         
-        dc:example "Qu’est-ce qu’elle a? Que se passe-t-il avec elle?"@fr;
-dc:example "Qu’est-ce que tu as? que se passe-t-il avec toi?"@fr;
-dc:example "Qu’est-ce qu’il a? que se passe-t-il avec lui?"@fr;
-dc:example "Qu’est-ce que vous avez? que se passe-t-il avec vous?"@fr;
-dc:example "Qu’est-ce qu’ils (elles) ont, que se passe-t-il avec eux (elles)"@fr;
-dc:example "Que se passe-t-il?"@fr;
-dc:example "إشبا؟ إشِبها؟"@ar;
-dc:example "إشبَك؟"@ar;
-dc:example "إشبُو؟"@ar;
-dc:example "إشِبكُن؟"@ar;
-dc:example "إشبُـن؟ إشِبهُن؟"@ar;
-dc:example "إشِبنا؟"@ar ;
+        dc:example """Qu’est-ce qu’elle a? Que se passe-t-il avec elle?"""@fr;
+dc:example """Qu’est-ce que tu as? que se passe-t-il avec toi?"""@fr;
+dc:example """Qu’est-ce qu’il a? que se passe-t-il avec lui?"""@fr;
+dc:example """Qu’est-ce que vous avez? que se passe-t-il avec vous?"""@fr;
+dc:example """Qu’est-ce qu’ils (elles) ont, que se passe-t-il avec eux (elles)"""@fr;
+dc:example """Que se passe-t-il?"""@fr;
+dc:example """إشبا؟ إشِبها؟"""@ar;
+dc:example """إشبَك؟"""@ar;
+dc:example """إشبُو؟"""@ar;
+dc:example """إشِبكُن؟"""@ar;
+dc:example """إشبُـن؟ إشِبهُن؟"""@ar;
+dc:example """إشِبنا؟"""@ar ;
         
         dc:subject "Interr."@fr;
 dc:subject "لِلاستِفهام"@ar ;
@@ -11417,8 +11420,8 @@ dc:abstract """أكثَرُ اِجتِهادًا مِن، أكثَرُ حِذق�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أشـطَـف"@ar ;
         
-        dc:example "(Expr.) Untel est plus potable que l’autre, untel est plus supportable que l’autre"@fr;
-dc:example "فلان ~ زُوم من فلان"@ar ;
+        dc:example """(Expr.) Untel est plus potable que l’autre, untel est plus supportable que l’autre"""@fr;
+dc:example """فلان ~ زُوم من فلان"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "لِلـمُقارَنَة"@ar ;
@@ -11524,8 +11527,8 @@ dc:abstract """خَبّ، خَبَب"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أشـلَـب"@ar ;
         
-        dc:example "Comme il est beau et gentil ce jeune homme !"@fr;
-dc:example "ما أشلبُه هَالشَبّ!"@ar ;
+        dc:example """Comme il est beau et gentil ce jeune homme !"""@fr;
+dc:example """ما أشلبُه هَالشَبّ!"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -11571,10 +11574,10 @@ dc:abstract """نَوعٌ مِن العِنَب
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أشـمـا"@ar ;
         
-        dc:example "Tout ce que tu voudras"@fr;
-dc:example "N’importe quoi"@fr;
-dc:example "~ بَدَّك"@ar;
-dc:example "~ كان"@ar ;
+        dc:example """Tout ce que tu voudras"""@fr;
+dc:example """N’importe quoi"""@fr;
+dc:example """~ بَدَّك"""@ar;
+dc:example """~ كان"""@ar ;
         
         
         dc:abstract """Tout, sans restriction"""@fr;
@@ -11761,8 +11764,8 @@ dc:abstract """حَلوى قِوامُها عَجِينٌ فَتّات بِحَ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أصـابِـيـع"@ar ;
         
-        dc:example "Les doigts de la main"@fr;
-dc:example "~ الإيد"@ar ;
+        dc:example """Les doigts de la main"""@fr;
+dc:example """~ الإيد"""@ar ;
         
         
         dc:abstract """Doigts"""@fr;
@@ -11801,9 +11804,9 @@ dc:abstract """(ثَورٌ أو خَيل) الذي عِندُه غُرَّةٌ �
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُصـبَـع"@ar ;
         
-        dc:example "Il est long d’un empan et large de deux doigts"@fr;
-dc:example "طُولُه شبر وعَرضُه أصبعتين 
-• +ج أصابيع، صَبيع، صابِيع"@ar ;
+        dc:example """Il est long d’un empan et large de deux doigts"""@fr;
+dc:example """طُولُه شبر وعَرضُه أصبعتين 
+• +ج أصابيع، صَبيع، صابِيع"""@ar ;
         
         
         dc:abstract """Sous-unité d’une coudée
@@ -11847,8 +11850,8 @@ dc:abstract """إصبَعان"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إصـحـا!"@ar ;
         
-        dc:example "Surtout ne dis rien!"@fr;
-dc:example "أُصحَك تْقُول شِي!"@ar ;
+        dc:example """Surtout ne dis rien!"""@fr;
+dc:example """أُصحَك تْقُول شِي!"""@ar ;
         
         dc:subject "Avert."@fr;
 dc:subject "لِلتَّحذِير"@ar ;
@@ -11901,10 +11904,10 @@ dc:abstract """عُمِّدَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اصـطَـفَـل"@ar ;
         
-        dc:example "Qu’il se débrouille"@fr;
-dc:example "Tant pis,va faire ce que tu veux !"@fr;
-dc:example "يِصطِفِل"@ar;
-dc:example "رُوح اصطِفِل!"@ar ;
+        dc:example """Qu’il se débrouille"""@fr;
+dc:example """Tant pis,va faire ce que tu veux !"""@fr;
+dc:example """يِصطِفِل"""@ar;
+dc:example """رُوح اصطِفِل!"""@ar ;
         
         
         dc:abstract """Laisser faire qqn en lui montrant une désapprobation pour son acte"""@fr;
@@ -12479,9 +12482,9 @@ dc:abstract """تَعَمَّدَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أعـجَـر"@ar ;
         
-        dc:example "Figue pas mûre"@fr;
-dc:example "تِين ~ 
-• +م عَجرا +ج عُجُر"@ar ;
+        dc:example """Figue pas mûre"""@fr;
+dc:example """تِين ~ 
+• +م عَجرا +ج عُجُر"""@ar ;
         
         
         dc:abstract """(Fruit) Non mûr, vert"""@fr;
@@ -13334,9 +13337,9 @@ dc:abstract """(شَخص) مُحَدِّثٌ مُتَحَذلِق، مُدَّع
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَفـلاطُـون"@ar ;
         
-        dc:example "Il se prend pour le génie de son époque (text. il se prend pour Platon)"@fr;
-dc:example "عامل حالُه ~ عَصرُه 
-• م أفلاطُونِة، أفلَطُونِة ج أفلاطُونِيِّي، أفلَطُونِيِّي"@ar ;
+        dc:example """Il se prend pour le génie de son époque (text. il se prend pour Platon)"""@fr;
+dc:example """عامل حالُه ~ عَصرُه 
+• م أفلاطُونِة، أفلَطُونِة ج أفلاطُونِيِّي، أفلَطُونِيِّي"""@ar ;
         lex:etymo "Cf. « aflaṭône » (1)"@fr ;
         
         dc:abstract """(Qqn) Génie	"""@fr;
@@ -13395,7 +13398,7 @@ dc:abstract """لَيْمُون يُوسُفِي، لَيْمُون يُوسُف
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَفـهَـم"@ar ;
         
-        dc:example "ما أفهَمُه!"@ar ;
+        dc:example """ما أفهَمُه!"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -13671,10 +13674,10 @@ dc:abstract """رَقمَيُّ اثنان  وواحِد فِـي زَهرِ ا�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أكـتَـر"@ar ;
         
-        dc:example "Bien plus que cela!"@fr;
-dc:example "Plus que nécessaire, plus qu’il ne faut"@fr;
-dc:example "~ بكتِير من هِيك!"@ar;
-dc:example "~ من اللازِم"@ar ;
+        dc:example """Bien plus que cela!"""@fr;
+dc:example """Plus que nécessaire, plus qu’il ne faut"""@fr;
+dc:example """~ بكتِير من هِيك!"""@ar;
+dc:example """~ من اللازِم"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -13729,8 +13732,8 @@ dc:abstract """اِغتَنَى وأثرَى"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أكـرَح"@ar ;
         
-        dc:example "Viens par ici! Approche-toi par là!"@fr;
-dc:example "تَاع ~!"@ar ;
+        dc:example """Viens par ici! Approche-toi par là!"""@fr;
+dc:example """تَاع ~!"""@ar ;
         
         
         dc:abstract """Par ici, par là, de ce côté"""@fr;
@@ -13855,9 +13858,9 @@ dc:abstract """إضافِيّ، زائِد"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إكـسـتـرا"@ar ;
         
-        dc:example "Mélange de toutes sortes d’amuse-gueules"@fr;
-dc:example "بزُورات ~ 
-• م إكسترا ج إكسترا"@ar ;
+        dc:example """Mélange de toutes sortes d’amuse-gueules"""@fr;
+dc:example """بزُورات ~ 
+• م إكسترا ج إكسترا"""@ar ;
         lex:etymo "& (π) Cf. « extra » (1)"@fr ;
         
         dc:abstract """Extra, remarquable, exceptionnel"""@fr;
@@ -13967,9 +13970,9 @@ dc:abstract """إصمام فُلان، إزعاجُه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أكـلِـة"@ar ;
         
-        dc:example "C’est un sacré bon plat"@fr;
-dc:example "والله ~ طِيّبِة 
-• +ج أكلات"@ar ;
+        dc:example """C’est un sacré bon plat"""@fr;
+dc:example """والله ~ طِيّبِة 
+• +ج أكلات"""@ar ;
         
         
         dc:abstract """Toute sorte de plat ou de mets"""@fr;
@@ -14256,8 +14259,8 @@ dc:abstract """صَفَّح، طَلَى أو لَبَّسَ الـمَعدِن�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "ألـبَـق"@ar ;
         
-        dc:example "Il n’y a point plus élégant que lui"@fr;
-dc:example "ما فِـي ~ مِنُّه"@ar ;
+        dc:example """Il n’y a point plus élégant que lui"""@fr;
+dc:example """ما فِـي ~ مِنُّه"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -14419,10 +14422,10 @@ dc:abstract """تَطَعَّمَ بِالـمَصلِ أو بِالـحُمَّ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِلْتَـكَـش"@ar ;
         
-        dc:example "J’ai parlé avec lui et il ne s‘est pas préoccupé (il n’a pas réagi)"@fr;
-dc:example "Cela fait un an qu’il n’a pas demandé de nouvelles d’un tel"@fr;
-dc:example "حْكِيت مَعُه وما ~"@ar;
-dc:example "صَرلُه سِنِة ما ~ بِفلان"@ar ;
+        dc:example """J’ai parlé avec lui et il ne s‘est pas préoccupé (il n’a pas réagi)"""@fr;
+dc:example """Cela fait un an qu’il n’a pas demandé de nouvelles d’un tel"""@fr;
+dc:example """حْكِيت مَعُه وما ~"""@ar;
+dc:example """صَرلُه سِنِة ما ~ بِفلان"""@ar ;
         
         dc:subject "Péj."@fr;
 dc:subject "اِبتِذالًا"@ar ;
@@ -14436,8 +14439,8 @@ dc:abstract """اِهتَمَّ بِـمَسألَةٍ، قامَ  بِرَدّ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِلْتَمّ"@ar ;
         
-        dc:example "Les gens se sont rassemblés"@fr;
-dc:example "اِلْتَمُّوا النّاس"@ar ;
+        dc:example """Les gens se sont rassemblés"""@fr;
+dc:example """اِلْتَمُّوا النّاس"""@ar ;
         
         
         dc:abstract """Se rassembler, se réunir (foule, masse, gens)"""@fr;
@@ -14533,8 +14536,8 @@ dc:abstract """حَذِقَ (فُلانٌ) لُغَةً"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "ألـشَـق"@ar ;
         
-        dc:example "Un  tel ne fait pas son travail et le néglige"@fr;
-dc:example "فلان بِألشِق شغلُه"@ar ;
+        dc:example """Un  tel ne fait pas son travail et le néglige"""@fr;
+dc:example """فلان بِألشِق شغلُه"""@ar ;
         
         
         dc:abstract """Sous-estimer une affaire et la négliger"""@fr;
@@ -14547,8 +14550,8 @@ dc:abstract """اِستَخَفَّ بِأمرٍ ولَم يَأبَهْ بِه"
         dc:source "Alif_revu_YZ.json" ;
         dc:title "الـشِّـيـبَـة"@ar ;
         
-        dc:example "Oh beau aux cheveux blancs! Oh toi séduisant qui me fait souffrir!"@fr;
-dc:example "يا غْزَيِّل يا بُو الشِّيبَة (بو الـهِيبَة)، يا غاوِي يا مْعَزِّيبا"@ar ;
+        dc:example """Oh beau aux cheveux blancs! Oh toi séduisant qui me fait souffrir!"""@fr;
+dc:example """يا غْزَيِّل يا بُو الشِّيبَة (بو الـهِيبَة)، يا غاوِي يا مْعَزِّيبا"""@ar ;
         
         
         dc:abstract """Expression dans un chant populaire du folklore libanais
@@ -14576,10 +14579,10 @@ dc:abstract """↔ قَلشِين"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "ألَـصـتَـه"@ar ;
         
-        dc:example "Le travail d’untel est fait selon les règles"@fr;
-dc:example "Affaire importante"@fr;
-dc:example "شِغِل فلان ~"@ar;
-dc:example "قصّة ~"@ar ;
+        dc:example """Le travail d’untel est fait selon les règles"""@fr;
+dc:example """Affaire importante"""@fr;
+dc:example """شِغِل فلان ~"""@ar;
+dc:example """قصّة ~"""@ar ;
         
         
         dc:abstract """Selon les règles, de bonne manière(Qqch) Important(ETYM. : LIEN AVEC AL-OSTA ??)"""@fr;
@@ -14795,9 +14798,9 @@ dc:abstract """عَلَى النَّمَطِ الأُورُوبِيّ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إلـلِـي"@ar ;
         
-        dc:example "(Prov.) Celui dont tu veux faire ton gendre, ne le vexe pas !"@fr;
-dc:example "~ بَدّك تصاهرُه، لا تقاهرُه! 
-• م إللِي  ج إللِي"@ar ;
+        dc:example """(Prov.) Celui dont tu veux faire ton gendre, ne le vexe pas !"""@fr;
+dc:example """~ بَدّك تصاهرُه، لا تقاهرُه! 
+• م إللِي  ج إللِي"""@ar ;
         
         
         dc:abstract """Celui qui, celle qui"""@fr;
@@ -14915,12 +14918,12 @@ dc:abstract """"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إلُـه"@ar ;
         
-        dc:example "À moi, à lui, à elle, à toi (m.), à toi (f.)"@fr;
-dc:example "À nous, à vous, à eux ou à elles"@fr;
-dc:example "La voiture a des pneus en surplus"@fr;
-dc:example "إلِـي، إلُه، إلْـها (إلا)، إلَكَ، إلِك"@ar;
-dc:example "إلْنا، إلكُن، إلْـهُن (إلُن)"@ar;
-dc:example "السَّيّارَة إلـها دوالِيب زيادِة"@ar ;
+        dc:example """À moi, à lui, à elle, à toi (m.), à toi (f.)"""@fr;
+dc:example """À nous, à vous, à eux ou à elles"""@fr;
+dc:example """La voiture a des pneus en surplus"""@fr;
+dc:example """إلِـي، إلُه، إلْـها (إلا)، إلَكَ، إلِك"""@ar;
+dc:example """إلْنا، إلكُن، إلْـهُن (إلُن)"""@ar;
+dc:example """السَّيّارَة إلـها دوالِيب زيادِة"""@ar ;
         
         
         dc:abstract """Appartenant à qqn ou à qqch"""@fr;
@@ -14933,11 +14936,11 @@ dc:abstract """لِفُلان، مُلكُه، تابِعٌ لِشَيءٍ"""@ar
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إلُـه"@ar ;
         
-        dc:example "Il est d’une grande utilité, il est nécessaire"@fr;
-dc:example "Cela lui fait une année qu’il est absent"@fr;
-dc:example "~ عازِة كبيرِة، ~ لْزُوم"@ar;
-dc:example "~ سِنِة غايِب
-• + م إلا، إلـها + ج إلُن، إلـهـُن"@ar ;
+        dc:example """Il est d’une grande utilité, il est nécessaire"""@fr;
+dc:example """Cela lui fait une année qu’il est absent"""@fr;
+dc:example """~ عازِة كبيرِة، ~ لْزُوم"""@ar;
+dc:example """~ سِنِة غايِب
+• + م إلا، إلـها + ج إلُن، إلـهـُن"""@ar ;
         
         
         dc:abstract """(Qqn ou qqch) Avoir une caractéristique ou une propriété (qqn ou qqch)"""@fr;
@@ -15041,11 +15044,11 @@ dc:abstract """خَرْطُ المَعادِنِ أو تَقْوِيرُها"""@
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إلُـوش"@ar ;
         
-        dc:example "Il n’est pas utile"@fr;
-dc:example "Il n’a personne"@fr;
-dc:example "ما ~ لزوم"@ar;
-dc:example "ما ~ حَدا 
-• +م إلاش، إلـهاش"@ar ;
+        dc:example """Il n’est pas utile"""@fr;
+dc:example """Il n’a personne"""@fr;
+dc:example """ما ~ لزوم"""@ar;
+dc:example """ما ~ حَدا 
+• +م إلاش، إلـهاش"""@ar ;
         
         
         dc:abstract """Ne pas avoir qqn ou qqch"""@fr;
@@ -15084,11 +15087,11 @@ dc:abstract """آلاف"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "ألـوَق"@ar ;
         
-        dc:example "Ce morceau de bois est tordu"@fr;
-dc:example "Untel a des idées tordues"@fr;
-dc:example "هالشَّقفِةْ من الـخَشَب لَوْقا"@ar;
-dc:example "تِفكِير فلان ~  
-• + م لَوْقا +ج لُوق"@ar ;
+        dc:example """Ce morceau de bois est tordu"""@fr;
+dc:example """Untel a des idées tordues"""@fr;
+dc:example """هالشَّقفِةْ من الـخَشَب لَوْقا"""@ar;
+dc:example """تِفكِير فلان ~  
+• + م لَوْقا +ج لُوق"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -15102,11 +15105,11 @@ dc:abstract """(شَيء) أَعوَج، مُعوَجّ، مُنحَرِف(شَ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "مطَعوَج"@ar ;
         
-        dc:example "Ce morceau de bois est tordu"@fr;
-dc:example "Untel a des idées tordues"@fr;
-dc:example "هالشَّقفِةْ من الـخَشَب لَوْقا"@ar;
-dc:example "تِفكِير فلان ~  
-• + م لَوْقا +ج لُوق"@ar ;
+        dc:example """Ce morceau de bois est tordu"""@fr;
+dc:example """Untel a des idées tordues"""@fr;
+dc:example """هالشَّقفِةْ من الـخَشَب لَوْقا"""@ar;
+dc:example """تِفكِير فلان ~  
+• + م لَوْقا +ج لُوق"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -15120,11 +15123,11 @@ dc:abstract """(شَيء) أَعوَج، مُعوَجّ، مُنحَرِف(شَ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "مَلوُوق"@ar ;
         
-        dc:example "Ce morceau de bois est tordu"@fr;
-dc:example "Untel a des idées tordues"@fr;
-dc:example "هالشَّقفِةْ من الـخَشَب لَوْقا"@ar;
-dc:example "تِفكِير فلان ~  
-• + م لَوْقا +ج لُوق"@ar ;
+        dc:example """Ce morceau de bois est tordu"""@fr;
+dc:example """Untel a des idées tordues"""@fr;
+dc:example """هالشَّقفِةْ من الـخَشَب لَوْقا"""@ar;
+dc:example """تِفكِير فلان ~  
+• + م لَوْقا +ج لُوق"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -15653,9 +15656,9 @@ dc:abstract """بُومَة"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إمّ"@ar ;
         
-        dc:example "Voilà madame la moche"@fr;
-dc:example "هَيْدِي السِّتّ ~   
-• ج إمّ كَبرَة"@ar ;
+        dc:example """Voilà madame la moche"""@fr;
+dc:example """هَيْدِي السِّتّ ~   
+• ج إمّ كَبرَة"""@ar ;
         
         dc:subject "Fmlr"@fr;
 dc:subject "أُلفَةً"@ar ;
@@ -16396,8 +16399,8 @@ dc:abstract """مُمتَصّاتُ الصَّدَماتِ لِلـمَركَب�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أمْـور"@ar ;
         
-        dc:example "Régler et faire avancer ses affaires"@fr;
-dc:example "سَيسَر أمْوُرُه"@ar ;
+        dc:example """Régler et faire avancer ses affaires"""@fr;
+dc:example """سَيسَر أمْوُرُه"""@ar ;
         
         
         dc:abstract """Affaires privées"""@fr;
@@ -16663,8 +16666,8 @@ dc:abstract """بَشَمَتُ (الدَّابَّةُ) وأُتْـخِمَت"
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـبَـحّ"@ar ;
         
-        dc:example "J’ai la voix rauque"@fr;
-dc:example "~ صَوتِي"@ar ;
+        dc:example """J’ai la voix rauque"""@fr;
+dc:example """~ صَوتِي"""@ar ;
         
         
         dc:abstract """S’enrouer, devenir rauque (voix)"""@fr;
@@ -16768,9 +16771,9 @@ dc:abstract """غُسِلَ (اللِباسُ) بِشكلٍ سَيِّئ، لـ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـبَـرَق"@ar ;
         
-        dc:example "Je suis gavé de nourriture"@fr;
-dc:example "اِنْبَرَقِت من الأكل"@ar;
-dc:example "انبرق ظهره: لمع ظهره، أصيب بوجع في ظهره"@ar ;
+        dc:example """Je suis gavé de nourriture"""@fr;
+dc:example """اِنْبَرَقِت من الأكل"""@ar;
+dc:example """انبرق ظهره: لمع ظهره، أصيب بوجع في ظهره"""@ar ;
         
         
         dc:abstract """Se gaver jusqu’au bord de l’éclatement (qqn)"""@fr;
@@ -16901,8 +16904,8 @@ dc:abstract """أجفَلَ، جَفَلَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـبَـعَـق"@ar ;
         
-        dc:example "Je suis gavé de nourriture"@fr;
-dc:example "اِنْبَعَقِت من الأكل"@ar ;
+        dc:example """Je suis gavé de nourriture"""@fr;
+dc:example """اِنْبَعَقِت من الأكل"""@ar ;
         
         
         dc:abstract """Se gaver jusqu’au bord de l’éclatement (qqn)"""@fr;
@@ -17336,8 +17339,8 @@ dc:abstract """ثارَت الـمُرُوءَةُ والنَّجدَةُ فِـ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـتَـخَـى"@ar ;
         
-        dc:example "Arrête de te montrer hautain"@fr;
-dc:example "حاج تِنتِخِي علينا!"@ar ;
+        dc:example """Arrête de te montrer hautain"""@fr;
+dc:example """حاج تِنتِخِي علينا!"""@ar ;
         
         
         dc:abstract """Se vanter, se montrer hautain  (qqn)"""@fr;
@@ -17533,8 +17536,8 @@ dc:abstract """نُكِّدَ وأُغِيظَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـتَـلَـى"@ar ;
         
-        dc:example "Goutte à goutte, la jarre se remplit"@fr;
-dc:example "نُقطَة نُقطَة بتِنتِلِي الـجَرّة"@ar ;
+        dc:example """Goutte à goutte, la jarre se remplit"""@fr;
+dc:example """نُقطَة نُقطَة بتِنتِلِي الـجَرّة"""@ar ;
         
         
         dc:abstract """Se remplir, être plein"""@fr;
@@ -17547,8 +17550,8 @@ dc:abstract """اِمْتَلَأَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـتَـلَـى"@ar ;
         
-        dc:example "Il s’est mouillé d’eau"@fr;
-dc:example "~ مَي"@ar ;
+        dc:example """Il s’est mouillé d’eau"""@fr;
+dc:example """~ مَي"""@ar ;
         
         
         dc:abstract """Se mouiller, s’humecter"""@fr;
@@ -17655,9 +17658,9 @@ dc:abstract """بِضاعَةٌ بالِيَةٌ أو قَديِمَةأشَيا
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أنـتِـيـكـا"@ar ;
         
-        dc:example "Untel a une vieille mentalité"@fr;
-dc:example "عقلات فلان ~ 
-• م أنتِيكا ج أنتِيكات"@ar ;
+        dc:example """Untel a une vieille mentalité"""@fr;
+dc:example """عقلات فلان ~ 
+• م أنتِيكا ج أنتِيكات"""@ar ;
         lex:etymo "Cf. « anntîka » (1)"@fr ;
         
         dc:abstract """(Mentalité ou idée)   Vieille, ringarde"""@fr;
@@ -17863,8 +17866,8 @@ dc:abstract """جَلَسَ (فُلانٌ) واتَّكَأَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أَنْجَـق"@ar ;
         
-        dc:example "Ils suffisent à peine"@fr;
-dc:example "~ بِكَفُّوا"@ar ;
+        dc:example """Ils suffisent à peine"""@fr;
+dc:example """~ بِكَفُّوا"""@ar ;
         
         
         dc:abstract """À peine, tout juste, presque"""@fr;
@@ -17958,8 +17961,8 @@ dc:abstract """رِعيُ الـحَمام المخزنيّ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـحـاش"@ar ;
         
-        dc:example "Il ne cesse de s’enorgueillir, de se montrer fier et hautain"@fr;
-dc:example "ما عاد ~"@ar ;
+        dc:example """Il ne cesse de s’enorgueillir, de se montrer fier et hautain"""@fr;
+dc:example """ما عاد ~"""@ar ;
         
         
         dc:abstract """Être modeste, pouvoir se tenir humble (qqn)"""@fr;
@@ -17972,8 +17975,8 @@ dc:abstract """كانَ (فُلانٌ) مُتَواضِعًا، تَصَرَّف
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْحَـبّ"@ar ;
         
-        dc:example "Cette personne est antipathique (text. ne peut pas être aimée)"@fr;
-dc:example "هَالزَّلَمِي ما بِيِـنحَبّ"@ar ;
+        dc:example """Cette personne est antipathique (text. ne peut pas être aimée)"""@fr;
+dc:example """هَالزَّلَمِي ما بِيِـنحَبّ"""@ar ;
         
         
         dc:abstract """Pouvoir être aimé, être aimable (qqn)"""@fr;
@@ -18198,8 +18201,8 @@ dc:abstract """أُمْسِكَ (فُلانٌ) بِشَعرِهِ وجُرَّ""
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْحَـمَـل"@ar ;
         
-        dc:example "Untel est insupportable"@fr;
-dc:example "فلان ما بِيِنحَمَل!"@ar ;
+        dc:example """Untel est insupportable"""@fr;
+dc:example """فلان ما بِيِنحَمَل!"""@ar ;
         
         
         dc:abstract """Être supportable, se faire supporter ou tolérer"""@fr;
@@ -18251,8 +18254,8 @@ dc:abstract """خَجِلَ (فُلانٌ)، اِسْتَحَى"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـخَـرَب"@ar ;
         
-        dc:example "Il nous arrive malheur (text. notre maison est ruinée)"@fr;
-dc:example "~ بَيتنا"@ar ;
+        dc:example """Il nous arrive malheur (text. notre maison est ruinée)"""@fr;
+dc:example """~ بَيتنا"""@ar ;
         
         
         dc:abstract """Être mis en ruine ou en désordre (qqch)Arriver malheur à qqn, être ruiné (qqn)"""@fr;
@@ -18359,8 +18362,8 @@ dc:abstract """أُثِيرَ (فُلانٌ)، اِنْزَعَجَ نَفسِي
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـخَـمَـد"@ar ;
         
-        dc:example "Va tout de suite dormir !"@fr;
-dc:example "رُوح اِنْخِمِد نام!"@ar ;
+        dc:example """Va tout de suite dormir !"""@fr;
+dc:example """رُوح اِنْخِمِد نام!"""@ar ;
         
         
         dc:abstract """S’exécuter vite ou se grouiller à faire qqch (qqn)"""@fr;
@@ -18386,8 +18389,8 @@ dc:abstract """غَيَّرَ (فُلانٌ) رَأيَه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـدار"@ar ;
         
-        dc:example "Cet homme est inflexible"@fr;
-dc:example "هَالرِّجّال ما بْيِندار"@ar ;
+        dc:example """Cet homme est inflexible"""@fr;
+dc:example """هَالرِّجّال ما بْيِندار"""@ar ;
         
         
         dc:abstract """Être flexible (qqn)Être manipulable (qqch)"""@fr;
@@ -18675,10 +18678,10 @@ dc:abstract """كانَ (فُلانٌ) أو صارَ صَلِبًا لا يُؤ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـدَفَـس"@ar ;
         
-        dc:example "L’enfant a été obligé de dormir"@fr;
-dc:example "Va dormir, c’est mieux pour toi !"@fr;
-dc:example "~ الوَلَد"@ar;
-dc:example "اِنْدِفِس أحسَنلَك!"@ar ;
+        dc:example """L’enfant a été obligé de dormir"""@fr;
+dc:example """Va dormir, c’est mieux pour toi !"""@fr;
+dc:example """~ الوَلَد"""@ar;
+dc:example """اِنْدِفِس أحسَنلَك!"""@ar ;
         
         
         dc:abstract """Être obligé d’aller dormir (qqn)"""@fr;
@@ -18717,8 +18720,8 @@ dc:abstract """دُفِنَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـدَقّ"@ar ;
         
-        dc:example "Il est atteint de la malaria"@fr;
-dc:example "~ فلان بِالبَردِيّة"@ar ;
+        dc:example """Il est atteint de la malaria"""@fr;
+dc:example """~ فلان بِالبَردِيّة"""@ar ;
         
         
         dc:abstract """Être atteint par une maladie (qqn)"""@fr;
@@ -19385,8 +19388,8 @@ dc:abstract """سُرِقَ (فُلانٌ أو مكان)"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـسَـلَـع"@ar ;
         
-        dc:example "Je crève de faim"@fr;
-dc:example "قَلبِـي ~"@ar ;
+        dc:example """Je crève de faim"""@fr;
+dc:example """قَلبِـي ~"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -19400,8 +19403,8 @@ dc:abstract """رَقَّ (قَلبُ فُلان)، اِنْفَعَلَ وتَ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "سَلَع"@ar ;
         
-        dc:example "Je crève de faim"@fr;
-dc:example "قَلبِـي ~"@ar ;
+        dc:example """Je crève de faim"""@fr;
+dc:example """قَلبِـي ~"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -19783,8 +19786,8 @@ dc:abstract """اِقْتُلِعتُ (النَّبتَةُ) مِن جُذُور
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـشَـلَـط"@ar ;
         
-        dc:example "J’ai le cœur brisé, j’ai du chagrin"@fr;
-dc:example "~ قَلبِـي"@ar ;
+        dc:example """J’ai le cœur brisé, j’ai du chagrin"""@fr;
+dc:example """~ قَلبِـي"""@ar ;
         
         
         dc:abstract """Se casser, se briser"""@fr;
@@ -19823,8 +19826,8 @@ dc:abstract """اِنْـخَلَعَ (عُضوُ الـجَسَد)"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـشَـلَـم"@ar ;
         
-        dc:example "J’a été fasciné, j’ai été ravi"@fr;
-dc:example "اِنْشَلَمُوا عَقلاتِـي"@ar ;
+        dc:example """J’a été fasciné, j’ai été ravi"""@fr;
+dc:example """اِنْشَلَمُوا عَقلاتِـي"""@ar ;
         
         
         dc:abstract """Être fasciné, enchanté, ébloui (qqn)"""@fr;
@@ -19919,8 +19922,8 @@ dc:abstract """أُصِيبَ بِطَلقِ رَصاص"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـصَـدَع"@ar ;
         
-        dc:example "Il a glissé et s’est foulé le pied"@fr;
-dc:example "زَحَط واِنْصَدَعِت إجرُه"@ar ;
+        dc:example """Il a glissé et s’est foulé le pied"""@fr;
+dc:example """زَحَط واِنْصَدَعِت إجرُه"""@ar ;
         
         
         dc:abstract """Se fouler ou se tordre (membre du corps)"""@fr;
@@ -20063,8 +20066,8 @@ dc:abstract """اِرْتَدَعَ (فُلانٌ) عَن فِعلِ شَيءٍ"
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـضَـب"@ar ;
         
-        dc:example "Dégage ! Casse-toi ! Va-t-en !"@fr;
-dc:example "رُوح ~"@ar ;
+        dc:example """Dégage ! Casse-toi ! Va-t-en !"""@fr;
+dc:example """رُوح ~"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "Fig."@fr;
@@ -20106,10 +20109,10 @@ dc:abstract """تَضَرَّرَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـضَـرَب"@ar ;
         
-        dc:example "La saison est foutue (agriculure, tourisme, etc.)"@fr;
-dc:example "Être atteint (d’une maladie) aux poumons"@fr;
-dc:example "~ الـمَوْسِم (زِراعَة، سِياحَة، إلخ)"@ar;
-dc:example "اِنْضَرَبُوا رِيّاتُه"@ar ;
+        dc:example """La saison est foutue (agriculure, tourisme, etc.)"""@fr;
+dc:example """Être atteint (d’une maladie) aux poumons"""@fr;
+dc:example """~ الـمَوْسِم (زِراعَة، سِياحَة، إلخ)"""@ar;
+dc:example """اِنْضَرَبُوا رِيّاتُه"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -20178,8 +20181,8 @@ dc:abstract """فَقَدَ (فُلانٌ) وَعيَه، أُغمِيَ عَل�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْطـاق"@ar ;
         
-        dc:example "Untel est insupportable"@fr;
-dc:example "ما بيِنطاق"@ar ;
+        dc:example """Untel est insupportable"""@fr;
+dc:example """ما بيِنطاق"""@ar ;
         
         
         dc:abstract """Être supportable, se faire supporter ou tolérer (qqn)"""@fr;
@@ -20283,8 +20286,8 @@ dc:abstract """صُمَّ (فُلانٌ)، طَرِشَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـطَـسّ"@ar ;
         
-        dc:example "Untel est insupportable"@fr;
-dc:example "فلان ما بِيِنطَسّ!"@ar ;
+        dc:example """Untel est insupportable"""@fr;
+dc:example """فلان ما بِيِنطَسّ!"""@ar ;
         
         
         dc:abstract """Être supportable, se faire supporter ou tolérer (qqn)"""@fr;
@@ -20349,8 +20352,8 @@ dc:abstract """دُفِنَ، غُمِرَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـطَـمّ"@ar ;
         
-        dc:example "Tais-toi ! Calme-toi !"@fr;
-dc:example "~!"@ar ;
+        dc:example """Tais-toi ! Calme-toi !"""@fr;
+dc:example """~!"""@ar ;
         
         
         dc:abstract """Se taire, se calmer"""@fr;
@@ -20610,8 +20613,8 @@ dc:abstract """عَفِنَ (الطَّعام)، تَعَفَّنَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـعَـقَـر"@ar ;
         
-        dc:example "Se blesser le dos, avoir le dos blessé"@fr;
-dc:example "~ ضَهرُه"@ar ;
+        dc:example """Se blesser le dos, avoir le dos blessé"""@fr;
+dc:example """~ ضَهرُه"""@ar ;
         
         
         dc:abstract """Se blesser, être blessé"""@fr;
@@ -20637,8 +20640,8 @@ dc:abstract """قُرِصَ (فُلانٌ)، لُسِعَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـعَـكّ"@ar ;
         
-        dc:example "Le pantalon a été bien frotté"@fr;
-dc:example "~ البَنطَلُون"@ar ;
+        dc:example """Le pantalon a été bien frotté"""@fr;
+dc:example """~ البَنطَلُون"""@ar ;
         
         
         dc:abstract """Être frotté et fouetté (habit)"""@fr;
@@ -20664,8 +20667,8 @@ dc:abstract """اِنْكَبَّ عَلَى، عَكَفَ عَلَى"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـعَـلّ"@ar ;
         
-        dc:example "Mon cœur est fatigué"@fr;
-dc:example "~ قَلبِـي"@ar ;
+        dc:example """Mon cœur est fatigué"""@fr;
+dc:example """~ قَلبِـي"""@ar ;
         
         
         dc:abstract """Se fatiguer, se lasser, être fatigué"""@fr;
@@ -20691,8 +20694,8 @@ dc:abstract """أُنْـجِزَ (العَمَلُ)، نُفِّذَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـعَـمَـى"@ar ;
         
-        dc:example "Je suis débordé (text. mon cœur est aveuglé)"@fr;
-dc:example "~ قَلبِـي"@ar ;
+        dc:example """Je suis débordé (text. mon cœur est aveuglé)"""@fr;
+dc:example """~ قَلبِـي"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -20719,8 +20722,8 @@ dc:abstract """اِحْدَوْدَبَ (شَيءٌ)، اِعْوَجَّ"""@ar 
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أنـغـاجِـيـه"@ar ;
         
-        dc:example "Ils sont assis ou ils marchent  bras dessus bras dessous"@fr;
-dc:example "قاعِدِين أو ماشيِين ~"@ar ;
+        dc:example """Ils sont assis ou ils marchent  bras dessus bras dessous"""@fr;
+dc:example """قاعِدِين أو ماشيِين ~"""@ar ;
         lex:etymo "Du fr. engagé"@fr ;
         
         dc:abstract """(Qqn) Qui prend qqn par la taille, qui marche bras dessus bras dessous"""@fr;
@@ -20772,8 +20775,8 @@ dc:abstract """غَضِبَ، سَخِطَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أنـغَـج"@ar ;
         
-        dc:example "Ils ont marché bras dessus bras dessous"@fr;
-dc:example "أنغَجُوا بِالـمَشِي"@ar ;
+        dc:example """Ils ont marché bras dessus bras dessous"""@fr;
+dc:example """أنغَجُوا بِالـمَشِي"""@ar ;
         lex:etymo "Du fr. engager"@fr ;
         
         dc:abstract """Prendre qqn par le bras (qqn)"""@fr;
@@ -20786,10 +20789,10 @@ dc:abstract """شَبَكَ (فُلانٌ) ذِراعَهُ بِذِراعِ ا�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أنـغَـر"@ar ;
         
-        dc:example "Il s’est mis en colère contre lui, il s’est fâché de lui"@fr;
-dc:example "Ça va mal !"@fr;
-dc:example "أنغَرِت مَعُه مِنُّه"@ar;
-dc:example "أنغَرِت!"@ar ;
+        dc:example """Il s’est mis en colère contre lui, il s’est fâché de lui"""@fr;
+dc:example """Ça va mal !"""@fr;
+dc:example """أنغَرِت مَعُه مِنُّه"""@ar;
+dc:example """أنغَرِت!"""@ar ;
         lex:etymo "De l’angl. angry : fâché"@fr ;
         
         dc:abstract """Se mettre en colère, être très mécontent (qqn)"""@fr;
@@ -20828,8 +20831,8 @@ dc:abstract """غَيْظ، زَعَلٌ وغَضَب↔ أنكَرَة"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـغَـرَم"@ar ;
         
-        dc:example "Il est tombé foux amoureux (text. il est tombé amoureux jusqu’à sa touffe)"@fr;
-dc:example "~ لَشُوشتُه"@ar ;
+        dc:example """Il est tombé foux amoureux (text. il est tombé amoureux jusqu’à sa touffe)"""@fr;
+dc:example """~ لَشُوشتُه"""@ar ;
         
         
         dc:abstract """Être passionné, être épris, être amoureux, tomber amoureux  """@fr;
@@ -20972,9 +20975,9 @@ dc:abstract """رَغِبَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إنِـف"@ar ;
         
-        dc:example "Je suis très exigent et  pointilleux avec ce que je mange"@fr;
-dc:example "أنا كتير ~ بِالأكل 
-• م إنفِة  ج إنفِين"@ar ;
+        dc:example """Je suis très exigent et  pointilleux avec ce que je mange"""@fr;
+dc:example """أنا كتير ~ بِالأكل 
+• م إنفِة  ج إنفِين"""@ar ;
         
         
         dc:abstract """(Qqn) Exigent, pointilleux, prudent"""@fr;
@@ -21195,8 +21198,8 @@ dc:abstract """فُدِغَ (فُلانٌ)، شُقَّ رَأسُه، شُدِ�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـفَـزَر"@ar ;
         
-        dc:example "Je suis gavé de nourriture"@fr;
-dc:example "اِنْفَزَرِت من الأكل"@ar ;
+        dc:example """Je suis gavé de nourriture"""@fr;
+dc:example """اِنْفَزَرِت من الأكل"""@ar ;
         
         
         dc:abstract """Se gaver jusqu’au bord de l’éclatement (qqn)"""@fr;
@@ -21355,8 +21358,8 @@ dc:abstract """كَئِبَ (فُلانٌ)، اِغْتَمَّ، حَزِنَ""
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـفَـقَـر"@ar ;
         
-        dc:example "Les fruits se sont tous percés"@fr;
-dc:example "اِنْفَقَرَت الفواكِه"@ar ;
+        dc:example """Les fruits se sont tous percés"""@fr;
+dc:example """اِنْفَقَرَت الفواكِه"""@ar ;
         
         
         dc:abstract """Être percé (abcès)"""@fr;
@@ -21486,12 +21489,12 @@ dc:abstract """تَـحَرَّرَ أو تَـخَلَّصَ مِن شَيءٍ"
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـفَـكَـس"@ar ;
         
-        dc:example "Le jeu a été rompu"@fr;
-dc:example "Le contrat a été annulé"@fr;
-dc:example "La partie a été bousillée"@fr;
-dc:example "انْفَكَسِت اللعبة"@ar;
-dc:example "~ العقد أو الاِتِّفاق"@ar;
-dc:example "~ الدَّقّ"@ar ;
+        dc:example """Le jeu a été rompu"""@fr;
+dc:example """Le contrat a été annulé"""@fr;
+dc:example """La partie a été bousillée"""@fr;
+dc:example """انْفَكَسِت اللعبة"""@ar;
+dc:example """~ العقد أو الاِتِّفاق"""@ar;
+dc:example """~ الدَّقّ"""@ar ;
         
         
         dc:abstract """Être rompu ou raté (jeu ou projet), être capoté (arrangement), être dénoncé ou annulé (engagement)"""@fr;
@@ -21504,10 +21507,10 @@ dc:abstract """كُسِرَتُ (اللُعبَةُ)، حُلَّ، حُلَّ (
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـفَـكَـش"@ar ;
         
-        dc:example "Se tordre le bras"@fr;
-dc:example "Avoir une entorse au pied"@fr;
-dc:example "اِنْفَكَشِت إيدُه"@ar;
-dc:example "اِنْفَكَشِت إجرُه"@ar ;
+        dc:example """Se tordre le bras"""@fr;
+dc:example """Avoir une entorse au pied"""@fr;
+dc:example """اِنْفَكَشِت إيدُه"""@ar;
+dc:example """اِنْفَكَشِت إجرُه"""@ar ;
         
         
         dc:abstract """Se  disloquer, être démis"""@fr;
@@ -21729,8 +21732,8 @@ dc:abstract """أنقَذَ، خَلَّصَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـقَـزَع"@ar ;
         
-        dc:example "Il a le dos cassé"@fr;
-dc:example "~ ضَهرُه"@ar ;
+        dc:example """Il a le dos cassé"""@fr;
+dc:example """~ ضَهرُه"""@ar ;
         
         
         dc:abstract """Être bousillé, cassé, arraché"""@fr;
@@ -21743,8 +21746,8 @@ dc:abstract """خُلِعَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـقَـشَـر"@ar ;
         
-        dc:example "Va-t-en hors de ma vue !"@fr;
-dc:example "اِنْقِشِر من وِجِّي ! اِنْقِلِع من وجّي"@ar ;
+        dc:example """Va-t-en hors de ma vue !"""@fr;
+dc:example """اِنْقِشِر من وِجِّي ! اِنْقِلِع من وجّي"""@ar ;
         
         
         dc:abstract """S’en aller, partir ou décoller d’un endroit"""@fr;
@@ -21913,8 +21916,8 @@ dc:abstract """أُزِيلَتُ القِشرَةُ الـمَيتَةُ عَن
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـقَـلَـع"@ar ;
         
-        dc:example "Va-t-en d’ici !"@fr;
-dc:example "اِنْقِلِع من هُون!"@ar ;
+        dc:example """Va-t-en d’ici !"""@fr;
+dc:example """اِنْقِلِع من هُون!"""@ar ;
         
         
         dc:abstract """Être arraché de sa place (qqch)Se tirer d’un endroit (qqn)"""@fr;
@@ -22096,8 +22099,8 @@ dc:abstract """رَثَّ (الـحِذاءُ)، بَلِيَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـكَـدا"@ar ;
         
-        dc:example "Le cadeau (reçu) ne s’offre pas"@fr;
-dc:example "الكَادُو ما بْيِنكَدا"@ar ;
+        dc:example """Le cadeau (reçu) ne s’offre pas"""@fr;
+dc:example """الكَادُو ما بْيِنكَدا"""@ar ;
         lex:etymo "Du fr. cadeau"@fr ;
         
         dc:abstract """Se faire offrir, s’offrir"""@fr;
@@ -22407,8 +22410,8 @@ dc:abstract """أُوقِفَ (فُلانٌ)، أُلقِيَ القَبضُ ع�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إنـكَـنّ"@ar ;
         
-        dc:example "Si tu es intelligent, réponds!"@fr;
-dc:example "إنكَنَّك شاطِر جاوِب!"@ar ;
+        dc:example """Si tu es intelligent, réponds!"""@fr;
+dc:example """إنكَنَّك شاطِر جاوِب!"""@ar ;
         
         
         dc:abstract """Si (au conditionnel)"""@fr;
@@ -22538,8 +22541,8 @@ dc:abstract """اِحْدَوْدَبَ (شَيءٌ)، اِعْوَجَّ، اِ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـمَـحَـق"@ar ;
         
-        dc:example "Va te faire crever !!"@fr;
-dc:example "روح اِنْـمِحِق!"@ar ;
+        dc:example """Va te faire crever !!"""@fr;
+dc:example """روح اِنْـمِحِق!"""@ar ;
         
         
         dc:abstract """Disparaître et ne pas laisser de trace, crever"""@fr;
@@ -22826,8 +22829,8 @@ dc:abstract """رَثَّ (لِباسٌ) وبَلِيَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـهَـزّ"@ar ;
         
-        dc:example "Allez remue-toi !"@fr;
-dc:example "قوم ~!"@ar ;
+        dc:example """Allez remue-toi !"""@fr;
+dc:example """قوم ~!"""@ar ;
         
         
         dc:abstract """Se remuer, bouger, se secouer (qqn ou qqch)"""@fr;
@@ -22867,8 +22870,8 @@ dc:abstract """هُضِمَ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "اِنْـهَـضَـم"@ar ;
         
-        dc:example "Cette personne est antipathique (text. indigeste)"@fr;
-dc:example "هالشَّخص ما بِيِنهَضَم"@ar ;
+        dc:example """Cette personne est antipathique (text. indigeste)"""@fr;
+dc:example """هالشَّخص ما بِيِنهَضَم"""@ar ;
         
         
         dc:abstract """Être supportable ou sympathique (qqn)"""@fr;
@@ -23252,8 +23255,8 @@ dc:abstract """صَبِيٌّ فِـي مُقتَبَلِ العُمرِ يَت�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أهـضَـم"@ar ;
         
-        dc:example "Il est très drôle (text. il n’y a pas plus drôle que lui)"@fr;
-dc:example "ما فِـي ~ مِنُّه"@ar ;
+        dc:example """Il est très drôle (text. il n’y a pas plus drôle que lui)"""@fr;
+dc:example """ما فِـي ~ مِنُّه"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -23309,8 +23312,8 @@ dc:abstract """لَعَنَ (اللهُ) فُلانًا، نَبَذَه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أهـلِـيِّـة"@ar ;
         
-        dc:example "Tous de la même famille"@fr;
-dc:example "~ بِـمَحَلِيِّة"@ar ;
+        dc:example """Tous de la même famille"""@fr;
+dc:example """~ بِـمَحَلِيِّة"""@ar ;
         
         
         dc:abstract """Parenté"""@fr;
@@ -23448,8 +23451,8 @@ dc:abstract """أوعِيَة، حَوائِجُ شَخصِيَّةأغراض"""
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أواعِـي"@ar ;
         
-        dc:example "Enlève tes habits !"@fr;
-dc:example "شلاح أواعِيك!"@ar ;
+        dc:example """Enlève tes habits !"""@fr;
+dc:example """شلاح أواعِيك!"""@ar ;
         
         
         dc:abstract """Toutes sortes d’habits ou de vêtements"""@fr;
@@ -23475,8 +23478,8 @@ dc:abstract """أوعِيَة، حَوائِجُ شَخصِيَّةأغراض"""
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أوايِـل"@ar ;
         
-        dc:example "Ustensiles de cuisine"@fr;
-dc:example "~ الـمِطبخ"@ar ;
+        dc:example """Ustensiles de cuisine"""@fr;
+dc:example """~ الـمِطبخ"""@ar ;
         
         dc:subject "Out./Ust."@fr;
 dc:subject "أدَوات"@ar ;
@@ -23716,8 +23719,8 @@ dc:abstract """حافِلَة، سَيّارَةٌ كَبِيرَةٌ لِنَق
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُوتُـومـاتِـيـك"@ar ;
         
-        dc:example "Voiture (à boîte de vitesse) automatique"@fr;
-dc:example "سَيّارَة ~"@ar ;
+        dc:example """Voiture (à boîte de vitesse) automatique"""@fr;
+dc:example """سَيّارَة ~"""@ar ;
         lex:etymo "Du fr. automatique"@fr ;
         dc:subject "Techn."@fr;
 dc:subject "تِقَنِيّات"@ar ;
@@ -24268,13 +24271,13 @@ dc:abstract """"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُوضَـة،"@ar ;
         
-        dc:example "Chambre à coucher"@fr;
-dc:example "Chambre familiale, chambre de jeux"@fr;
-dc:example "Chambre ou suite (d’hôtel) avec prostituée"@fr;
-dc:example "أُوضِةْ مَنامة"@ar;
-dc:example "أُوضِةْ قْعُود"@ar;
-dc:example "~ فرش كامل 
-• +ج أُوَض"@ar ;
+        dc:example """Chambre à coucher"""@fr;
+dc:example """Chambre familiale, chambre de jeux"""@fr;
+dc:example """Chambre ou suite (d’hôtel) avec prostituée"""@fr;
+dc:example """أُوضِةْ مَنامة"""@ar;
+dc:example """أُوضِةْ قْعُود"""@ar;
+dc:example """~ فرش كامل 
+• +ج أُوَض"""@ar ;
         lex:etymo "Du turc oda : chambre"@fr ;
         
         dc:abstract """Chambre"""@fr;
@@ -24414,8 +24417,8 @@ dc:abstract """↔ أُوتُومبِيل"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أوْطَـى"@ar ;
         
-        dc:example "C’est le plus bas prix"@fr;
-dc:example "هَيْدا ~ سعر"@ar ;
+        dc:example """C’est le plus bas prix"""@fr;
+dc:example """هَيْدا ~ سعر"""@ar ;
         
         dc:subject "Compar."@fr;
 dc:subject "Superl."@fr;
@@ -24431,8 +24434,8 @@ dc:abstract """أكثَرُ انـخِفاضًا مِن(شَيء) أكثَرُ �
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أُوعـا!"@ar ;
         
-        dc:example "Surtout ne lui adresse pas la parole ! Surtout ne va pas avec lui !"@fr;
-dc:example "~ تِـحكِي معه! أُوعَك تْرُوح معه!"@ar ;
+        dc:example """Surtout ne lui adresse pas la parole ! Surtout ne va pas avec lui !"""@fr;
+dc:example """~ تِـحكِي معه! أُوعَك تْرُوح معه!"""@ar ;
         
         dc:subject "Avert."@fr;
 dc:subject "لِلتَّحذِير"@ar ;
@@ -24527,8 +24530,8 @@ dc:abstract """(شَرِكاتٌ أو مَصارِف) مَقَرُّها خار�
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أوفِـرتـايـم"@ar ;
         
-        dc:example "J’ai deux jours et trois heures d’heures supplémentaires"@fr;
-dc:example "عِندِي يَومِين وتلات ساعات ~"@ar ;
+        dc:example """J’ai deux jours et trois heures d’heures supplémentaires"""@fr;
+dc:example """عِندِي يَومِين وتلات ساعات ~"""@ar ;
         lex:etymo "De l’angl. overtime :"@fr ;
         
         dc:abstract """Heures supplémentaires"""@fr;
@@ -24801,8 +24804,8 @@ dc:abstract """أوَّل
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أوّلِـةْ"@ar ;
         
-        dc:example "Début de l’année"@fr;
-dc:example "~ السِّنِة"@ar ;
+        dc:example """Début de l’année"""@fr;
+dc:example """~ السِّنِة"""@ar ;
         
         
         dc:abstract """Début de, commencement de"""@fr;
@@ -25089,8 +25092,8 @@ dc:abstract """صَوتٌ لِلتَّعبِيرِ عَن الكَفِّ أو ا
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أوَى"@ar ;
         
-        dc:example "Mets les affaires à l’intérieur (à l’abri) sous un toit"@fr;
-dc:example "حُطّ الغراض بالأوَى"@ar ;
+        dc:example """Mets les affaires à l’intérieur (à l’abri) sous un toit"""@fr;
+dc:example """حُطّ الغراض بالأوَى"""@ar ;
         
         
         dc:abstract """Intérieur d’une maison, endroit sous un toit ou à l’abri"""@fr;
@@ -25132,7 +25135,7 @@ dc:abstract """كَلبُ أبُو عَين
         dc:source "Alif_revu_YZ.json" ;
         dc:title "آوِيـهـا"@ar ;
         
-        dc:example "~ يا وردة مْفَتّحَة ...!"@ar ;
+        dc:example """~ يا وردة مْفَتّحَة ...!"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25203,12 +25206,12 @@ dc:abstract """↔ إيـمايْل"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أيّـا؟"@ar ;
         
-        dc:example "Quel objet?"@fr;
-dc:example "Lequel?"@fr;
-dc:example "Laquelle?"@fr;
-dc:example "أيّا غَرَض؟"@ar;
-dc:example "أيّا هُوِّي؟"@ar;
-dc:example "أيّا هِيِّي؟"@ar ;
+        dc:example """Quel objet?"""@fr;
+dc:example """Lequel?"""@fr;
+dc:example """Laquelle?"""@fr;
+dc:example """أيّا غَرَض؟"""@ar;
+dc:example """أيّا هُوِّي؟"""@ar;
+dc:example """أيّا هِيِّي؟"""@ar ;
         
         dc:subject "Interr."@fr;
 dc:subject "لِلاِسْتِفهام"@ar ;
@@ -25304,23 +25307,23 @@ dc:abstract """اِخْتِراع"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـد"@ar ;
         
-        dc:example "Il a demandé la main de sa bien-aimée"@fr;
-dc:example "Merci à toi (text. que ta main soit sauve)"@fr;
-dc:example "(Expr. populaire) N’y compte pas, n’y compte pas trop (text. ne tire pas trop ta main)"@fr;
-dc:example "(Prov.) Ne fais pas confiance à qqn d’incertain (text. ne mets pas ta main sous la dalle de qqn)"@fr;
-dc:example "Il est revenu bredouille"@fr;
-dc:example "Je ne suis pas capable (text. cela ne dépend pas de moi)"@fr;
-dc:example "Au pouvoir de Dieu"@fr;
-dc:example "Il a du pouvoir, il a le bras long (text. sa main peut atteindre)"@fr;
-dc:example "طَلَبَ ~ حَبِيبتُه"@ar;
-dc:example "سَلِّم هَل ~، سَلِّم إيدَك"@ar;
-dc:example "ما تشِدّ إيدَك، ما كتِير تشِدّ إيدَك"@ar;
-dc:example "ما تْـحِطّ إيدَك تَـحت بلاطِةْ حَدا"@ar;
-dc:example "رِجِع صفر الإيدين"@ar;
-dc:example "ما بإيدي!"@ar;
-dc:example "بِإيد الله"@ar;
-dc:example "إيدُه طايْلِة  
-• ج أيادِي  +ج إيدان، إيدين، دَيْن"@ar ;
+        dc:example """Il a demandé la main de sa bien-aimée"""@fr;
+dc:example """Merci à toi (text. que ta main soit sauve)"""@fr;
+dc:example """(Expr. populaire) N’y compte pas, n’y compte pas trop (text. ne tire pas trop ta main)"""@fr;
+dc:example """(Prov.) Ne fais pas confiance à qqn d’incertain (text. ne mets pas ta main sous la dalle de qqn)"""@fr;
+dc:example """Il est revenu bredouille"""@fr;
+dc:example """Je ne suis pas capable (text. cela ne dépend pas de moi)"""@fr;
+dc:example """Au pouvoir de Dieu"""@fr;
+dc:example """Il a du pouvoir, il a le bras long (text. sa main peut atteindre)"""@fr;
+dc:example """طَلَبَ ~ حَبِيبتُه"""@ar;
+dc:example """سَلِّم هَل ~، سَلِّم إيدَك"""@ar;
+dc:example """ما تشِدّ إيدَك، ما كتِير تشِدّ إيدَك"""@ar;
+dc:example """ما تْـحِطّ إيدَك تَـحت بلاطِةْ حَدا"""@ar;
+dc:example """رِجِع صفر الإيدين"""@ar;
+dc:example """ما بإيدي!"""@ar;
+dc:example """بِإيد الله"""@ar;
+dc:example """إيدُه طايْلِة  
+• ج أيادِي  +ج إيدان، إيدين، دَيْن"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -25334,9 +25337,9 @@ dc:abstract """يَدقُدرَة، طاقَة، إمكان"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـد"@ar ;
         
-        dc:example "Untel est habile"@fr;
-dc:example "فلان إيدُه خَفِيفِة     
-• +ج إيدِين خَفِيفِة"@ar ;
+        dc:example """Untel est habile"""@fr;
+dc:example """فلان إيدُه خَفِيفِة     
+• +ج إيدِين خَفِيفِة"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25350,9 +25353,9 @@ dc:abstract """(شَخص) ماهِر، حاذِق"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـد"@ar ;
         
-        dc:example "Untel a de l’influence"@fr;
-dc:example "فلان إيدُه طايلِة  
-• +ج إيدِين طايلِة"@ar ;
+        dc:example """Untel a de l’influence"""@fr;
+dc:example """فلان إيدُه طايلِة  
+• +ج إيدِين طايلِة"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25380,9 +25383,9 @@ dc:abstract """سارِق، لُصّ"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـد"@ar ;
         
-        dc:example "Untel a les mains baladeuses"@fr;
-dc:example "فلان إيدُه طَوِيلِة 
-• م إيد طَوِيلِة  +ج إيدِين طَوِيلِة"@ar ;
+        dc:example """Untel a les mains baladeuses"""@fr;
+dc:example """فلان إيدُه طَوِيلِة 
+• م إيد طَوِيلِة  +ج إيدِين طَوِيلِة"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25396,9 +25399,9 @@ dc:abstract """(شَخص) مَنْ يَعبَثُ بِيَدَيه"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـد"@ar ;
         
-        dc:example "Untel est incapable"@fr;
-dc:example "فلان إيدُه قَصِيرِة  
-• +ج إيدين قَصِيرِة"@ar ;
+        dc:example """Untel est incapable"""@fr;
+dc:example """فلان إيدُه قَصِيرِة  
+• +ج إيدين قَصِيرِة"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25412,9 +25415,9 @@ dc:abstract """(شَخص) عاجِز، غَيرُ قادِر، قاصِرٌ عَ
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـد"@ar ;
         
-        dc:example "Untel est avare"@fr;
-dc:example "فلان إيدُه ماسكِة 
-• +ج إيدِين ماسكِة"@ar ;
+        dc:example """Untel est avare"""@fr;
+dc:example """فلان إيدُه ماسكِة 
+• +ج إيدِين ماسكِة"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25428,23 +25431,23 @@ dc:abstract """(شَخص) بَـخِيل"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "دَيّ"@ar ;
         
-        dc:example "Il a demandé la main de sa bien-aimée"@fr;
-dc:example "Merci à toi (text. que ta main soit sauve)"@fr;
-dc:example "(Expr. populaire) N’y compte pas, n’y compte pas trop (text. ne tire pas trop ta main)"@fr;
-dc:example "(Prov.) Ne fais pas confiance à qqn d’incertain (text. ne mets pas ta main sous la dalle de qqn)"@fr;
-dc:example "Il est revenu bredouille"@fr;
-dc:example "Je ne suis pas capable (text. cela ne dépend pas de moi)"@fr;
-dc:example "Au pouvoir de Dieu"@fr;
-dc:example "Il a du pouvoir, il a le bras long (text. sa main peut atteindre)"@fr;
-dc:example "طَلَبَ ~ حَبِيبتُه"@ar;
-dc:example "سَلِّم هَل ~، سَلِّم إيدَك"@ar;
-dc:example "ما تشِدّ إيدَك، ما كتِير تشِدّ إيدَك"@ar;
-dc:example "ما تْـحِطّ إيدَك تَـحت بلاطِةْ حَدا"@ar;
-dc:example "رِجِع صفر الإيدين"@ar;
-dc:example "ما بإيدي!"@ar;
-dc:example "بِإيد الله"@ar;
-dc:example "إيدُه طايْلِة  
-• ج أيادِي  +ج إيدان، إيدين، دَيْن"@ar ;
+        dc:example """Il a demandé la main de sa bien-aimée"""@fr;
+dc:example """Merci à toi (text. que ta main soit sauve)"""@fr;
+dc:example """(Expr. populaire) N’y compte pas, n’y compte pas trop (text. ne tire pas trop ta main)"""@fr;
+dc:example """(Prov.) Ne fais pas confiance à qqn d’incertain (text. ne mets pas ta main sous la dalle de qqn)"""@fr;
+dc:example """Il est revenu bredouille"""@fr;
+dc:example """Je ne suis pas capable (text. cela ne dépend pas de moi)"""@fr;
+dc:example """Au pouvoir de Dieu"""@fr;
+dc:example """Il a du pouvoir, il a le bras long (text. sa main peut atteindre)"""@fr;
+dc:example """طَلَبَ ~ حَبِيبتُه"""@ar;
+dc:example """سَلِّم هَل ~، سَلِّم إيدَك"""@ar;
+dc:example """ما تشِدّ إيدَك، ما كتِير تشِدّ إيدَك"""@ar;
+dc:example """ما تْـحِطّ إيدَك تَـحت بلاطِةْ حَدا"""@ar;
+dc:example """رِجِع صفر الإيدين"""@ar;
+dc:example """ما بإيدي!"""@ar;
+dc:example """بِإيد الله"""@ar;
+dc:example """إيدُه طايْلِة  
+• ج أيادِي  +ج إيدان، إيدين، دَيْن"""@ar ;
         
         dc:subject "Fig."@fr;
 dc:subject "مَجازًا"@ar ;
@@ -25651,10 +25654,10 @@ dc:abstract """أيُّ شَيء"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـش"@ar ;
         
-        dc:example "J’ai hâte de voyager"@fr;
-dc:example "Il est impatient d’en finir"@fr;
-dc:example "بَدِّي ~ سَافِر"@ar;
-dc:example "بَدُّو ~ يِـخلَص"@ar ;
+        dc:example """J’ai hâte de voyager"""@fr;
+dc:example """Il est impatient d’en finir"""@fr;
+dc:example """بَدِّي ~ سَافِر"""@ar;
+dc:example """بَدُّو ~ يِـخلَص"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25681,8 +25684,8 @@ dc:abstract """(صَحنٌ أو وِعاء) مُسَطَّح"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـشـمـا"@ar ;
         
-        dc:example "Quoi qu’il arrive !"@fr;
-dc:example "~ صار!"@ar ;
+        dc:example """Quoi qu’il arrive !"""@fr;
+dc:example """~ صار!"""@ar ;
         
         dc:subject "Loc."@fr;
 dc:subject "عِبارَة"@ar ;
@@ -25858,8 +25861,8 @@ dc:abstract """نَوعٌ مِن "الـمِغلِي" السَّائِل
         dc:source "Alif_revu_YZ.json" ;
         dc:title "إيـه"@ar ;
         
-        dc:example "Un jour sur deux (text. un jour oui, un jour non)"@fr;
-dc:example "يُوم إيه يُوم لأ"@ar ;
+        dc:example """Un jour sur deux (text. un jour oui, un jour non)"""@fr;
+dc:example """يُوم إيه يُوم لأ"""@ar ;
         
         
         dc:abstract """Oui, bien sûr, certes"""@fr;
@@ -25941,8 +25944,8 @@ dc:abstract """"""@ar .
         dc:source "Alif_revu_YZ.json" ;
         dc:title "أيُّـولِـة"@ar ;
         
-        dc:example "Viens t’asseoir"@fr;
-dc:example "أيِّلَك ~"@ar ;
+        dc:example """Viens t’asseoir"""@fr;
+dc:example """أيِّلَك ~"""@ar ;
         
         
         dc:abstract """Fait de s’asseoir et de se reposer"""@fr;
