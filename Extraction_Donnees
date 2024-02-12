@@ -1,0 +1,31 @@
+Ce dossier contient trois scripts Python ainsi que les fichiers de sortie générés par ces scripts. Les scripts sont conçus pour traiter des données extraites à partir de fichiers DOCX, les transformer en formats de données différents, et gérer les dépendances nécessaires à leur exécution via un fichier `requirements.txt`.
+
+## Scripts
+
+1. **docx_to_json.py** :
+   - **Description** : Ce script prend en entrée un fichier DOCX et extrait les données de ce fichier pour les convertir en format JSON.
+   - **Entrée** : Fichier DOCX.
+   - **Sortie** : Fichier JSON contenant les données extraites.
+
+2. **json_to_rdf.py** :
+   - **Description** : Ce script prend en entrée un fichier JSON généré par le premier script et le transforme en un fichier RDF.
+   - **Entrée** : Fichier JSON (généré par `docx_to_json.py`).
+   - **Sortie** : Fichier RDF contenant les données au format RDF.
+
+3. **rdf_id.py** :
+   - **Description** : Ce script prend génére un identifiant pour chaque graphique d'un mot.
+   - **Entrée** : titre (graphique mot).
+   - **Sortie** : identifiant (n-id-) .
+
+## Fichiers de sortie
+
+- **output.json** : Ce fichier contient les données extraites du fichier DOCX au format JSON, généré par `docx_to_json.py`.
+- **output.rdf** : Ce fichier contient les données au format RDF, généré par `json_to_rdf.py`.
+
+## Fichier requirements.txt
+
+Le fichier `requirements.txt` contient les dépendances Python nécessaires à l'exécution des scripts. Pour installer ces dépendances, exécutez la commande suivante :
+
+```
+pip install -r requirements.txt
+```
