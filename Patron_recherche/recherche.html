@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title class="trad" id="title">Lexique libanais de Makki</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="jquery.js"></script>
+
+</head>
+<body>
+
+<div role="search" style="text-align: center;">
+    <h1 class="titre">Recherche avancée</h1>
+
+    <form id="search-form">
+        <label for="search-form">Mot / Expression</label>
+        <input type="text" id="search-mot" name="search_term" placeholder="Recherche par mot / expression">
+        <i class="fas fa-trash-alt" onclick="clearField('search-mot')"></i>
+    </form>
+
+    <div class="search-options">
+       
+        <div>
+            <label for="search-pronunciation">Prononciation</label>
+            <input type="text" id="search-pronunciation" name="search_pronunciation" placeholder="Prononciation">
+            <i class="fas fa-trash-alt" onclick="clearField('search-pronunciation')"></i>
+        </div>
+
+        <div>
+            <label for="search-etymologie">Etymologie</label>
+            <input type="text" id="search-etymologie" name="search_etymologie" placeholder="Etymologie">
+            <i class="fas fa-trash-alt" onclick="clearField('search-etymologie')"></i>
+        </div>
+
+        <div>
+            <label for="search_thematique">Thématique</label>
+            <select type="text" id="search-thematique" name="search_thematique" placeholder="Thématique">
+                <option value="">Tout</option>
+                <option value="Jeu">Jeux</option>
+                <option value="Commun">Commun</option>
+                <option value="Outil">Outil</option>
+                <option value="Ustensil">Ustensil</option>
+                <option value="Musique">Musique</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="search-lieu">Lieu</label>
+            <select type="text" id="search-lieu" name="search_lieu" placeholder="Lieu">
+                <option value="">Tout</option>
+                <option value="Nord">Nord</option>
+                <option value="Est">Est</option>
+                <option value="Ouest">Ouest</option>
+                <option value="Sud">Sud</option>
+            </select>
+        </div>
+
+    </div>
+
+    <form id="searchForm" onsubmit="return false;">
+        <input type="submit" id="searching" value="Recherche Filtrée" onclick="search()">
+        <i class="fas fa-search" onclick="search()"></i>
+    </form> 
+    
+    <script>
+
+        // Supprimer le contenu en cliquant sur corbeille 
+        function clearField(fieldId) {
+            document.getElementById(fieldId).value = "";
+
+        }
+
+        //  Afficher les résultats de la recherche filtrée
+        function search() {
+            var searchQuery = document.getElementById('search-mot').value;
+            var pronunciation = document.getElementById('search-pronunciation').value;
+            var etymology = document.getElementById('search-etymologie').value;
+            var thematic = document.getElementById('search-thematique').value;
+            var location = document.getElementById('search-lieu').value;
+
+            // Logique de recherche
+        }
+        
+    </script>
+</body>
+</html>
