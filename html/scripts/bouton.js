@@ -9,6 +9,17 @@ $(".login-wrapper").on("mouseleave", function() {
   }
 });
 
+$('#login-button_connecte').on("mouseenter", function() {
+  $('.login-form_connecte').addClass('open_connecte');
+});
+
+$(".login-wrapper_connecte").on("mouseleave", function() {
+
+  if (!$("#bouton_admin, #bouton_deco").is(":focus")) {
+    $('.login-form_connecte').removeClass('open_connecte');
+  }
+});
+
 $(document).ready(function() {
   $('*').each(function(index, element) {
     $(element).addClass("loaded");
