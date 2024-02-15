@@ -10,16 +10,28 @@
             <img class ="logo" src="images/logo.png"/>                       
         </div>
 
-        <div class="login-wrapper">
-            <button class="trad" id="login-button">Connexion</button>
-            <div class="login-container">
-              <form class="login-form" method="POST">
-                <input class ="trad_placeholder" type="text" placeholder="Nom d'utilisateur" id="utilisateur" name="utilisateur" required>
-                <input class ="trad_placeholder" type="password" placeholder="Mot de passe" id="mdp" name="mdp" required>
-                  <input class ="trad_value" type="submit" name="bouton_co" value="Se connecter" id="bouton_co" />
-              </form>
-            </div>
-        </div>
+		<div class="login-wrapper">
+			<button class="trad" id="login-button">Connexion</button>
+			<div class="login-container">
+			  <form class="login-form" method="POST">
+				<input class ="trad_placeholder" type="text" placeholder="Nom d'utilisateur" id="utilisateur" name="utilisateur" required>
+				<input class ="trad_placeholder" type="password" placeholder="Mot de passe" id="mdp" name="mdp" required>
+				  <input class ="trad_value" type="submit" name="bouton_co" value="Se connecter" id="bouton_co" />
+			  </form>
+			</div>
+		  </div>
+	
+		<div hidden class="login-wrapper_connecte">
+			<button class="button_1 trad" id="login-button_connecte">Vous êtes connecté !</button>
+			<div class="login-container_connecte">
+			  <div class="login-form_connecte">
+	
+				<button class ="button_1 trad" name="bouton_admin" id="bouton_admin">Page d'administration</button>
+				<button class ="button_2 trad" name="bouton_deco" id="bouton_deco">Se déconnecter</button>
+	
+			  </div>
+			</div>
+		</div>
 		
         <script src="scripts/bouton.js"></script>
 		
