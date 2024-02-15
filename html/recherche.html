@@ -16,7 +16,7 @@
 
         <form id="search-form">
             <label for="search-form">Mot / Expression</label>
-            <input type="text" id="search-mot" name="search_term" placeholder="Recherche par mot / expression">
+            <input type="text" id="search-mot" name="search_mot" placeholder="Recherche par mot / expression">
             <i class="fas fa-trash-alt" onclick="clearField('search-mot')"></i>
         </form>
 
@@ -59,10 +59,14 @@
 
         </div>
 
-        <form id="searchForm" onsubmit="return false;">
+        <form id="searchform" name= "search_form"onsubmit="return false;">
             <input type="submit" id="searching" value="Recherche Filtrée" onclick="search()">
             <i class="fas fa-search" onclick="search()"></i>
         </form> 
+
+        <div id="results">
+            <!--Affichage des résultats de la recherche filtrée-->
+        </div>
         
     </div>
     <script src="scripts/recherche.js"></script>
