@@ -61,6 +61,11 @@ class HTMLSerializer {
 
         if ($connected) {
             $header->find('.login-wrapper', 0)->outertext = "";
+            $header->find(".login-wrapper_connecte", 0)->removeAttribute("hidden");
+            $header->find("#form_admin", 0)->action = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."administration";
+        }
+        else {
+            $header->find(".login-wrapper_connecte", 0)->outertext = "";
         }
         
         $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;

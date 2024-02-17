@@ -17,6 +17,7 @@ class RequestHandler {
     function __construct(string $uri, string $request_config, string $server, string $headers) {
 
         $parser = new RequestParser($request_config);
+        $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
 
         $this->output           = "";
         $this->header           = array();
@@ -27,6 +28,7 @@ class RequestHandler {
         $this->there            = $server;
         $this->protocol         = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
         $this->request          = $parser->parse_uri($uri, $this->there);
+        $this->uri              = $uri;
         $this->content_type     = "text/html";
         $this->db               = new DB("config/db.json", "config/db.sql");
         $this->html_serializer  = new HTMLSerializer("config/pages.json", $this->db);
@@ -208,7 +210,7 @@ class RequestHandler {
             }
 
             $cookie = $this->retrieve_nonce($_COOKIE['makki_nonce']);
-            $frm = $this->retrieve_nonce($_POST['nonce']);
+            $frm = $this->retrieve_nonce(urldecode($_POST['nonce']));
 
             // On vérifie que :
             // si connecté, le champ `usr` du cookie nonce doit correspondre au champ `sid` du cookie d'authentification
@@ -230,7 +232,12 @@ class RequestHandler {
                     $this->make_session($id);
                 }
 
-                $this->redirect($this->protocol.$uri);
+                $this->redirect($this->protocol.$this->uri);
+                return;
+            }
+
+            if (isset($_POST['bouton_deco'])) {
+                $this->disconnect();
                 return;
             }
             
@@ -333,7 +340,7 @@ class RequestHandler {
                     $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $this->protocol.$this->there, 0);
 
                     $uploader->delete();
-                    $this->redirect($this->protocol.$uri);
+                    $this->redirect($this->protocol.$this->uri);
                 }
                 else if (isset($_FILES["uploaddata"])) {
                     $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 2000000);
@@ -371,7 +378,7 @@ class RequestHandler {
                     }
 
                     $uploader->delete();
-                    $this->redirect($this->protocol.$uri);
+                    $this->redirect($this->protocol.$this->uri);
                 }
                 else {
                     echo "bleuargh";
@@ -516,7 +523,7 @@ class RequestHandler {
     }
 
     function disconnect() {
-        $this->redirect();
+        $this->redirect($this->protocol.$this->uri);
         setcookie("makki_user", "", 1, "/", $GLOBALS['iss'], false, true);
     }
 
@@ -604,7 +611,6 @@ class RequestHandler {
             $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
         }
 
-        $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
         $jwt = JWT::encode($id, '+30 minutes');
         $jws = JWS::encode($jwt, base64_decode($clefs['keys']['sig-session']['key']));
         $jwe = JWE::encode($jws, get_public_key(base64_decode($clefs['keys']['enc-session']['key'])));
@@ -663,7 +669,6 @@ class RequestHandler {
             $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
         }
 
-        $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
         $jwt = JWT::encode($this->auth ? $this->session : "", '+60 minutes');
         $jws = JWS::encode($jwt, base64_decode($clefs['keys']['sig-csrf']['key']));
 
@@ -720,7 +725,7 @@ class RequestHandler {
         }
 
         $cookie = $this->retrieve_nonce($_COOKIE['makki_nonce']);
-        $frm = $this->retrieve_nonce($form_nonce);
+        $frm = $this->retrieve_nonce(urldecode($form_nonce));
 
         // On vérifie que :
         // si connecté, le champ `usr` du cookie nonce doit correspondre au champ `sid` du cookie d'authentification
