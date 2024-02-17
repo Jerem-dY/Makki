@@ -9,12 +9,6 @@ require_once("vendor/autoload.php");
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-// TODO:
-// - faire un fichier excel des traductions avec les 'class' HTML pour les transmettre à Léa
-// - mettre au point le système de connexion (table dans la base de données, authentification) (note : penser à remplacer le bouton de connexion par un de déconnexion !)
-// - voir avec Léa pour la page d'administration
-// - faire un système d'upload de fichiers rdf pour alimenter la DB
-// - voir avec Inès pour la mise au point d'une conversion xlsx (traductions) => rdf
 
 class RequestHandler {
 
@@ -87,6 +81,14 @@ class RequestHandler {
 
         if (!in_array("fr", $this->lang) && in_array("fr", $lang_available))
             array_push($this->lang, "fr"); # Langue par défaut
+        
+        $prepare_dir = function ($value) {
+            $res = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?dir WHERE { ?in dcterms:alternative ?txt . ?in <".$this->protocol.$this->there."traductions/dir> ?dir FILTER( lang(?txt) = \"$value\" ) } GROUP BY ?dir");
+            return [$value, $res['result']['rows'][0]['dir']];
+        };
+        $this->lang = array_map($prepare_dir, $this->lang);
+
+        #$this->output .= var_dump($this->lang);
 
         /**
          * GESTION DES TYPES DE REQUÊTE
@@ -151,6 +153,8 @@ class RequestHandler {
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
                     if (isset($this->request['target'])) {
                         $page = "mot";
+                        $word_data = $this->get_data($this->request['target']);
+
                     }
                     else if (isset($this->request['query'])) {
                         $page = "mot";
@@ -190,7 +194,7 @@ class RequestHandler {
                 $token = $this->make_nonce();
 
 
-                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token);
+                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array());
             }
             else {
                 echo "OH NO!";
@@ -232,10 +236,10 @@ class RequestHandler {
             
             if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
 
-                if (!$this->auth) {
+                if(!$this->validate_tokens()) {
                     $this->unauthorized();
                     return;
-                }
+                }    
 
                 if (isset($_FILES["uploadtrad"])) {
                     $uploader = new FileUploader(array("xlsx"), $this->id, 500000);
@@ -332,13 +336,37 @@ class RequestHandler {
                     $this->redirect($this->protocol.$uri);
                 }
                 else if (isset($_FILES["uploaddata"])) {
-                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 1000000);
+                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 2000000);
 
                     $uploader->upload($_FILES["uploaddata"]);
 
                     foreach($uploader->get_filenames() as $file){
+
+                        $f_name = $f_no_ext = explode(".", basename($file))[0];
+
+                        $pre_q = "@prefix dcterms: <http://purl.org/dc/terms/> .
+                            @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                            @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                            
+                            SELECT ?out WHERE {?in dcterms:source ?out . FILTER(REGEX(?out, \"$f_no_ext( \([0-9]+\)|)\"))} GROUP BY ?out";
+                        $rows = $this->db->store->query($pre_q);
+
+                        $occs = count($rows['result']['rows']);
+                        if ($occs > 0) {
+                            $f_no_ext .= " ($occs)";
+                        }
+
+                        $contents = mb_convert_encoding(file_get_contents($file), "UTF-8");
+
+                        if ($f_no_ext != $f_name) {
+                            $contents = str_replace($f_name, $f_no_ext, $contents);
+                        }
                         
-                        $this->db->store->insert(mb_convert_encoding(file_get_contents($file), "UTF-8"), $this->protocol.$this->there, 0);
+                        $this->db->store->insert( $contents, $this->protocol.$this->there, 0);
+                        
+                        if ($errs = $this->db->store->getErrors()) {
+                            $this->output .= var_dump($errs);
+                        }
 
                     }
 
@@ -350,17 +378,9 @@ class RequestHandler {
                 }
             }
         }
-        else if ($this->method == 'PUT') {
-            echo "THIS IS A PUT REQUEST";
-
-            if (!$this->auth) {
-                $this->unauthorized();
-                return;
-            }
-        }
         else if ($this->method == 'DELETE') {
 
-            if (!$this->auth) {
+            if(!$this->validate_tokens()) {
                 $this->unauthorized();
                 return;
             }
@@ -403,7 +423,67 @@ class RequestHandler {
                     }
                 }
                 else if ($_DELETE['type'] == "delete_data" && isset($_DELETE['file'])) {
+                    
+                    $file = $_DELETE['file'];
 
+                    /** On commence par compter combien de sources a chaque définition issue de ce fichier.
+                     * Cela permet d'éviter de tout supprimer si une définition est aussi issue d'un autre fichier.
+                     * Ainsi, on supprime le lien entre le fichier et ces définitions, et l'on a alors les mains libre pour supprimer entièrement ce qui est
+                     * uniquement issu de ce fichier.
+                     */
+                    $pre_q = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
+
+                    SELECT DISTINCT ?el (COUNT(?src2) AS ?nb) WHERE { 
+                    
+                      ?el dcterms:source ?src, ?src2 .
+                      FILTER (?src = \"$file\")
+                    
+                    } GROUP BY ?el";
+                    $res = $this->db->store->query($pre_q);
+                    
+                    $unlink = array();
+                    foreach($res['result']['rows'] as $row) {
+                        if ($row["nb"] > 1) {
+                            array_push($unlink, $row["el"]);
+                        }
+                    }
+
+                    $del_assoc = "@prefix dcterms: <http://purl.org/dc/terms/> .
+                    @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                    
+                    DELETE {
+                        <".implode("> dcterms:source \"$file\" .<", $unlink)."> dcterms:source \"$file\" .
+                    }";
+
+                    $this->db->store->query($del_assoc);
+
+                    if ($errs = $this->db->store->getErrors()) {
+                        $this->output .= htmlentities($del_assoc);
+                        http_response_code(400);
+                        return;
+                    }
+
+                    $del_all = "@prefix dcterms: <http://purl.org/dc/terms/> .
+                    @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                    
+                    DELETE {
+                        ?in ?pred ?out .
+                    }
+                    
+                    WHERE {
+                        ?in dcterms:source \"$file\" .
+                        ?in ?pred ?out .
+                    }";
+
+                    $this->db->store->query($del_all);
+
+                    if ($errs = $this->db->store->getErrors()) {
+                        $this->output .= htmlentities($del_all);
+                        http_response_code(400);
+                        return;
+                    }
                 }
             }
         }
@@ -620,6 +700,132 @@ class RequestHandler {
         }
 
         return $decoded;
+    }
+
+    function validate_tokens() {
+
+        if ($this->method == "DELETE") {
+            parse_str(file_get_contents('php://input'), $_DELETE);
+            $form_nonce = isset($_DELETE["nonce"]) ? $_DELETE["nonce"] : null;
+        }
+        else if ($this->method == "POST") {
+            $form_nonce = isset($_POST["nonce"]) ? $_POST["nonce"] : null;
+        }
+        else {
+            $form_nonce = null;
+        }
+
+        if ($form_nonce == null || !isset($_COOKIE['makki_nonce'])) {
+            return false;
+        }
+
+        $cookie = $this->retrieve_nonce($_COOKIE['makki_nonce']);
+        $frm = $this->retrieve_nonce($form_nonce);
+
+        // On vérifie que :
+        // si connecté, le champ `usr` du cookie nonce doit correspondre au champ `sid` du cookie d'authentification
+        // le nonce doit être présent dans les donneés du formulaire
+        // le champ `sid` du nonce du formulaire doit correspondre à celui du cookie 
+        if(($this->auth && $cookie['usr'] != $this->session) || $frm['sid'] != $cookie['sid']) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function get_data(string $target) {
+
+        // On prépare puis effectue la requête pour récupérer les infos :
+
+        $prepare_search = function ($value) {
+            return "{ ?in ?pred ?out . FILTER( lang(?out) = \"".$value[0]."\" ) }";
+        };
+        
+        $q = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+        @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+        @prefix dc:    <http://purl.org/dc/terms/> .
+        @prefix lex:   <lexique/> .
+        
+        DESCRIBE ?in ?pred ?out WHERE {
+            ?in dc:title \"".urldecode($target)."\" .";
+        $mini_q = array_map($prepare_search, $this->lang);
+        $q .= implode(" UNION ", $mini_q) . "}";
+
+        $res = $this->db->query($q);
+
+        // On arrange les résultats sous une forme exploitable :
+
+        $output = array();
+
+        foreach(array_keys($res['result']) as $def_id) {
+
+            $def = array();
+            $words = array();
+            $syns = array();
+
+
+            foreach(array_keys($res['result'][$def_id]) as $pred) {
+
+                $item = substr($pred, strrpos($pred, "/")+1);
+
+                if ($item == 'title') {
+                    foreach($res['result'][$def_id][$pred] as $element) {
+                        array_push($words, $element['value']);
+                    }
+                }
+                else if ($item == 'identifier') {
+
+                    $q_s = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                        @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+                        @prefix dc:    <http://purl.org/dc/terms/> .
+                        @prefix lex:   <lexique/> .
+                        SELECT ?title WHERE {
+                            ?in dc:identifier \"".$res['result'][$def_id][$pred][0]["value"]."\" .
+                            ?in dc:title ?title .
+                        }
+                        ";
+                    
+                    $res_syn = $this->db->query($q_s);
+
+                    if (sizeof($res_syn['result']['rows']) > 0) {
+
+                        if (!array_key_exists("syn", $def)) {
+                            $def["syn"] = array();
+                        }
+    
+                        foreach($res_syn['result']['rows'] as $element) {
+                            array_push($def["syn"], [$element['title'], isset($element['title lang']) ? $element['title lang'] : "ar"]);
+                        }
+                    }
+
+                }
+                else {
+                    if (!array_key_exists($item, $def)) {
+                        $def[$item] = array();
+                    }
+                    
+                    foreach($res['result'][$def_id][$pred] as $element) {
+                        array_push($def[$item], [$element['value'], isset($element['lang']) ? $element['lang'] : "fr"]);
+                    }
+                }
+            }
+
+            foreach($words as $w) {
+
+                if (!array_key_exists($w, $output)) {
+                    $output[$w] = array();
+                }
+
+                $output[$w][$def_id] = $def;
+            }
+
+        }
+
+        #$this->output .= var_dump($output);
+
+        return $output;
     }
 
 }

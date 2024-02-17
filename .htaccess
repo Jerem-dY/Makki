@@ -1,6 +1,8 @@
+# On met en place la redirection vers le script php "index.php"
 RewriteEngine On
 RewriteRule .* index.php
 RewriteRule .* - [E=HTTP_CONTENT_TYPE:%{HTTP:Content-Type},L]
 <RequireAny>
-    Require method DELETE GET POST PUT OPTIONS
+    Require method DELETE GET POST
 </RequireAny>
+# Il peut être intéressant d'aussi intégrer et implémenter les méthodes PUT et OPTIONS

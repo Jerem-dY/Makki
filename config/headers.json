@@ -2,5 +2,6 @@
     "Content-Security-Policy" : "default-src 'self'; img-src 'self'; object-src 'none'; frame-ancestors 'none'",
     "Referrer-Policy" : "same-origin",
     "X-Content-Type-Options" : "nosniff",
-    "X-Frame-Options" : "DENY"
+    "X-Frame-Options" : "DENY",
+	"Permissions-Policy" : "microphone=(), geolocation=(), payment=(), camera=()"
 }

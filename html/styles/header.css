@@ -1,8 +1,9 @@
+html {
+  opacity : 0;
+  transition : opacity 0.5s ease;
+}
+
 html, body {
-
-    opacity : 0;
-    transition : opacity 1s ease;
-
     background-color: #fdeee2; 
     padding:0;
     margin:0;   

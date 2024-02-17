@@ -21,9 +21,7 @@ $(".login-wrapper_connecte").on("mouseleave", function() {
 });
 
 $(document).ready(function() {
-  $('*').each(function(index, element) {
-    $(element).addClass("loaded");
-  });
+    $("html").addClass("loaded");
 });
 
 $("form.login-form").on("submit", function(event) {

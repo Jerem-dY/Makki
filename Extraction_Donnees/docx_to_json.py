@@ -2,6 +2,7 @@ import json
 from docx import Document
 from rdf_id import data_to_uuid
 import re 
+import html
 
 
 class ExtractData:
@@ -20,7 +21,7 @@ class ExtractData:
         self.data = {}
 
     def generate_term_uri(self, description_id):
-        return f"n{str(data_to_uuid(description_id))}"
+        return str(data_to_uuid(description_id))
 
     def make_term(self, terme, description_fr, description_ar):
 
@@ -47,7 +48,7 @@ class ExtractData:
 
         # On isole le mot lui-même de ses exemples
         #NOTE: on perd actuellement les informations de pluriel, de féminin, etc.
-        return re.match(r"\S+", s[0]).group(0), [(ex, "ar") for ex in s[1:]]
+        return re.match(r"[^\d\(\)\n\r\f]+", s[0]).group(0).strip(), [(ex, "ar") for ex in s[1:]]
     
     def parse_coverage(self, s: str, lang: str):
 
@@ -140,7 +141,7 @@ class ExtractData:
                     output['example'].append((d['example'].strip(), lang))
 
 
-        output['abstract'][0] = (output['abstract'][0], lang)
+        output['abstract'][0] = (html.escape(output['abstract'][0]), lang)
 
         return output
 
@@ -173,11 +174,11 @@ class ExtractData:
                 self.data[terme]["description"][term_uri]["example"] += examples
             
             # On ajoute les synonymes en leur donnant la même définition que le mot actuel
-            if (alternatif := re.match(r"(\([0-9]\)|) ← (.*)", row.cells[3].text)) != None:
+            if (alternatif := re.match(r"(\([0-9]\)|) ?← (.*)", row.cells[3].text)) != None:
                 
                 for alt in alternatif.group(2).split("،"):
                     alt = alt.strip()
-                    if alt:
+                    if alt != "":
                         if not alt in self.data:
                             self.data[alt] = {"description" : {}}
 
