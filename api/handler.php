@@ -90,8 +90,6 @@ class RequestHandler {
         };
         $this->lang = array_map($prepare_dir, $this->lang);
 
-        #$this->output .= var_dump($this->lang);
-
         /**
          * GESTION DES TYPES DE REQUÊTE
          */
@@ -152,6 +150,30 @@ class RequestHandler {
             }  
             else if (in_array(array('text', 'html'), $this->mime) || in_array(array('*', '*'), $this->mime)) {
 
+                $themes = $this->db->query("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                    @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+                    @prefix dc:    <http://purl.org/dc/terms/> .
+                    @prefix lex:   <lexique/> .
+                            
+                    SELECT DISTINCT ?subject WHERE {
+                    
+                    ?in dc:subject ?subject .
+                    FILTER (lang(?subject) = \"".$this->lang[0][0]."\")
+                    
+                    }");
+
+                if (isset($themes['result'])) {
+                    $themes = array_map(function($item) {
+                        return $item['subject'];
+                    }, $themes['result']['rows']);
+                }
+                else {
+                    $themes = array();
+                }
+                
+
+
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
                     if (isset($this->request['target'])) {
                         $page = "mot";
@@ -197,7 +219,7 @@ class RequestHandler {
                 $token = $this->make_nonce();
 
 
-                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array());
+                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes);
             }
             else {
                 echo "OH NO!";

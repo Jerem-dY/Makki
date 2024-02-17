@@ -22,7 +22,7 @@ class HTMLSerializer {
         }
     }
 
-    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = []): string {
+    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -41,6 +41,7 @@ class HTMLSerializer {
 
         $bar = $header->find('.barre', 0);
         $lang_list = $bar->find('ul#lang_liste', 0);
+        $themes_list = $bar->find('ul#thematiques_liste', 0);
 
         $accueil_link = $header->find('#accueil', 0);
         $accueil_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "");
@@ -54,9 +55,21 @@ class HTMLSerializer {
         $lang_list->innertext = "";
         $sorted_langs = $langs;
         asort($sorted_langs);
-        $last = end($sorted_langs);
+        $nb = count($sorted_langs);
+        $c = 0;
         foreach($sorted_langs as $l) {
-            $lang_list->innertext .= "<li><a ". ($last == $l[0] ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.$l[0]."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">".$l[0]."</a></li>";
+            $c += 1;
+            $lang_list->innertext .= "<li><a ". ($c == $nb ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.$l[0]."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">".$l[0]."</a></li>";
+        }
+
+        $themes_list->innertext = "";
+        $sorted_themes = $themes;
+        asort($sorted_themes);
+        $nb = count($sorted_themes);
+        $c = 0;
+        foreach($themes as $t) {
+            $c += 1;
+            $themes_list->innertext .= "<li><a ". ($c == $nb ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique?subject=".$t."\">".$t."</a></li>";
         }
 
         if ($connected) {
