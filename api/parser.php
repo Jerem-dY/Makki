@@ -129,21 +129,11 @@ class RequestParser {
           // On récupère le nom et la valeur
           list($name,$value) = explode('=', $i, 2);
           
-          // Si la variable existe déjà, on la transforme en tableau pour accueillir la nouvelle
-          if( isset($output[$name]) ) {
-
-            if( is_array($output[$name]) ) {
-              $output[$name][] = $value;
-            }
-            else {
-              $output[$name] = array($output[$name], $value);
-            }
+          if (!isset($output[$name])) {
+            $output[$name] = array();
           }
           
-          // Si elle n'existe pas, on ajoute simplement le couple clé => valeur
-          else {
-            $output[$name] = $value;
-          }
+          array_push($output[$name], $value);
         }
       
         return $output;

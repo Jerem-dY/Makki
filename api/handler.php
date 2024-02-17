@@ -155,11 +155,12 @@ class RequestHandler {
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
                     if (isset($this->request['target'])) {
                         $page = "mot";
-                        $word_data = $this->get_data($this->request['target']);
+                        $word_data = $this->get_data(array("title" => [$this->request['target']]));
 
                     }
                     else if (isset($this->request['query'])) {
                         $page = "mot";
+                        $word_data = $this->get_data($this->request['query']);
                     }
                     else {
                         //TODO: Afficher une liste de tous les mots dans l'ordre alphabétique
@@ -738,26 +739,50 @@ class RequestHandler {
         return true;
     }
 
-    function get_data(string $target) {
 
-        // On prépare puis effectue la requête pour récupérer les infos :
+    function search_query(array $query): array {
 
-        $prepare_search = function ($value) {
-            return "{ ?in ?pred ?out . FILTER( lang(?out) = \"".$value[0]."\" ) }";
-        };
-        
+        $corres = array(
+            "subject" => "dc:subject",
+            "title" => "dc:title",
+            "coverage" => "dc:coverage",
+            "pron" => "lex:pron",
+            "etymo" => "lex:etymo",
+        );
+
+        if (sizeof($query) <= 0) {
+            return array();
+        }
+
         $q = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
         @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
         @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
         @prefix dc:    <http://purl.org/dc/terms/> .
         @prefix lex:   <lexique/> .
         
-        DESCRIBE ?in ?pred ?out WHERE {
-            ?in dc:title \"".urldecode($target)."\" .";
-        $mini_q = array_map($prepare_search, $this->lang);
-        $q .= implode(" UNION ", $mini_q) . "}";
+        DESCRIBE ?in WHERE {";
 
-        $res = $this->db->query($q);
+        foreach(array_keys($query) as $criterion) {
+            if(!array_key_exists($criterion, $corres) || sizeof($query[$criterion]) <= 0) {
+                continue;
+            }
+
+            $q .= implode(" UNION ", array_map(function($val) use ($corres, $criterion) {
+                return "{?in ".$corres[$criterion]." \"".urldecode($val)."\" .}";
+            }, $query[$criterion]));
+
+        }
+        
+        $q .= "}";
+
+        return $this->db->query($q);
+    }
+
+    function get_data(array $query) {
+
+        // On prépare puis effectue la requête pour récupérer les infos :
+
+        $res = $this->search_query($query);
 
         // On arrange les résultats sous une forme exploitable :
 
