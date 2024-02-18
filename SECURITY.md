@@ -4,9 +4,9 @@ Cette note de sécurité décrit les mesures qui ont été prises ou restent à 
 
 ## Historique
 
-| version | changements |
-|---------|-------------|
-| 1.0     | v. initiale |
+| version | date | changements |
+|---------|-----|-------------|
+| 1.0     |23/02/2024| v. initiale |
 
 ## Notes
 

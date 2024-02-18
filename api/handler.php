@@ -902,6 +902,7 @@ class RequestHandler {
 
         }
 
+        ksort($output, SORT_STRING);
         return $output;
     }
 

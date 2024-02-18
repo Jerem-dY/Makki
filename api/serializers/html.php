@@ -218,8 +218,8 @@ class HTMLSerializer extends Serializer {
                     $ex->innertext .= "<h5 class=\"trad\" id=\"theme\"> Thématiques : </h5>";
 
                     foreach($word_data[$word][$def_id]["subject"] as $subject) {
-                        if ($subject[1] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$subject[1]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?subject=".urlencode($subject[0])."\">".$subject[0]."</a></li>";
+                        if ($subject["lang"] == $langs[0][0]) {
+                            $ex->innertext .= "<li lang=\"".$subject["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?subject=".urlencode($subject["value"])."\">".$subject["value"]."</a></li>";
                         }
                     }
 

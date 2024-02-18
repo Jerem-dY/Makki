@@ -43,6 +43,7 @@
 .mots_donnees {
 
     display: flex;
+    flex-flow: column;
     justify-content: space-between;
     text-align: center;
     
