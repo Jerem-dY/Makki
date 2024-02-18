@@ -1,8 +1,8 @@
 {
-	"application/rdf+xml" : "RDFSerializer",
-	"application/tei+xml" : "TEISerializer",
-	"text/turtle"         : "TTLSerializer",
-	"application/json"    : "JSONSerializer",
-	"text/html"           : "HTMLSerializer",
-	"*/*"                 : "HTMLSerializer"
+	"application/rdf+xml" : {"classe" : "RDFSerializer", "raw" : true},
+	"application/tei+xml" : {"classe" : "TEISerializer", "raw" : false},
+	"text/turtle"         : {"classe" : "TTLSerializer", "raw" : true},
+	"application/json"    : {"classe" : "JSONSerializer", "raw" : false},
+	"text/html"           : {"classe" : "HTMLSerializer", "raw" : false},
+	"*/*"                 : {"classe" : "HTMLSerializer", "raw" : false}
 }

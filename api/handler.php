@@ -163,9 +163,10 @@ class RequestHandler {
                     $m = implode("/", $m);
 
                     if (array_key_exists($m, $available)) {
-                        $builder = new $available[$m]($this->db);
+                        $selected = $available[$m];
+                        $builder = new $selected["classe"]($this->db);
                         $this->add_header("Content-Type", $m);
-                        $raw = mb_strpos($m, "rdf") || mb_strpos($m, "turtle") ? true : false;
+                        $raw = $selected["raw"];
                         break;
                     }
                 }
