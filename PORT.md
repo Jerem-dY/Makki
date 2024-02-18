@@ -4,9 +4,9 @@ Cette note de portabilité a pour but de décrire l'environnement sur lequel le 
 
 ## Historique
 
-| version | changements |
-|---------|-------------|
-| 1.0     | v. initiale |
+| version | date | changements |
+|---------|----|-------------|
+| 1.0     |23/02/2024| v. initiale |
 
 ## Spécifications techniques du serveur
 

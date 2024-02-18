@@ -41,4 +41,24 @@
     margin: 0;
     padding: 0;
 
+<<<<<<< HEAD
+=======
+.mots_donnees {
+
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    text-align: center;
+    
+}
+
+hr {
+
+    height: 1px;
+    margin: -0.5em 0;
+    background-color: #fdeee2;
+    border-color: #fdeee2;
+
+    
+>>>>>>> c075045e99a6e16629c1656d5c0697ac183fbc37
 }
