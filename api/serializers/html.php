@@ -1,14 +1,15 @@
 <?php 
 
 require_once(__DIR__."/../simple_html_dom/simple_html_dom.php");
+require_once("serializer.php");
 
-class HTMLSerializer {
+class HTMLSerializer extends Serializer {
 
-    function __construct(string $pages_path, $db) {
+    function __construct($db) {
 
-        $paths = file_get_contents($pages_path);
+        $paths = file_get_contents("config/pages.json");
         $this->pages = array("header" => "html/header.html", "footer" => "html/footer.html");
-        $this->db = $db;
+        parent::__construct($db);
 
         if ($paths != false) {
             $data = json_decode($paths, true);
@@ -22,7 +23,7 @@ class HTMLSerializer {
         }
     }
 
-    public function make_html(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
+    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -127,26 +128,26 @@ class HTMLSerializer {
             $id = $e->id;
 
             $ts = $this->fetch_translation($id, $langs, $base_url, $protocol);
-            $e->lang = $ts[0];
-            $e->dir = $ts[2];
-            $e->innertext = $ts[1];
+            $e->lang = $ts[self::TRANSLATION_LANG];
+            $e->dir = $ts[self::TRANSLATION_DIR];
+            $e->innertext = $ts[self::TRANSLATION_TEXT];
             
         }
         foreach($output->find('.trad_placeholder') as $e) {
             $id = $e->id;
 
             $ts = $this->fetch_translation($id, $langs, $base_url, $protocol);
-            $e->lang = $ts[0];
-            $e->dir = $ts[2];
-            $e->placeholder = $ts[1];
+            $e->lang = $ts[self::TRANSLATION_LANG];
+            $e->dir = $ts[self::TRANSLATION_DIR];
+            $e->placeholder = $ts[self::TRANSLATION_TEXT];
         }
         foreach($output->find('.trad_value') as $e) {
             $id = $e->id;
 
             $ts = $this->fetch_translation($id, $langs, $base_url, $protocol);
-            $e->lang = $ts[0];
-            $e->dir = $ts[2];
-            $e->value = $ts[1];
+            $e->lang = $ts[self::TRANSLATION_LANG];
+            $e->dir = $ts[self::TRANSLATION_DIR];
+            $e->value = $ts[self::TRANSLATION_TEXT];
         }
 
         return $output->innertext;
@@ -252,8 +253,8 @@ class HTMLSerializer {
                     $ex->innertext .= "<h5 class=\"trad\" id=\"origine\"> Origines : </h5>";
 
                     foreach($word_data[$word][$def_id]["coverage"] as $coverage) {
-                        if ($coverage[1] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$coverage[1]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?coverage=".urlencode($coverage[0])."\">".$coverage[0]."</a></li>";
+                        if ($coverage["lang"] == $langs[0][0]) {
+                            $ex->innertext .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
                         }
                     }
 
@@ -266,8 +267,8 @@ class HTMLSerializer {
                     $ex->innertext .= "<h5 class=\"trad\" id=\"pron\"> Prononciations : </h5>";
 
                     foreach($word_data[$word][$def_id]["pron"] as $pron) {
-                        if ($pron[1] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$pron[1]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?pron=".urlencode($pron[0])."\">".$pron[0]."</a></li>";
+                        if ($pron["lang"] == $langs[0][0]) {
+                            $ex->innertext .= "<li lang=\"".$pron["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?pron=".urlencode($pron["value"])."\">".$pron["value"]."</a></li>";
                         }
                     }
 
@@ -280,8 +281,8 @@ class HTMLSerializer {
                     $ex->innertext .= "<h5 class=\"trad\" id=\"etymo\"> Etymologie : </h5>";
 
                     foreach($word_data[$word][$def_id]["etymo"] as $etymo) {
-                        if ($etymo[1] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$etymo[1]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?etymo=".urlencode($etymo[0])."\">".$etymo[0]."</a></li>";
+                        if ($etymo["lang"] == $langs[0][0]) {
+                            $ex->innertext .= "<li lang=\"".$etymo["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?etymo=".urlencode($etymo["value"])."\">".$etymo["value"]."</a></li>";
                         }
                     }
 
@@ -290,8 +291,8 @@ class HTMLSerializer {
 
                 if (array_key_exists("abstract", $word_data[$word][$def_id])) {
                     foreach($word_data[$word][$def_id]["abstract"] as $abstract) {
-                        if ($abstract[1] == $langs[0][0]) {
-                            $ex->innertext .= "<p lang=\"".$abstract[1]."\" dir=\"".$langs[0][1]."\">".htmlentities($abstract[0])."</p>";
+                        if ($abstract["lang"] == $langs[0][0]) {
+                            $ex->innertext .= "<p lang=\"".$abstract["lang"]."\" dir=\"".$langs[0][0]."\">".htmlentities($abstract["value"])."</p>";
                         }
                     }
                 }
@@ -302,8 +303,8 @@ class HTMLSerializer {
                     $ex->innertext .= "<h5 class=\"trad\" id=\"exemple\"> Exemples : </h5>";
 
                     foreach($word_data[$word][$def_id]["example"] as $example) {
-                        if ($example[1] == "ar") {
-                            $ex->innertext .= "<li lang=\"".$example[1]."\" dir=\"rtl\"><i>".$example[0]."</i></li>";
+                        if ($example["lang"] == "ar") {
+                            $ex->innertext .= "<li lang=\"".$example["lang"]."\" dir=\"rtl\"><i>".$example["value"]."</i></li>";
                         }
                     }
 
@@ -316,27 +317,6 @@ class HTMLSerializer {
             $ex->innertext .= "</ol>";
         }
 
-    }
-
-    function fetch_translation(string $id, array $langs, string $base_url, string $protocol): array {
-
-        if (sizeof($langs) > 0) {
-            $prepare_trad = function ($value, $base_url, $protocol) {
-                return "{ ?in dcterms:alternative ?txt . ?in <$protocol".$base_url."traductions/dir> ?dir FILTER( lang(?txt) = \"".$value[0]."\" ) }";
-            };
-    
-            $query = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?txt ?dir WHERE { ?in dcterms:identifier \"$id\" . ";
-            $mini_q = array_map($prepare_trad, $langs, array_fill(0, sizeof($langs), $base_url), array_fill(0, sizeof($langs), $protocol));
-            $query .= implode(" UNION ", $mini_q) . "}";
-    
-            $rows = $this->db->query($query)['result']['rows'];
-    
-            if (sizeof($rows) > 0) {
-                return array($rows[0]['txt lang'], $rows[0]['txt'], isset($rows[0]['dir']) ? $rows[0]['dir'] : "ltr");
-            }
-        }
-
-        return array("", "NOT_FOUND:".strtoupper($id), "ltr");
     }
 }
 

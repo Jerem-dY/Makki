@@ -2,10 +2,17 @@
 
 require_once("parser.php");
 require_once("db.php");
-require_once("serializers/html.php");
 require_once("upload.php");
 require_once("jwt.php");
 require_once("vendor/autoload.php");
+
+$serz = dirname(__FILE__).DIRECTORY_SEPARATOR."serializers";
+foreach (scandir($serz) as $filename) {
+    $path = $serz . DIRECTORY_SEPARATOR . $filename;
+    if (is_file($path)) {
+        require_once $path;
+    }
+}
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -31,7 +38,6 @@ class RequestHandler {
         $this->uri              = $uri;
         $this->content_type     = "text/html";
         $this->db               = new DB("config/db.json", "config/db.sql");
-        $this->html_serializer  = new HTMLSerializer("config/pages.json", $this->db);
 
         $session = $this->retrieve_session();
         $this->auth      = $session[0];
@@ -148,7 +154,26 @@ class RequestHandler {
                 http_response_code($this->cache($rs_path, $mime));
                 return;
             }  
-            else if (in_array(array('text', 'html'), $this->mime) || in_array(array('*', '*'), $this->mime)) {
+            else {
+
+                $available = json_decode(file_get_contents("config/mimes.json"), true);
+                $raw = false;
+
+                foreach($this->mime as $m) {
+                    $m = implode("/", $m);
+
+                    if (array_key_exists($m, $available)) {
+                        $builder = new $available[$m]($this->db);
+                        $this->add_header("Content-Type", $m);
+                        $raw = mb_strpos($m, "rdf") || mb_strpos($m, "turtle") ? true : false;
+                        break;
+                    }
+                }
+
+                if(!isset($builder)) {
+                    http_response_code(400);
+                    return;
+                }
 
                 $themes = $this->db->query("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
                     @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -177,12 +202,12 @@ class RequestHandler {
                 if (isset($this->request['collection']) && $this->request['collection'] == "lexique") {
                     if (isset($this->request['target'])) {
                         $page = "mot";
-                        $word_data = $this->get_data(array("title" => [$this->request['target']]));
+                        $word_data = $this->get_data(array("title" => [$this->request['target']]), $raw);
 
                     }
                     else if (isset($this->request['query'])) {
                         $page = "mot";
-                        $word_data = $this->get_data($this->request['query']);
+                        $word_data = $this->get_data($this->request['query'], $raw);
                     }
                     else {
                         //TODO: Afficher une liste de tous les mots dans l'ordre alphabétique
@@ -219,10 +244,7 @@ class RequestHandler {
                 $token = $this->make_nonce();
 
 
-                $this->output .= $this->html_serializer->make_html($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes);
-            }
-            else {
-                echo "OH NO!";
+                $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes);
             }
         }
         else if ($this->method == 'POST') {
@@ -800,11 +822,15 @@ class RequestHandler {
         return $this->db->query($q);
     }
 
-    function get_data(array $query) {
+    function get_data(array $query, bool $raw = false) {
 
         // On prépare puis effectue la requête pour récupérer les infos :
 
         $res = $this->search_query($query);
+
+        if ($raw) {
+            return $res['result'];
+        }
 
         // On arrange les résultats sous une forme exploitable :
 
@@ -859,7 +885,7 @@ class RequestHandler {
                     }
                     
                     foreach($res['result'][$def_id][$pred] as $element) {
-                        array_push($def[$item], [$element['value'], isset($element['lang']) ? $element['lang'] : "fr"]);
+                        array_push($def[$item], ["value" => $element['value'], "lang" => isset($element['lang']) ? $element['lang'] : "fr"]);
                     }
                 }
             }
@@ -874,8 +900,6 @@ class RequestHandler {
             }
 
         }
-
-        #$this->output .= var_dump($output);
 
         return $output;
     }

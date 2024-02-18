@@ -1,0 +1,8 @@
+{
+	"application/rdf+xml" : "RDFSerializer",
+	"application/tei+xml" : "TEISerializer",
+	"text/turtle"         : "TTLSerializer",
+	"application/json"    : "JSONSerializer",
+	"text/html"           : "HTMLSerializer",
+	"*/*"                 : "HTMLSerializer"
+}
