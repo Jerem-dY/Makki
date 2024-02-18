@@ -33,27 +33,12 @@
 
 }
 
-.mots_titres {
 
-    display: flex;
-    justify-content: space-between;
+.definition li {
 
-}
+    display: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 
-.mots_donnees {
-
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    
-}
-
-hr {
-
-    height: 1px;
-    margin: -0.5em 0;
-    background-color: #fdeee2;
-    border-color: #fdeee2;
-
-    
 }
