@@ -161,6 +161,10 @@ class RequestHandler {
                 $available = json_decode(file_get_contents("config/mimes.json"), true);
                 $raw = false;
 
+                if (isset($this->request['query']['mime'])) {
+                    array_unshift($this->mime, $this->request['query']['mime']);
+                }
+
                 foreach($this->mime as $m) {
                     $m = implode("/", $m);
 
@@ -169,6 +173,9 @@ class RequestHandler {
                         $builder = new $selected["classe"]($this->db);
                         $this->add_header("Content-Type", $m);
                         $raw = $selected["raw"];
+
+                        if ($m != "text/html" && $m != "*/*")
+                            $this->add_header("Content-Disposition", "attachment");
                         break;
                     }
                 }
@@ -252,7 +259,7 @@ class RequestHandler {
                 $token = $this->make_nonce();
 
 
-                $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes);
+                $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes, array_keys($available));
             }
         }
         else if ($this->method == 'POST') {

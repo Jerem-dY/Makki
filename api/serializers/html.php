@@ -23,7 +23,7 @@ class HTMLSerializer extends Serializer {
         }
     }
 
-    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
+    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = [], array $mimes = []): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -34,7 +34,7 @@ class HTMLSerializer extends Serializer {
         $output = file_get_html($this->pages[$page]);
 
         if ($page == "mot") {
-            $this->make_data($word_data, $output, $langs, $base_url, $protocol);
+            $this->make_data($word_data, $output, $langs, $base_url, $protocol, $mimes);
         }
 
         $html = $output->find('html', 0);
@@ -196,11 +196,17 @@ class HTMLSerializer extends Serializer {
         return $html;
     }
 
-    function make_data(array $word_data, $template, array $langs, string $base_url, string $protocol) {
+    function make_data(array $word_data, $template, array $langs, string $base_url, string $protocol, array $mimes) {
 
         $ex = $template->find(".mots_donnees", 0);
         $page_sys = $template->find(".pagination");
         $ex->innertext = "";
+
+        $make_query_string = function(array $q, int $p = 1, int $p_s = 1) {
+            $q['page'] = $p;
+            $q['page_size'] = $p_s;
+            return urldecode(preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($q, null, '&')));
+        };
 
         if (sizeof($word_data) <= 0) {
             return;
@@ -212,6 +218,22 @@ class HTMLSerializer extends Serializer {
         if ($pagination["nb_results"] > 1) {
             $r = $template->find("div.resultats", 0);
             $r->innertext .= $pagination["nb_results"];
+
+            $select = $template->find("#export_data_select", 0);
+            
+            foreach($mimes as $m) {
+                if ($m != "*/*" && $m != "text/html")
+                    $select->innertext .= "<option value=\"$m\">".explode("/", $m)[1]."</option>";
+            }
+
+            $export_btn = $template->find("#export_data_btn", 0);
+            $temp_q = $pagination['query'];
+            $export_btn->setAttribute("data-url", $protocol.$base_url."lexique?".$make_query_string($temp_q, (isset($temp_q['page']) ? $temp_q['page'][0] : 1), $pagination['page_size']));
+            $temp_q['mime'] = $mimes[0];
+
+            
+            $export_btn->href = $protocol.$base_url."lexique?".$make_query_string($temp_q, isset($temp_q['page']) ? $temp_q['page'][0] : 1, $pagination['page_size']);
+            
         }
         else {
             $template->find("div.thematiqueseule", 0)->outertext = "";
@@ -221,12 +243,6 @@ class HTMLSerializer extends Serializer {
         }
 
         $current_page = isset($pagination['query']['page']) ? (int)$pagination['query']['page'][0] : 1;
-
-        $make_query_string = function(array $q, int $p = 1, int $p_s = 1) {
-            $q['page'] = $p;
-            $q['page_size'] = $p_s;
-            return urldecode(preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($q, null, '&')));
-        };
 
         $expand_numbers = function(int $n, int $k, int $min=1, int $max=10) {
 

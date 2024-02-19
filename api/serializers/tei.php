@@ -4,7 +4,7 @@ require_once("serializer.php");
 
 class TEISerializer extends Serializer {
 
-    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
+    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = [], array $mimes = []): string {
 
         $this->word_data = $word_data;
 
