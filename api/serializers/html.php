@@ -229,7 +229,12 @@ class HTMLSerializer extends Serializer {
         };
 
         $expand_numbers = function(int $n, int $k, int $min=1, int $max=10) {
-            $output = array($n);
+
+            $n = min(max($n, $min), $max);
+
+            $output = array(
+                $n
+            );
             
             $last_up = $n;
             $last_down = $n;
@@ -266,7 +271,7 @@ class HTMLSerializer extends Serializer {
         }
 
         foreach(array_keys($word_data) as $word) {
-            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\">$word</h3>";
+            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\"><a class=\"mot_titre\" href=\"".$protocol.$base_url."lexique/".$word."\">$word<a></h3>";
 
             foreach(array_keys($word_data[$word]) as $def_id) {
 
@@ -305,17 +310,17 @@ class HTMLSerializer extends Serializer {
 
                     $map = function($syn) use ($word, $protocol, $base_url, $word_data) {
 
-                            if (array_key_exists($syn[0], $word_data)) {
-                                $link = "#".$syn[0];
+                            if (array_key_exists($syn["value"], $word_data)) {
+                                $link = "#".$syn["value"];
                             } else {
-                                $link = ($protocol.$base_url."lexique/".urlencode($syn[0]));
+                                $link = ($protocol.$base_url."lexique/".urlencode($syn["value"]));
                             }
-                            return "<i><a href=\"".$link."\">".$syn[0]."</a></i>";
+                            return "<i><a href=\"".$link."\">".$syn["value"]."</a></i>";
                         };
 
                     
                     $txt .= implode(" ، ", array_map($map, array_filter($word_data[$word][$def_id]["syn"], function($el) use ($word) {
-                                if ($el[0] != $word)
+                                if ($el["value"] != $word)
                                     return true;
 
                                 return false;

@@ -74,6 +74,11 @@ h3 {
 
 }
 
+a.mot_titre {
+    color: #301703;
+    cursor: pointer; 
+}
+
 #synonyme, #etymo, #origine, #theme, #pron, #exemple {
 
     padding: 5px;

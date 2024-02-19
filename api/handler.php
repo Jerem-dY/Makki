@@ -219,8 +219,8 @@ class RequestHandler {
                     }
                     else {
                         //TODO: Afficher une liste de tous les mots dans l'ordre alphabétique
-                        $this->redirect();
-                        return;
+                        $page = "mot";
+                        $word_data = $this->get_data(array(), $raw);
                     }
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "recherche") {
@@ -802,10 +802,6 @@ class RequestHandler {
             "etymo" => "lex:etymo",
         );
 
-        if (sizeof($query) <= 0) {
-            return array();
-        }
-
         $head = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
         @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
         @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
@@ -829,7 +825,7 @@ class RequestHandler {
 
         $nb_results = $this->db->query("$head SELECT COUNT(?title) AS ?nb $body")['result']['rows'][0]['nb'];
 
-        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : self::PAGE_SIZE_MAX;
+        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : ceil((self::PAGE_SIZE_MAX - self::PAGE_SIZE_MIN) / 2);
         $offset    = (isset($query['page']) ? max((int)$query['page'][0]-1, 0) : 0)*$page_size;
         $nb_pages  = (int)ceil($nb_results / $page_size);
         
@@ -896,7 +892,7 @@ class RequestHandler {
                         }
     
                         foreach($res_syn['result']['rows'] as $element) {
-                            array_push($def["syn"], [$element['title'], isset($element['title lang']) ? $element['title lang'] : "ar"]);
+                            array_push($def["syn"], ["value" => $element['title'], "lang" => isset($element['title lang']) ? $element['title lang'] : "ar"]);
                         }
                     }
 
