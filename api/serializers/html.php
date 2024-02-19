@@ -209,6 +209,17 @@ class HTMLSerializer extends Serializer {
         $pagination = $word_data['pagination'];
         $word_data  = $word_data['data'];
 
+        if ($pagination["nb_results"] > 1) {
+            $r = $template->find("div.resultats", 0);
+            $r->innertext .= $pagination["nb_results"];
+        }
+        else {
+            $template->find("div.thematiqueseule", 0)->outertext = "";
+            foreach($template->find(".pagination") as $pagin) {
+                $pagin->outertext = "";
+            }
+        }
+
         $current_page = isset($pagination['query']['page']) ? (int)$pagination['query']['page'][0] : 1;
 
         $make_query_string = function(array $q, int $p = 1, int $p_s = 1) {
@@ -261,7 +272,7 @@ class HTMLSerializer extends Serializer {
 
                 $ex->innertext .= "<li class=\"definition\" id=\"$def_id\">";
 
-                if (array_key_exists("abstract", $word_data[$word][$def_id])) {
+                if (array_key_exists("abstract", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["abstract"]) > 0) {
                     foreach($word_data[$word][$def_id]["abstract"] as $abstract) {
                         if ($abstract["lang"] == $langs[0][0]) {
                             $ex->innertext .= "<p class=\"defmot\" lang=\"".$abstract["lang"]."\" dir=\"".$langs[0][1]."\">".htmlentities($abstract["value"])."</p>";
@@ -269,23 +280,28 @@ class HTMLSerializer extends Serializer {
                     }
                 }
 
-                if (array_key_exists("subject", $word_data[$word][$def_id])) {
-                    $ex->innertext .= "<ul>";
+                if (array_key_exists("subject", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["subject"]) > 0) {
 
-                    $ex->innertext .= "<h5 class=\"trad\" id=\"theme\"> Thématiques : </h5>";
+                    $txt = "<p class=\"trad\" id=\"theme\"> Thématiques : </p><ul>";
 
+                    $one = false;
                     foreach($word_data[$word][$def_id]["subject"] as $subject) {
                         if ($subject["lang"] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$subject["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?subject=".urlencode($subject["value"])."\">".$subject["value"]."</a></li>";
+                            $one = true;
+                            $txt .= "<li lang=\"".$subject["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?subject=".urlencode($subject["value"])."\">".$subject["value"]."</a></li>";
                         }
                     }
 
-                    $ex->innertext .= "</ul>";
+                    if ($one) {
+                        $ex->innertext .= $txt . "</ul>";
+                    }
                 }
 
                 if (array_key_exists("syn", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["syn"]) > 1) {
 
-                    $ex->innertext .= "<p class=\"trad\" id=\"synonyme\">Synonymes : </p><p lang=\"ar\" dir=\"rtl\">( ";
+                    // On met sizeof($word_data[$word][$def_id]["syn"]) > 1 car le mot lui-même est présent dans les synonymes
+
+                    $txt = "<p class=\"trad\" id=\"synonyme\">Synonymes : </p><p lang=\"ar\" dir=\"rtl\"> ";
 
                     $map = function($syn) use ($word, $protocol, $base_url, $word_data) {
 
@@ -298,7 +314,7 @@ class HTMLSerializer extends Serializer {
                         };
 
                     
-                    $ex->innertext .= implode(" ، ", array_map($map, array_filter($word_data[$word][$def_id]["syn"], function($el) use ($word) {
+                    $txt .= implode(" ، ", array_map($map, array_filter($word_data[$word][$def_id]["syn"], function($el) use ($word) {
                                 if ($el[0] != $word)
                                     return true;
 
@@ -307,63 +323,75 @@ class HTMLSerializer extends Serializer {
                         )
                     );
 
-                    $ex->innertext .= " )</p>";
+                    $ex->innertext .= $txt . " </p>";
+
                 }
 
-                if (array_key_exists("coverage", $word_data[$word][$def_id])) {
-                    $ex->innertext .= "<ul>";
+                if (array_key_exists("coverage", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["coverage"]) > 0) {
+                    $txt = "<p class=\"trad\" id=\"origine\"> Origines : </p><ul>";
 
-                    $ex->innertext .= "<h5 class=\"trad\" id=\"origine\"> Origines : </h5>";
-
+                    $one = false;
                     foreach($word_data[$word][$def_id]["coverage"] as $coverage) {
                         if ($coverage["lang"] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
+                            $one = true;
+                            $txt .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
                         }
                     }
 
-                    $ex->innertext .= "</ul>";
+                    if ($one) {
+                        $ex->innertext .= $txt . " </ul>";
+                    }
                 }
 
-                if (array_key_exists("pron", $word_data[$word][$def_id])) {
-                    $ex->innertext .= "<ul>";
+                if (array_key_exists("pron", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["pron"]) > 0) {
 
-                    $ex->innertext .= "<h5 class=\"trad\" id=\"pron\"> Prononciations : </h5>";
+                    $txt = "<p class=\"trad\" id=\"pron\"> Prononciations : </p><ul>";
 
+                    $one = false;
                     foreach($word_data[$word][$def_id]["pron"] as $pron) {
                         if ($pron["lang"] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$pron["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?pron=".urlencode($pron["value"])."\">".$pron["value"]."</a></li>";
+                            $one = true;
+                            $txt .= "<li lang=\"".$pron["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?pron=".urlencode($pron["value"])."\">".$pron["value"]."</a></li>";
                         }
                     }
 
-                    $ex->innertext .= "</ul>";
+                    if ($one) {
+                        $ex->innertext .= $txt . " </ul>";
+                    }
                 }
 
-                if (array_key_exists("etymo", $word_data[$word][$def_id])) {
-                    $ex->innertext .= "<ul>";
+                if (array_key_exists("etymo", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["etymo"]) > 0) {
 
-                    $ex->innertext .= "<h5 class=\"trad\" id=\"etymo\"> Etymologie : </h5>";
+                    $txt = "<p class=\"trad\" id=\"etymo\"> Etymologie : </p><ul>";
 
+                    $one = false;
                     foreach($word_data[$word][$def_id]["etymo"] as $etymo) {
                         if ($etymo["lang"] == $langs[0][0]) {
-                            $ex->innertext .= "<li lang=\"".$etymo["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?etymo=".urlencode($etymo["value"])."\">".$etymo["value"]."</a></li>";
+                            $txt .= "<li lang=\"".$etymo["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?etymo=".urlencode($etymo["value"])."\">".$etymo["value"]."</a></li>";
                         }
                     }
 
-                    $ex->innertext .= "</ul>";
+                    if ($one) {
+                        $ex->innertext .= $txt . " </ul>";
+                    }
                 }
 
-                if (array_key_exists("example", $word_data[$word][$def_id])) {
-                    $ex->innertext .= "<ul>";
+                if (array_key_exists("example", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["example"]) > 0) {
 
-                    $ex->innertext .= "<h5 class=\"trad\" id=\"exemple\"> Exemples : </h5>";
+                    $txt = "<p class=\"trad\" id=\"exemple\"> Exemples : </p>";
+                    $txt .= "<ul>";
 
+                    $one = false;
                     foreach($word_data[$word][$def_id]["example"] as $example) {
                         if ($example["lang"] == "ar") {
-                            $ex->innertext .= "<li lang=\"".$example["lang"]."\" dir=\"rtl\"><i>".$example["value"]."</i></li>";
+                            $one = true;
+                            $txt .= "<li lang=\"".$example["lang"]."\" dir=\"rtl\"><i>".$example["value"]."</i></li>";
                         }
                     }
 
-                    $ex->innertext .= "</ul>";
+                    if ($one) {
+                        $ex->innertext .= $txt . " </ul>";
+                    }
                 }
 
                 $ex->innertext .= "<br/></li>";

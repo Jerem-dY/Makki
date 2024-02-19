@@ -74,7 +74,7 @@ h3 {
 
 }
 
-#synonyme, #etymo, #origine {
+#synonyme, #etymo, #origine, #theme, #pron, #exemple {
 
     padding: 5px;
     text-decoration: underline overline black;
