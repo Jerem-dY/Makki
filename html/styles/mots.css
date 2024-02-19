@@ -1,10 +1,13 @@
 .thematiqueseule {
 
     margin: 15px;
-    padding: 6px;
+    padding: 1.0rem 2.0rem 1.0rem 2.0rem;
     background-color: #ead4c1;
-  
-  }
+    box-sizing: border-box;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	line-height: 1.1rem;
+}
 
 .resultats, .resultats_donnees {
 
@@ -34,21 +37,12 @@
 }
 
 
-.definition li {
 
-    display: none;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-
-<<<<<<< HEAD
-=======
 .mots_donnees {
 
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    text-align: center;
     
 }
 
@@ -60,5 +54,67 @@ hr {
     border-color: #fdeee2;
 
     
->>>>>>> c075045e99a6e16629c1656d5c0697ac183fbc37
 }
+
+
+.definition {
+
+    border-radius: 4px;
+    padding: 5px;
+    background-color:  #e8cab0;
+
+}
+
+h3 {
+
+    border-radius: 4px;
+    border: thick double #B0C4DE;
+    padding: 5px 15px;
+    background:#e8bf9b;
+
+}
+
+#synonyme, #etymo, #origine {
+
+    padding: 5px;
+    text-decoration: underline overline black;
+
+}
+
+.defmot {
+
+    background-color:     #e8bf9b;
+    border-radius: 4px;
+    padding: 5px;
+    display: inline-block;
+
+}
+
+
+/* PAGINATION */
+
+.pagination {
+    display: flex;
+    align-items: stretch;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pagination links */
+.pagination a {
+color: black;
+float: left;
+padding: 8px 16px;
+text-decoration: none;
+border-radius: 4px;
+transition: background-color .3s;
+}
+
+/* Style the active/current link */
+.pagination a.active {
+background-color: #301703;
+color: white;
+}
+
+/* Add a grey background color on mouse-over */
+.pagination a:hover:not(.active) {background-color: #ead4c1;} 

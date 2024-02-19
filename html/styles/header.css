@@ -90,7 +90,7 @@ html, body {
 
 }
 
-header {
+header.top-header {
 
     height: 100px;
     padding:10px;
@@ -210,24 +210,6 @@ to {
 .commun {
 
   width: 30px;
-
-}
-
-footer {
-    
-    background: #301703;
-    width:100%;
-    text-align: center;
-    color: #fdeee2; 
-    padding-top: 1px;
-    padding-bottom: 1px;
-    bottom:0;  /* on le colle en bas */
-    border-top: 1px;
-    border-right: 0px;
-    border-left: 0px;
-    border-bottom: 0px;
-    border-style:solid;
-    border-color: #301703;
 
 }
 

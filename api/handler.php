@@ -20,6 +20,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class RequestHandler {
 
     const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
+    const PAGE_SIZE_MAX      = 100;
+    const PAGE_SIZE_MIN      = 1;
 
     function __construct(string $uri, string $request_config, string $server, string $headers) {
 
@@ -176,23 +178,28 @@ class RequestHandler {
                     return;
                 }
 
-                $themes = $this->db->query("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                    @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-                    @prefix dc:    <http://purl.org/dc/terms/> .
-                    @prefix lex:   <lexique/> .
-                            
-                    SELECT DISTINCT ?subject WHERE {
-                    
-                    ?in dc:subject ?subject .
-                    FILTER (lang(?subject) = \"".$this->lang[0][0]."\")
-                    
-                    }");
+                if (isset($this->lang[0]) && isset($this->lang[0][0])) {
+                    $themes = $this->db->query("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                        @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+                        @prefix dc:    <http://purl.org/dc/terms/> .
+                        @prefix lex:   <lexique/> .
+                                
+                        SELECT DISTINCT ?subject WHERE {
+                        
+                        ?in dc:subject ?subject .
+                        FILTER (lang(?subject) = \"". $this->lang[0][0] ."\")
+                        
+                        }");
 
-                if (isset($themes['result'])) {
-                    $themes = array_map(function($item) {
-                        return $item['subject'];
-                    }, $themes['result']['rows']);
+                    if (isset($themes['result'])) {
+                        $themes = array_map(function($item) {
+                            return $item['subject'];
+                        }, $themes['result']['rows']);
+                    }
+                    else {
+                        $themes = array();
+                    }
                 }
                 else {
                     $themes = array();
@@ -799,35 +806,49 @@ class RequestHandler {
             return array();
         }
 
-        $q = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+        $head = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
         @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
         @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
         @prefix dc:    <http://purl.org/dc/terms/> .
-        @prefix lex:   <lexique/> .
-        
-        DESCRIBE ?in WHERE {";
+        @prefix lex:   <lexique/> .";
+
+        $body = "WHERE { ?in dc:title ?title . ";
 
         foreach(array_keys($query) as $criterion) {
             if(!array_key_exists($criterion, $corres) || sizeof($query[$criterion]) <= 0) {
                 continue;
             }
 
-            $q .= implode(" UNION ", array_map(function($val) use ($corres, $criterion) {
-                return "{?in ".$corres[$criterion]." \"".urldecode($val)."\" .}";
+            $body .= implode(" UNION ", array_map(function($val) use ($corres, $criterion) {
+                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." \"".urldecode($val)."\" .}";
             }, $query[$criterion]));
 
         }
-        
-        $q .= "}";
 
-        return $this->db->query($q);
+        $body .= "}";
+
+        $nb_results = $this->db->query("$head SELECT COUNT(?title) AS ?nb $body")['result']['rows'][0]['nb'];
+
+        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : self::PAGE_SIZE_MAX;
+        $offset    = (isset($query['page']) ? max((int)$query['page'][0]-1, 0) : 0)*$page_size;
+        $nb_pages  = (int)ceil($nb_results / $page_size);
+        
+        $q = "$head DESCRIBE ?in $body ORDER BY (?title) LIMIT $page_size OFFSET ".$offset;
+        return array("pagination" => array(
+            "nb_results" => $nb_results,
+            "page_size"  => $page_size,
+            "offset"     => $offset,
+            "nb_pages"   => $nb_pages,
+            "query"      => $query
+        ), "data" => $this->db->query($q));
     }
 
     function get_data(array $query, bool $raw = false) {
 
         // On prépare puis effectue la requête pour récupérer les infos :
 
-        $res = $this->search_query($query);
+        $retrieved = $this->search_query($query);
+        $res = $retrieved["data"];
 
         if ($raw) {
             return $res['result'];
@@ -902,8 +923,8 @@ class RequestHandler {
 
         }
 
-        ksort($output, SORT_STRING);
-        return $output;
+        //ksort($output, SORT_STRING);
+        return array("pagination" => $retrieved["pagination"], "data" => $output);
     }
 
 }

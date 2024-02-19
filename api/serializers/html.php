@@ -199,18 +199,75 @@ class HTMLSerializer extends Serializer {
     function make_data(array $word_data, $template, array $langs, string $base_url, string $protocol) {
 
         $ex = $template->find(".mots_donnees", 0);
+        $page_sys = $template->find(".pagination");
         $ex->innertext = "";
 
         if (sizeof($word_data) <= 0) {
             return;
         }
 
+        $pagination = $word_data['pagination'];
+        $word_data  = $word_data['data'];
+
+        $current_page = isset($pagination['query']['page']) ? (int)$pagination['query']['page'][0] : 1;
+
+        $make_query_string = function(array $q, int $p = 1, int $p_s = 1) {
+            $q['page'] = $p;
+            $q['page_size'] = $p_s;
+            return urldecode(preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($q, null, '&')));
+        };
+
+        $expand_numbers = function(int $n, int $k, int $min=1, int $max=10) {
+            $output = array($n);
+            
+            $last_up = $n;
+            $last_down = $n;
+
+            $limit = min($k, $max-$min+1);
+
+            while(sizeof($output) < $limit) {
+                if ($last_down-1 >= $min) {
+                    $last_down -= 1;
+                    array_unshift($output, $last_down);
+                }
+
+                if (sizeof($output) < $limit) {
+                    if ($last_up+1 <= $max) {
+                        $last_up += 1;
+                        array_push($output, $last_up);
+                    }
+                }
+            }
+
+            return $output;
+        };
+
+        foreach($page_sys as $el) {
+
+
+            $el->innertext .= "<a href=\"".$protocol.$base_url."lexique?".$make_query_string($pagination['query'], 1, $pagination['page_size'])."\">&laquo;</a>";
+
+            foreach($expand_numbers($current_page, 7, 1, $pagination['nb_pages']) as $p) {
+                $el->innertext .= "<a ".($p == $current_page ? "class=\"active\"" : "")." href=\"".$protocol.$base_url."lexique?".$make_query_string($pagination['query'], $p, $pagination['page_size'])."\">$p</a>";
+            }
+
+            $el->innertext .= "<a href=\"".$protocol.$base_url."lexique?".$make_query_string($pagination['query'], $pagination['nb_pages'], $pagination['page_size'])."\">&raquo;</a>";
+        }
+
         foreach(array_keys($word_data) as $word) {
-            $ex->innertext .= "<ol class=\"resultats_donnees\"><h3 lang=\"ar\" dir=\"rtl\">$word</h3>";
+            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\">$word</h3>";
 
             foreach(array_keys($word_data[$word]) as $def_id) {
 
                 $ex->innertext .= "<li class=\"definition\" id=\"$def_id\">";
+
+                if (array_key_exists("abstract", $word_data[$word][$def_id])) {
+                    foreach($word_data[$word][$def_id]["abstract"] as $abstract) {
+                        if ($abstract["lang"] == $langs[0][0]) {
+                            $ex->innertext .= "<p class=\"defmot\" lang=\"".$abstract["lang"]."\" dir=\"".$langs[0][1]."\">".htmlentities($abstract["value"])."</p>";
+                        }
+                    }
+                }
 
                 if (array_key_exists("subject", $word_data[$word][$def_id])) {
                     $ex->innertext .= "<ul>";
@@ -228,10 +285,16 @@ class HTMLSerializer extends Serializer {
 
                 if (array_key_exists("syn", $word_data[$word][$def_id]) && sizeof($word_data[$word][$def_id]["syn"]) > 1) {
 
-                    $ex->innertext .= " <p lang=\"ar\" dir=\"rtl\">( ";
+                    $ex->innertext .= "<p class=\"trad\" id=\"synonyme\">Synonymes : </p><p lang=\"ar\" dir=\"rtl\">( ";
 
-                    $map = function($syn) use ($word, $protocol, $base_url) {
-                            return "<i><a href=\"".$protocol.$base_url."lexique/".urlencode($syn[0])."\">".$syn[0]."</a></i>";
+                    $map = function($syn) use ($word, $protocol, $base_url, $word_data) {
+
+                            if (array_key_exists($syn[0], $word_data)) {
+                                $link = "#".$syn[0];
+                            } else {
+                                $link = ($protocol.$base_url."lexique/".urlencode($syn[0]));
+                            }
+                            return "<i><a href=\"".$link."\">".$syn[0]."</a></i>";
                         };
 
                     
@@ -244,7 +307,7 @@ class HTMLSerializer extends Serializer {
                         )
                     );
 
-                    $ex->innertext .= " ) <span class=\"trad\" id=\"synonyme\"> Synonymes : </span></p>";
+                    $ex->innertext .= " )</p>";
                 }
 
                 if (array_key_exists("coverage", $word_data[$word][$def_id])) {
@@ -289,14 +352,6 @@ class HTMLSerializer extends Serializer {
                     $ex->innertext .= "</ul>";
                 }
 
-                if (array_key_exists("abstract", $word_data[$word][$def_id])) {
-                    foreach($word_data[$word][$def_id]["abstract"] as $abstract) {
-                        if ($abstract["lang"] == $langs[0][0]) {
-                            $ex->innertext .= "<p lang=\"".$abstract["lang"]."\" dir=\"".$langs[0][0]."\">".htmlentities($abstract["value"])."</p>";
-                        }
-                    }
-                }
-
                 if (array_key_exists("example", $word_data[$word][$def_id])) {
                     $ex->innertext .= "<ul>";
 
@@ -311,7 +366,7 @@ class HTMLSerializer extends Serializer {
                     $ex->innertext .= "</ul>";
                 }
 
-                $ex->innertext .= "</li>";
+                $ex->innertext .= "<br/></li>";
             }
 
             $ex->innertext .= "</ol>";
