@@ -564,6 +564,10 @@ class RequestHandler {
         $this->header[$h] = $v;
     }
 
+    function add_cookie(string $name, string $value, int $t) {
+        $this->add_header("Set-Cookie", urlencode($name)."=".urlencode($value)."; Expires=".date("D, d M Y H:i:s", $t)."GMT"."; path=/; domain=".$GLOBALS['iss']."; HttpOnly; SameSite=Strict");
+    }
+
     function send_header(): void {
 
         foreach(array_keys($this->header) as $h) {
@@ -584,7 +588,7 @@ class RequestHandler {
 
     function disconnect() {
         $this->redirect($this->protocol.$this->uri);
-        setcookie("makki_user", "", 1, "/", $GLOBALS['iss'], false, true);
+        $this->add_cookie("makki_user", "", 1);
     }
 
     function unauthorized() {
@@ -676,8 +680,7 @@ class RequestHandler {
         $jwe = JWE::encode($jws, get_public_key(base64_decode($clefs['keys']['enc-session']['key'])));
 
         $dec = json_decode($jwt, true);
-
-        setcookie("makki_user", $jwe, $dec['exp'], "/", $GLOBALS['iss'], false, true);
+        $this->add_cookie("makki_user", $jwe, $dec['exp']);
     }
 
     function retrieve_session(): array {
@@ -734,8 +737,7 @@ class RequestHandler {
 
         $dec = json_decode($jwt, true);
 
-        setcookie("makki_nonce", $jws, $dec['exp'], "/", $GLOBALS['iss'], false, true);
-
+        $this->add_cookie("makki_nonce", $jws, $dec['exp']);
         return $jws;
     }
 
