@@ -5,8 +5,7 @@ require_once("vendor/autoload.php");
 
 class RequestParser {
 
-    function __construct() {
-    }
+    function __construct() {}
 
     /**
      * Cette méthode traite une uri et renvoie un tableau associatif des données qu'elle contient.

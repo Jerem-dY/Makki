@@ -5,11 +5,13 @@ include_once("vendor/autoload.php");
 
 class DB {
 
-    function __construct(string $config_path, string $db_init_path) {
+    function __construct(string $config_path, string $db_init_path, string $prefixes_path) {
 
         $config = json_decode(file_get_contents($config_path), true);
         $this->store = ARC2::getStore($config);
         $this->store->createDBCon();
+
+        $this->prefixes = file_get_contents($prefixes_path);
 
         if (!$this->store->isSetUp()) {
             $this->store->setUp();
@@ -22,7 +24,7 @@ class DB {
 
     public function query(string $q): array {
 
-        $out = $this->store->query($q);
+        $out = $this->store->query($this->prefixes . $q);
 
         if ($errs = $this->store->getErrors()) {
             echo "Query errors: ";

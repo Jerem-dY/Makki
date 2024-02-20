@@ -1,6 +1,7 @@
 <?php 
 
 require_once(__DIR__."/../simple_html_dom/simple_html_dom.php");
+require_once(__DIR__."/../jwt.php");
 require_once("serializer.php");
 
 class HTMLSerializer extends Serializer {
@@ -36,6 +37,14 @@ class HTMLSerializer extends Serializer {
         if ($page == "mot") {
             $this->make_data($word_data, $output, $langs, $base_url, $protocol, $mimes);
         }
+        else if ($page == "recherche") {
+            $output->find("#search-form", 0)->action = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique";
+
+            $dl_th = $output->find("datalist.theme", 0);
+            foreach($themes as $th) {
+                $dl_th->innertext .= "<option value=\"$th\">$th</option>";
+            }
+        }
 
         $html = $output->find('html', 0);
         $body = $html->find('body', 0);
@@ -52,6 +61,9 @@ class HTMLSerializer extends Serializer {
 
         $licence_link = $footer->find('#licence', 0);
         $licence_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."licences";
+
+        $recherche_poussee_link = $header->find("#recherche_poussee", 0);
+        $recherche_poussee_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."recherche";
 
         $lang_list->innertext = "";
         $sorted_langs = $langs;
@@ -80,6 +92,22 @@ class HTMLSerializer extends Serializer {
         }
         else {
             $header->find(".login-wrapper_connecte", 0)->outertext = "";
+
+            if (!is_file("secure/public_keys.json")) {
+                make_keyset();
+            }
+
+            $keys = json_decode(file_get_contents("secure/public_keys.json"), true)["keys"];
+            $key = null;
+
+            foreach($keys as $k) {
+                if ($k["kid"] == "enc-login") {
+                    $key = $k;
+                }
+            }
+            $key = base64_encode(JWT::encode(json_encode($key), "+60 minutes"));
+            $login_form = $header->find("form.login-form", 0);
+            $login_form->setAttribute("data-key", $key);
         }
         
         $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
@@ -91,7 +119,8 @@ class HTMLSerializer extends Serializer {
             $nonce = "<input type=\"hidden\" id=\"nonce\" name=\"nonce\" value=\"".urlencode($token)."\">";
 
             foreach($output->find("form") as $form) {
-                $form->innertext = $nonce . $form->innertext;
+                if ($form->method != "GET")
+                    $form->innertext = $nonce . $form->innertext;
             }
         }
 

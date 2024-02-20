@@ -6,6 +6,7 @@ require_once("upload.php");
 require_once("jwt.php");
 require_once("vendor/autoload.php");
 
+// On importe tous les sérialiseurs du dossier
 $serz = dirname(__FILE__).DIRECTORY_SEPARATOR."serializers";
 foreach (scandir($serz) as $filename) {
     $path = $serz . DIRECTORY_SEPARATOR . $filename;
@@ -16,18 +17,27 @@ foreach (scandir($serz) as $filename) {
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-
+/**
+ * Classe coordonnant tout le traitement des requêtes ainsi que les réponses
+ */
 class RequestHandler {
 
     const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
     const PAGE_SIZE_MAX      = 200;
     const PAGE_SIZE_MIN      = 1;
 
-    function __construct(string $uri, string $request_config, string $server, string $headers) {
+    /**
+     * @param string $url l'url complète demandée par l'utilisateur, sans le protocole
+     * @param string $server l'adresse de base du site (équivalent à l'adresse de la page d'accueil)
+     * @param string $headers Chemin vers le fichier référençant les en-têtes à mettre à chaque réponse
+     */
+    function __construct(string $url, string $server, string $headers) {
 
-        $parser = new RequestParser($request_config);
+        // On prépare le parser (URI, query, etc.) et on défini la variable globale qui indique le serveur (utilisée notamment par les JWT)
+        $parser = new RequestParser;
         $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
 
+        // On prépare toutes les variables nécessaires au traitement de la requête
         $this->output           = "";
         $this->header           = array();
         $this->method           = $_SERVER['REQUEST_METHOD'];
@@ -36,11 +46,12 @@ class RequestHandler {
         $this->lang             = array();
         $this->there            = $server;
         $this->protocol         = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
-        $this->request          = $parser->parse_uri($uri, $this->there);
-        $this->uri              = $uri;
+        $this->request          = $parser->parse_uri($url, $this->there);
+        $this->uri              = $url;
         $this->content_type     = "text/html";
-        $this->db               = new DB("config/db.json", "config/db.sql");
+        $this->db               = new DB("config/db.json", "config/db.sql", "config/prefixes.ttl");
 
+        // On récupère les informations sur la session de l'utilisateur (ou son absence)
         $session = $this->retrieve_session();
         $this->auth      = $session[0];
         $this->id        = $session[1]['usr'];
@@ -57,6 +68,7 @@ class RequestHandler {
             }
         }
 
+        // Si le tableau contenant les éléments décortiqués de la requête est vide, on redirige l'utilisateur vers la page d'accueil
         if (sizeof($this->request) == 0) {
             $this->redirect();
             return;
@@ -69,7 +81,7 @@ class RequestHandler {
         // On commence par récupérer les langues disponibles
         // Il s'agit d'un premier tri ; pour chaque élément il faudra faire attention à effectuer les vérifications nécessaires
         #TODO: ne récupérer que les littérales qui appartiennent à l'interface
-        $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
+        $rows = $this->db->query("SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
         $lang_available = array();
 
         foreach($rows['result']['rows'] as $l) {
@@ -90,19 +102,26 @@ class RequestHandler {
         }
 
         if (!in_array("fr", $this->lang) && in_array("fr", $lang_available))
-            array_push($this->lang, "fr"); # Langue par défaut
+            array_push($this->lang, "fr"); # Langue par défaut (si disponible)
         
-        $prepare_dir = function ($value) {
-            $res = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?dir WHERE { ?in dcterms:alternative ?txt . ?in <".$this->protocol.$this->there."traductions/dir> ?dir FILTER( lang(?txt) = \"$value\" ) } GROUP BY ?dir");
-            return [$value, $res['result']['rows'][0]['dir']];
-        };
-        $this->lang = array_map($prepare_dir, $this->lang);
+        // On récupère le sens de lecture `dir` associé à chaque langue
+        $this->lang = array_map(
+            function ($value) {
+                $res = $this->db->query("SELECT ?dir WHERE { ?in dcterms:alternative ?txt . ?in <".$this->protocol.$this->there."traductions/dir> ?dir FILTER( lang(?txt) = \"$value\" ) } GROUP BY ?dir");
+                return [$value, $res['result']['rows'][0]['dir']];
+            }, 
+            $this->lang
+        );
 
         /**
          * GESTION DES TYPES DE REQUÊTE
          */
+
+        // Les requêtes GET sont vouées à fournir une représentation (HTML, XML, JSON, etc.) d'une ressource (page web, résultats de recherche, ...)
+        // Elles ne modifient pas l'ETAT du site, i.e. elles ne changent pas les données de la DB ou les fichiers sur le serveur
         if ($this->method == 'GET') {
-                
+            
+
             if (isset($this->request['collection']) && in_array($this->request['collection'], self::RESOURCES_COLL)) {
 
                 $collection = $this->request['collection'];
@@ -282,7 +301,7 @@ class RequestHandler {
             }
 
             if (isset($_POST['bouton_co'])) {
-                
+
                 $mdp = base64_decode($_POST['mdp']);
                 $login = base64_decode($_POST['utilisateur']);
 
@@ -825,7 +844,7 @@ class RequestHandler {
             }
 
             $body .= implode(" UNION ", array_map(function($val) use ($corres, $criterion) {
-                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." \"".urldecode($val)."\" .}";
+                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." ?$criterion . FILTER (REGEX(?$criterion, \"".urldecode($val)."\")) .}";
             }, $query[$criterion]));
 
         }
