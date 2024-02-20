@@ -9,6 +9,23 @@
 	line-height: 1.1rem;
 }
 
+ol.thematiqueseule {
+    filter: blur(0.00rem) saturate(80%) opacity(85%);
+    transition: transform 200ms ease-in-out, filter 400ms ease-in-out;
+}
+
+ol.thematiqueseule:hover {
+	transform: scale(1.02) translateZ(0);
+    backface-visibility: hidden;
+    filter: blur(0px) saturate(110%) opacity(100%);
+}
+
+div.mots_donnees:hover ol.thematiqueseule:not(:hover) { 
+    transform: scale(0.95) translateZ(0) perspective(1px);
+    backface-visibility: hidden;
+    filter: blur(0.04rem) saturate(65%) opacity(65%);
+}
+
 .resultats, .resultats_donnees {
 
     width: 600px;  
@@ -77,6 +94,7 @@ h3 {
 a.mot_titre {
     color: #301703;
     cursor: pointer; 
+    text-decoration: none;
 }
 
 #synonyme, #etymo, #origine, #theme, #pron, #exemple {
@@ -123,3 +141,25 @@ color: white;
 
 /* Add a grey background color on mouse-over */
 .pagination a:hover:not(.active) {background-color: #ead4c1;} 
+
+#scroll_top_btn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #e8bf9b; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+    width: 50px;
+    opacity: 0.8;
+  }
+  
+  #scroll_top_btn:hover {
+    background-color: #301703; /* Add a dark-grey background on hover */
+  }

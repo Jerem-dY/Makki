@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class RequestHandler {
 
     const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
-    const PAGE_SIZE_MAX      = 100;
+    const PAGE_SIZE_MAX      = 200;
     const PAGE_SIZE_MIN      = 1;
 
     function __construct(string $uri, string $request_config, string $server, string $headers) {
@@ -886,7 +886,7 @@ class RequestHandler {
                         @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
                         @prefix dc:    <http://purl.org/dc/terms/> .
                         @prefix lex:   <lexique/> .
-                        SELECT ?title WHERE {
+                        SELECT ?title ?in WHERE {
                             ?in dc:identifier \"".$res['result'][$def_id][$pred][0]["value"]."\" .
                             ?in dc:title ?title .
                         }
@@ -901,7 +901,7 @@ class RequestHandler {
                         }
     
                         foreach($res_syn['result']['rows'] as $element) {
-                            array_push($def["syn"], ["value" => $element['title'], "lang" => isset($element['title lang']) ? $element['title lang'] : "ar"]);
+                            array_push($def["syn"], ["value" => $element['title'], "lang" => (isset($element['title lang']) ? $element['title lang'] : "ar"), "URI" => $element['in']]);
                         }
                     }
 
@@ -928,7 +928,6 @@ class RequestHandler {
 
         }
 
-        //ksort($output, SORT_STRING);
         return array("pagination" => $retrieved["pagination"], "data" => $output);
     }
 

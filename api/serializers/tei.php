@@ -139,7 +139,17 @@ class TEISerializer extends Serializer {
                 $id = $this->get_word_id($syn['value']);
 
                 if ($id != $w_id) {
-                    $d .= "<xr type=\"syn\"><ptr target=\"#".$id."\"/></xr>";
+                    if ($id != false) {
+                        $d .= "<xr type=\"syn\"><ptr target=\"#$id\"/></xr>";
+                    }
+                    else {
+                        $cut = explode("/", $syn['URI']);
+                        $id = end($cut);
+                        $url = implode('/', array_slice($cut, 0, -1)) . "/" . $syn['value'];
+                        $d .= "<xr type=\"syn\"><ptr target=\"#$id\" url=\"$url\"/></xr>";
+                    }
+                        
+                    
                 }
             }
 
@@ -189,11 +199,18 @@ class TEISerializer extends Serializer {
     }
 
     function get_word_id(string $w) {
-        $w_id = explode("/", array_keys($this->word_data['data'][$w])[0]);
-        $w_id = end($w_id);
-        $w_id = explode("#", $w_id)[0];
 
-        return "entry_" . $w_id;
+        if (array_key_exists($w, $this->word_data['data'])) {
+            $w_id = explode("/", array_keys($this->word_data['data'][$w])[0]);
+            $w_id = end($w_id);
+            $w_id = explode("#", $w_id)[0];
+
+            return "entry_" . $w_id;
+        }
+        else {
+            return false;
+        }
+        
     }
 }
 
