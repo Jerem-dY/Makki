@@ -744,12 +744,3 @@ input:placeholder-shown {
   
   }
 
-  button, input, a {
-    transition: transform 200ms ease-in-out;
-  }
-
-  button:hover, input:hover, a:hover {
-    transform: scale(1.02);
-    backface-visibility: hidden;
-  }
-

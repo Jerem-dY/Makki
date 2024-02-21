@@ -10,6 +10,7 @@
 
     <body>
 
+        <div class="content">
         <form id="search-form" role="search" method="GET">
             <h1 class="titre">Recherche avancée</h1>
 
@@ -19,7 +20,9 @@
                     <label for="search-mot" id="search-mot" class="trad">Mot / Expression</label>
                     <div class="title crit">
                         <input type="text" id="search-mot" name="title" class="trad_placeholder champ" placeholder="Recherche par mot / expression">
-                        <i class="fas fa-trash-alt del">D</i>
+                        <i class="fas fa-trash-alt del">
+                            <img class="bouton_suppr"src="images/bouton_suppr.png"/>
+                        </i>
                     </div>
                     <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
                 </div>
@@ -28,7 +31,9 @@
                     <label for="search-pronunciation" id="search-pronunciation" class="trad">Prononciation</label>
                     <div class="pron crit">
                         <input class="trad_placeholder champ" type="text" id="search-pronunciation" name="pron" placeholder="Prononciation">
-                        <i class="fas fa-trash-alt del">D</i>
+                        <i class="fas fa-trash-alt del">
+                            <img class="bouton_suppr"src="images/bouton_suppr.png"/>
+                        </i>
                     </div>
                     <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
                 </div>
@@ -37,7 +42,9 @@
                     <label for="search-etymologie" id="search-etymologie" class="trad">Etymologie</label>
                     <div class="etymo crit">
                         <input type="text" id="search-etymologie" name="etymo" placeholder="Etymologie" class="trad_placeholder champ">
-                        <i class="fas fa-trash-alt del">D</i>
+                        <i class="fas fa-trash-alt del">
+                            <img class="bouton_suppr"src="images/bouton_suppr.png"/>
+                        </i>
                     </div>                    
                     <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
                 </div>
@@ -49,7 +56,9 @@
                         <datalist id="search-thematique" class="theme">
                             <option value="none" class="trad" id="valeur_aucune">Aucun</option>
                         </datalist>
-                        <i class="fas fa-trash-alt del">D</i>
+                        <i class="fas fa-trash-alt del">
+                            <img class="bouton_suppr"src="images/bouton_suppr.png"/>
+                        </i>
                     </div>
                     <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
                 </div>
@@ -61,7 +70,9 @@
                         <datalist id="search-lieu" class="lieu">
                             <option value="none" class="trad" id="valeur_aucune">Aucun</option>
                         </datalist>
-                        <i class="fas fa-trash-alt del">D</i>
+                        <i class="fas fa-trash-alt del">
+                            <img class="bouton_suppr"src="images/bouton_suppr.png"/>
+                        </i>
                     </div>
                     <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
                 </div>
@@ -71,6 +82,7 @@
             <input type="submit" id="searching" value="Recherche Filtrée" class="trad_value" />
 
         </form>
+        </div>
         <script src="scripts/recherche.js"></script>
     </body>
 
