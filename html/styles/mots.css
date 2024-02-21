@@ -15,7 +15,6 @@ ol.thematiqueseule {
 }
 
 ol.thematiqueseule:hover {
-	transform: scale(1.02) translateZ(0);
     backface-visibility: hidden;
     filter: blur(0px) saturate(110%) opacity(100%);
 }
@@ -163,3 +162,21 @@ color: white;
   #scroll_top_btn:hover {
     background-color: #301703; /* Add a dark-grey background on hover */
   }
+
+#titre_resultats {
+    
+    padding: 5px;
+    text-decoration: underline overline black;
+    
+}
+
+#export_data_select {
+
+    cursor: pointer; 
+    font-family:'El Messiri', sans-serif;
+    background: #fdeee2;
+    border-radius: 4px;
+    border: 1.5px solid black;
+    font-size: 15px;
+    
+}
