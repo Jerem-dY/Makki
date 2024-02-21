@@ -14,7 +14,7 @@ ol.thematiqueseule {
     transition: transform 200ms ease-in-out, filter 400ms ease-in-out;
 }
 
-ol.thematiqueseule:hover {
+ol.thematiqueseule:hover, ol.thematiqueseule:target {
     backface-visibility: hidden;
     filter: blur(0px) saturate(110%) opacity(100%);
 }
