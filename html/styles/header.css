@@ -744,3 +744,15 @@ input:placeholder-shown {
   
   }
 
+  div.msg {
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+    background-color: #fce5d3;
+    border-radius: 4px;
+    font-size:12px;
+    border: 1.5px solid black;
+    vertical-align: middle;
+    max-height: 30px;
+    text-align:left;
+  }

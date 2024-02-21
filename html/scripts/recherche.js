@@ -1,4 +1,4 @@
-$(".champ").on("keyup", function(){
+function update_row(){
   var btn_ajt = $(this).parents(".top").find(".ajout");
 
   if ($(this).val() == "") {
@@ -7,7 +7,10 @@ $(".champ").on("keyup", function(){
   else {
     $(btn_ajt).removeClass("hidden");
   }
-});
+}
+
+$(document).on("keyup", ".champ", update_row);
+$(document).on("change", ".champ", update_row);
 
 
 $(".ajout").on("click", function(){
@@ -24,7 +27,7 @@ $(document).on("click",".del", function(){
     $(this).parent().remove();
   }
   else {
-    $(this).parent().find("input").val('');
+    $(this).parent().find("input").val('').change();
   }
 });
 

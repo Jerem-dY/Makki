@@ -70,7 +70,7 @@ class RequestHandler {
 
         // Si le tableau contenant les éléments décortiqués de la requête est vide, on redirige l'utilisateur vers la page d'accueil
         if (sizeof($this->request) == 0) {
-            $this->redirect();
+            $this->redirect("", "badreq_err", 400);
             return;
         }
 
@@ -268,7 +268,7 @@ class RequestHandler {
                     $page = "licences";
                 }
                 else if (isset($this->request['collection'])) {
-                    $this->redirect();
+                    $this->redirect("", "badreq_err", 400);
                     return;
                 }
                 else {
@@ -311,16 +311,46 @@ class RequestHandler {
                     $this->make_session($id);
                 }
 
-                $this->redirect($this->protocol.$this->uri);
+                $this->redirect($this->protocol.$this->uri, "co_msg");
                 return;
             }
-
-            if (isset($_POST['bouton_deco'])) {
+            else if (isset($_POST['bouton_deco'])) {
                 $this->disconnect();
                 return;
             }
-            
-            if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
+            else if (isset($this->request['collection']) && $this->request['collection'] == "contact" && isset($_POST["contact"])){
+
+                /** Validation */
+                if(!(
+                isset($_POST["name"]) && $_POST["name"] != "" && 
+                isset($_POST["objet"]) && $_POST["objet"] != "" && 
+                isset($_POST["email"]) && $_POST["email"] != "" && 
+                isset($_POST["msg"]) && $_POST["msg"] != ""
+                )) {
+                    //TODO: communiquer le message d'erreur dans la query
+                    $this->redirect("", "contact_err", 400);
+                }
+
+                $name = $_POST["name"];
+                $obj = $_POST["objet"];
+                $uni = isset($_POST["uni"]) ? " (".$_POST["uni"].")" : "";
+                $mail = $_POST["email"];
+                $msg = $_POST["msg"];
+
+                $sub = $obj . $uni;
+
+                $stt = $this->db->pdo->prepare("INSERT INTO `contact` (name, email, subject, message) VALUES (:name, :email, :subject, :message);");
+                $stt->bindParam(":name", $name);
+                $stt->bindParam(":email", $mail);
+                $stt->bindParam(":subject", $sub);
+                $stt->bindParam(":message", $msg);
+                $stt->bindParam(":name", $name);
+
+                $stt->execute();
+
+                $this->redirect("", "contact_msg");
+            }
+            else if (isset($this->request['collection']) && $this->request['collection'] == "administration") {
 
                 if(!$this->validate_tokens()) {
                     $this->unauthorized();
@@ -419,7 +449,7 @@ class RequestHandler {
                     $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $this->protocol.$this->there, 0);
 
                     $uploader->delete();
-                    $this->redirect($this->protocol.$this->uri);
+                    $this->redirect($this->protocol.$this->uri, "upload_msg");
                 }
                 else if (isset($_FILES["uploaddata"])) {
                     $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 2000000);
@@ -457,16 +487,13 @@ class RequestHandler {
                     }
 
                     $uploader->delete();
-                    $this->redirect($this->protocol.$this->uri);
-                }
-                else {
-                    echo "bleuargh";
+                    $this->redirect($this->protocol.$this->uri, "upload_msg");
                 }
             }
         }
         else if ($this->method == 'DELETE') {
 
-            if(!$this->validate_tokens()) {
+            if(!$this->validate_tokens() || !$this->auth) {
                 $this->unauthorized();
                 return;
             }
@@ -571,6 +598,16 @@ class RequestHandler {
                         return;
                     }
                 }
+                else if ($_DELETE['type'] == "delete_contact" && isset($_DELETE['file'])) {
+
+                    $id = $_DELETE['file'];
+
+                    $stt = $this->db->pdo->prepare("DELETE FROM `contact` WHERE contact_id=$id");
+                    if (!$stt->execute()) {
+                        http_response_code(400);
+                        return;
+                    }
+                }
             }
         }
         else {
@@ -598,22 +635,40 @@ class RequestHandler {
         return $this->protocol . $this->there . (isset($this->request['lang']) ? $this->request['lang'].'/' : "" );
     }
 
-    function redirect(string $location = "") {
+    /**
+     * Cette méthode permet de définir les headers nécessaires à la redirection de l'usager vers une autre page, avec possibilité de définir un message
+     * 
+     * @param string $location La page vers laquelle rediriger
+     * @param string $msg      L'id du message à afficher (correspondant à l'entrée dans la traduction)
+     * @param int    $code     Le code de réponse HTTP (par défaut, le code de redirection 303)
+     */
+    function redirect(string $location = "", string $msg = "", int $code = 303) {
 
-        $location = $location == "" ? $this->get_homepage() : $location;
+        $location = ($location == "" ? $this->get_homepage() : $location);
+
+        if ($msg != "") {
+
+            if (isset($this->request['query']) && sizeof($this->request['query']) > 0 && !str_ends_with($location, "/")) {
+                $location = trim($location, "/") . '&';
+            }
+            else {
+                $location = trim($location, "/") . "?";
+            }
+
+            $location .= 'msg='.$msg;
+        }
+
         $this->add_header('Location', $location);
-        http_response_code(303);
+        http_response_code($code);
     }
 
     function disconnect() {
-        $this->redirect($this->protocol.$this->uri);
+        $this->redirect($this->protocol.$this->uri, "deco_msg");
         $this->add_cookie("makki_user", "", 1);
     }
 
     function unauthorized() {
-        http_response_code(401);
-        $url = $this->get_homepage();
-        $this->output = "<html><meta http-equiv=\"refresh\" content=\"1;url=$url\" /><p>UNAUTHORIZED</p></html>";
+        $this->redirect("", "unauth_err", 401);
         return;
     }
 

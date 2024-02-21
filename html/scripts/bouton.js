@@ -28,3 +28,8 @@ $("form.login-form").on("submit", function(event) {
   $("#utilisateur").val( window.btoa(encodeURIComponent($("#utilisateur").val())) );
   $("#mdp").val( window.btoa(encodeURIComponent($("#mdp").val())) );
 });
+
+
+$(document).on("click",".msg_btn", function(){
+  $(this).parent().remove();
+});

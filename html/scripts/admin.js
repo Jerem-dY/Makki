@@ -27,17 +27,20 @@ $(".delete_trad").click(function() {
     });
 });
 
-$(".delete_data").click(function() {
+
+
+$(".delete_data, .delete_contact").click(function() {
 
     var form = $(this);
+    var className = this.className.match(/delete_[\w]+/)[0];
 
     $.ajax({
         type: 'DELETE',
         url: form.attr('data-url'),
         data: {
-            "file" : form.attr('data-file'),
-            "type" : 'delete_data',
-            "nonce" : $('html').attr('data-nonce')
+            file: form.attr('data-file'),
+            type: className,
+            nonce: $('html').attr('data-nonce')
         },
         contentType: 'json',
         success: function(data){
