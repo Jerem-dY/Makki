@@ -5,7 +5,7 @@ require_once("serializer.php");
 
 class RDFSerializer extends Serializer {
 
-    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
+    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = [], array $mimes = []): string {
 
         $ns = array(
             'rdf' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
@@ -22,7 +22,7 @@ class RDFSerializer extends Serializer {
 
 class TTLSerializer extends Serializer {
 
-    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
+    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = [], array $mimes = []): string {
 
         $ns = array(
             'rdf' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',

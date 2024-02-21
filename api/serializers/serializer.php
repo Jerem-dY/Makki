@@ -17,9 +17,10 @@ abstract class Serializer {
         array  $request, 
         string $protocol, 
         bool   $connected, 
-        string $token       ="", 
+        string $token       = "", 
         array  $word_data   = [], 
-        array  $themes      = []
+        array  $themes      = [],
+        array $mimes        = []
             ): string;
     
     protected function fetch_translation(string $id, array $langs, string $base_url, string $protocol): array {

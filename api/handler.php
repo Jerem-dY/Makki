@@ -6,6 +6,7 @@ require_once("upload.php");
 require_once("jwt.php");
 require_once("vendor/autoload.php");
 
+// On importe tous les sérialiseurs du dossier
 $serz = dirname(__FILE__).DIRECTORY_SEPARATOR."serializers";
 foreach (scandir($serz) as $filename) {
     $path = $serz . DIRECTORY_SEPARATOR . $filename;
@@ -16,18 +17,27 @@ foreach (scandir($serz) as $filename) {
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-
+/**
+ * Classe coordonnant tout le traitement des requêtes ainsi que les réponses
+ */
 class RequestHandler {
 
     const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
-    const PAGE_SIZE_MAX      = 100;
+    const PAGE_SIZE_MAX      = 200;
     const PAGE_SIZE_MIN      = 1;
 
-    function __construct(string $uri, string $request_config, string $server, string $headers) {
+    /**
+     * @param string $url l'url complète demandée par l'utilisateur, sans le protocole
+     * @param string $server l'adresse de base du site (équivalent à l'adresse de la page d'accueil)
+     * @param string $headers Chemin vers le fichier référençant les en-têtes à mettre à chaque réponse
+     */
+    function __construct(string $url, string $server, string $headers) {
 
-        $parser = new RequestParser($request_config);
+        // On prépare le parser (URI, query, etc.) et on défini la variable globale qui indique le serveur (utilisée notamment par les JWT)
+        $parser = new RequestParser;
         $GLOBALS['iss'] = $_SERVER['HTTP_HOST'];
 
+        // On prépare toutes les variables nécessaires au traitement de la requête
         $this->output           = "";
         $this->header           = array();
         $this->method           = $_SERVER['REQUEST_METHOD'];
@@ -36,11 +46,12 @@ class RequestHandler {
         $this->lang             = array();
         $this->there            = $server;
         $this->protocol         = strtolower(current(explode('/',$_SERVER['SERVER_PROTOCOL']))) . "://";
-        $this->request          = $parser->parse_uri($uri, $this->there);
-        $this->uri              = $uri;
+        $this->request          = $parser->parse_uri($url, $this->there);
+        $this->uri              = $url;
         $this->content_type     = "text/html";
-        $this->db               = new DB("config/db.json", "config/db.sql");
+        $this->db               = new DB("config/db.json", "config/db.sql", "config/prefixes.ttl");
 
+        // On récupère les informations sur la session de l'utilisateur (ou son absence)
         $session = $this->retrieve_session();
         $this->auth      = $session[0];
         $this->id        = $session[1]['usr'];
@@ -57,6 +68,7 @@ class RequestHandler {
             }
         }
 
+        // Si le tableau contenant les éléments décortiqués de la requête est vide, on redirige l'utilisateur vers la page d'accueil
         if (sizeof($this->request) == 0) {
             $this->redirect();
             return;
@@ -69,7 +81,7 @@ class RequestHandler {
         // On commence par récupérer les langues disponibles
         // Il s'agit d'un premier tri ; pour chaque élément il faudra faire attention à effectuer les vérifications nécessaires
         #TODO: ne récupérer que les littérales qui appartiennent à l'interface
-        $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
+        $rows = $this->db->query("SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
         $lang_available = array();
 
         foreach($rows['result']['rows'] as $l) {
@@ -90,19 +102,26 @@ class RequestHandler {
         }
 
         if (!in_array("fr", $this->lang) && in_array("fr", $lang_available))
-            array_push($this->lang, "fr"); # Langue par défaut
+            array_push($this->lang, "fr"); # Langue par défaut (si disponible)
         
-        $prepare_dir = function ($value) {
-            $res = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?dir WHERE { ?in dcterms:alternative ?txt . ?in <".$this->protocol.$this->there."traductions/dir> ?dir FILTER( lang(?txt) = \"$value\" ) } GROUP BY ?dir");
-            return [$value, $res['result']['rows'][0]['dir']];
-        };
-        $this->lang = array_map($prepare_dir, $this->lang);
+        // On récupère le sens de lecture `dir` associé à chaque langue
+        $this->lang = array_map(
+            function ($value) {
+                $res = $this->db->query("SELECT ?dir WHERE { ?in dcterms:alternative ?txt . ?in <".$this->protocol.$this->there."traductions/dir> ?dir FILTER( lang(?txt) = \"$value\" ) } GROUP BY ?dir");
+                return [$value, $res['result']['rows'][0]['dir']];
+            }, 
+            $this->lang
+        );
 
         /**
          * GESTION DES TYPES DE REQUÊTE
          */
+
+        // Les requêtes GET sont vouées à fournir une représentation (HTML, XML, JSON, etc.) d'une ressource (page web, résultats de recherche, ...)
+        // Elles ne modifient pas l'ETAT du site, i.e. elles ne changent pas les données de la DB ou les fichiers sur le serveur
         if ($this->method == 'GET') {
-                
+            
+
             if (isset($this->request['collection']) && in_array($this->request['collection'], self::RESOURCES_COLL)) {
 
                 $collection = $this->request['collection'];
@@ -161,6 +180,10 @@ class RequestHandler {
                 $available = json_decode(file_get_contents("config/mimes.json"), true);
                 $raw = false;
 
+                if (isset($this->request['query']['mime'])) {
+                    array_unshift($this->mime, $this->request['query']['mime']);
+                }
+
                 foreach($this->mime as $m) {
                     $m = implode("/", $m);
 
@@ -169,6 +192,9 @@ class RequestHandler {
                         $builder = new $selected["classe"]($this->db);
                         $this->add_header("Content-Type", $m);
                         $raw = $selected["raw"];
+
+                        if ($m != "text/html" && $m != "*/*")
+                            $this->add_header("Content-Disposition", "attachment");
                         break;
                     }
                 }
@@ -219,8 +245,8 @@ class RequestHandler {
                     }
                     else {
                         //TODO: Afficher une liste de tous les mots dans l'ordre alphabétique
-                        $this->redirect();
-                        return;
+                        $page = "mot";
+                        $word_data = $this->get_data(array(), $raw);
                     }
                 }
                 else if (isset($this->request['collection']) && $this->request['collection'] == "recherche") {
@@ -252,7 +278,7 @@ class RequestHandler {
                 $token = $this->make_nonce();
 
 
-                $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes);
+                $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes, array_keys($available));
             }
         }
         else if ($this->method == 'POST') {
@@ -275,7 +301,7 @@ class RequestHandler {
             }
 
             if (isset($_POST['bouton_co'])) {
-                
+
                 $mdp = base64_decode($_POST['mdp']);
                 $login = base64_decode($_POST['utilisateur']);
 
@@ -557,6 +583,10 @@ class RequestHandler {
         $this->header[$h] = $v;
     }
 
+    function add_cookie(string $name, string $value, int $t) {
+        $this->add_header("Set-Cookie", urlencode($name)."=".urlencode($value)."; Expires=".date("D, d M Y H:i:s", $t)."GMT"."; path=/; domain=".$GLOBALS['iss']."; HttpOnly; SameSite=Strict");
+    }
+
     function send_header(): void {
 
         foreach(array_keys($this->header) as $h) {
@@ -577,7 +607,7 @@ class RequestHandler {
 
     function disconnect() {
         $this->redirect($this->protocol.$this->uri);
-        setcookie("makki_user", "", 1, "/", $GLOBALS['iss'], false, true);
+        $this->add_cookie("makki_user", "", 1);
     }
 
     function unauthorized() {
@@ -669,8 +699,7 @@ class RequestHandler {
         $jwe = JWE::encode($jws, get_public_key(base64_decode($clefs['keys']['enc-session']['key'])));
 
         $dec = json_decode($jwt, true);
-
-        setcookie("makki_user", $jwe, $dec['exp'], "/", $GLOBALS['iss'], false, true);
+        $this->add_cookie("makki_user", $jwe, $dec['exp']);
     }
 
     function retrieve_session(): array {
@@ -727,8 +756,7 @@ class RequestHandler {
 
         $dec = json_decode($jwt, true);
 
-        setcookie("makki_nonce", $jws, $dec['exp'], "/", $GLOBALS['iss'], false, true);
-
+        $this->add_cookie("makki_nonce", $jws, $dec['exp']);
         return $jws;
     }
 
@@ -802,10 +830,6 @@ class RequestHandler {
             "etymo" => "lex:etymo",
         );
 
-        if (sizeof($query) <= 0) {
-            return array();
-        }
-
         $head = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
         @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
         @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
@@ -820,7 +844,7 @@ class RequestHandler {
             }
 
             $body .= implode(" UNION ", array_map(function($val) use ($corres, $criterion) {
-                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." \"".urldecode($val)."\" .}";
+                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." ?$criterion . FILTER (REGEX(?$criterion, \"".urldecode($val)."\")) .}";
             }, $query[$criterion]));
 
         }
@@ -829,7 +853,7 @@ class RequestHandler {
 
         $nb_results = $this->db->query("$head SELECT COUNT(?title) AS ?nb $body")['result']['rows'][0]['nb'];
 
-        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : self::PAGE_SIZE_MAX;
+        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : ceil((self::PAGE_SIZE_MAX - self::PAGE_SIZE_MIN) / 2);
         $offset    = (isset($query['page']) ? max((int)$query['page'][0]-1, 0) : 0)*$page_size;
         $nb_pages  = (int)ceil($nb_results / $page_size);
         
@@ -881,7 +905,7 @@ class RequestHandler {
                         @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
                         @prefix dc:    <http://purl.org/dc/terms/> .
                         @prefix lex:   <lexique/> .
-                        SELECT ?title WHERE {
+                        SELECT ?title ?in WHERE {
                             ?in dc:identifier \"".$res['result'][$def_id][$pred][0]["value"]."\" .
                             ?in dc:title ?title .
                         }
@@ -896,7 +920,7 @@ class RequestHandler {
                         }
     
                         foreach($res_syn['result']['rows'] as $element) {
-                            array_push($def["syn"], [$element['title'], isset($element['title lang']) ? $element['title lang'] : "ar"]);
+                            array_push($def["syn"], ["value" => $element['title'], "lang" => (isset($element['title lang']) ? $element['title lang'] : "ar"), "URI" => $element['in']]);
                         }
                     }
 
@@ -923,7 +947,6 @@ class RequestHandler {
 
         }
 
-        //ksort($output, SORT_STRING);
         return array("pagination" => $retrieved["pagination"], "data" => $output);
     }
 

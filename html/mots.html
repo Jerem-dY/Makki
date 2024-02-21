@@ -12,7 +12,12 @@
         <div class="content">  
 
             <div class ="thematiqueseule"> 
-                <div class="resultats"><p class="trad" id="titre_resultats"> Résultats pour le mot " x " :</p></div>
+                <div class="resultats"><p class="trad" id="titre_resultats"> Résultats :</p></div>
+                <div>
+                    <select id="export_data_select">
+                    </select>
+                    <a id="export_data_btn" class="trad" download>Télécharger</a>
+                </div>
             </div>
 
             <header class="pagination"></header>
@@ -78,9 +83,13 @@
                     </div>
             </div>
             <footer class="pagination"></footer>
+            <input type="image" src="images/top.png" id="scroll_top_btn"></input>
 
         </div>
 
+
     </body>  
+
+    <script src="scripts/mots.js"></script>
 </html>
 

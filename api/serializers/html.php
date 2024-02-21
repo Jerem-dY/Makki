@@ -1,6 +1,7 @@
 <?php 
 
 require_once(__DIR__."/../simple_html_dom/simple_html_dom.php");
+require_once(__DIR__."/../jwt.php");
 require_once("serializer.php");
 
 class HTMLSerializer extends Serializer {
@@ -23,7 +24,7 @@ class HTMLSerializer extends Serializer {
         }
     }
 
-    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = []): string {
+    public function make(string $page, string $base_url, array $langs, array $request, string $protocol, bool $connected, string $token="", array $word_data = [], array $themes = [], array $mimes = []): string {
 
         if (!array_key_exists($page, $this->pages)) {
             die("OH NO"); #TODO
@@ -34,7 +35,15 @@ class HTMLSerializer extends Serializer {
         $output = file_get_html($this->pages[$page]);
 
         if ($page == "mot") {
-            $this->make_data($word_data, $output, $langs, $base_url, $protocol);
+            $this->make_data($word_data, $output, $langs, $base_url, $protocol, $mimes);
+        }
+        else if ($page == "recherche") {
+            $output->find("#search-form", 0)->action = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique";
+
+            $dl_th = $output->find("datalist.theme", 0);
+            foreach($themes as $th) {
+                $dl_th->innertext .= "<option value=\"$th\">$th</option>";
+            }
         }
 
         $html = $output->find('html', 0);
@@ -52,6 +61,9 @@ class HTMLSerializer extends Serializer {
 
         $licence_link = $footer->find('#licence', 0);
         $licence_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."licences";
+
+        $recherche_poussee_link = $header->find("#recherche_poussee", 0);
+        $recherche_poussee_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."recherche";
 
         $lang_list->innertext = "";
         $sorted_langs = $langs;
@@ -80,6 +92,22 @@ class HTMLSerializer extends Serializer {
         }
         else {
             $header->find(".login-wrapper_connecte", 0)->outertext = "";
+
+            if (!is_file("secure/public_keys.json")) {
+                make_keyset();
+            }
+
+            $keys = json_decode(file_get_contents("secure/public_keys.json"), true)["keys"];
+            $key = null;
+
+            foreach($keys as $k) {
+                if ($k["kid"] == "enc-login") {
+                    $key = $k;
+                }
+            }
+            $key = base64_encode(JWT::encode(json_encode($key), "+60 minutes"));
+            $login_form = $header->find("form.login-form", 0);
+            $login_form->setAttribute("data-key", $key);
         }
         
         $body->innertext = $header->find('header', 0)->outertext . $bar->outertext . $body->innertext . $footer->find('footer', 0)->outertext;
@@ -91,7 +119,8 @@ class HTMLSerializer extends Serializer {
             $nonce = "<input type=\"hidden\" id=\"nonce\" name=\"nonce\" value=\"".urlencode($token)."\">";
 
             foreach($output->find("form") as $form) {
-                $form->innertext = $nonce . $form->innertext;
+                if ($form->method != "GET")
+                    $form->innertext = $nonce . $form->innertext;
             }
         }
 
@@ -196,11 +225,17 @@ class HTMLSerializer extends Serializer {
         return $html;
     }
 
-    function make_data(array $word_data, $template, array $langs, string $base_url, string $protocol) {
+    function make_data(array $word_data, $template, array $langs, string $base_url, string $protocol, array $mimes) {
 
         $ex = $template->find(".mots_donnees", 0);
         $page_sys = $template->find(".pagination");
         $ex->innertext = "";
+
+        $make_query_string = function(array $q, int $p = 1, int $p_s = 1) {
+            $q['page'] = $p;
+            $q['page_size'] = $p_s;
+            return urldecode(preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($q, null, '&')));
+        };
 
         if (sizeof($word_data) <= 0) {
             return;
@@ -212,6 +247,22 @@ class HTMLSerializer extends Serializer {
         if ($pagination["nb_results"] > 1) {
             $r = $template->find("div.resultats", 0);
             $r->innertext .= $pagination["nb_results"];
+
+            $select = $template->find("#export_data_select", 0);
+            
+            foreach($mimes as $m) {
+                if ($m != "*/*" && $m != "text/html")
+                    $select->innertext .= "<option value=\"$m\">".explode("/", $m)[1]."</option>";
+            }
+
+            $export_btn = $template->find("#export_data_btn", 0);
+            $temp_q = $pagination['query'];
+            $export_btn->setAttribute("data-url", $protocol.$base_url."lexique?".$make_query_string($temp_q, (isset($temp_q['page']) ? $temp_q['page'][0] : 1), $pagination['page_size']));
+            $temp_q['mime'] = $mimes[0];
+
+            
+            $export_btn->href = $protocol.$base_url."lexique?".$make_query_string($temp_q, isset($temp_q['page']) ? $temp_q['page'][0] : 1, $pagination['page_size']);
+            
         }
         else {
             $template->find("div.thematiqueseule", 0)->outertext = "";
@@ -222,14 +273,13 @@ class HTMLSerializer extends Serializer {
 
         $current_page = isset($pagination['query']['page']) ? (int)$pagination['query']['page'][0] : 1;
 
-        $make_query_string = function(array $q, int $p = 1, int $p_s = 1) {
-            $q['page'] = $p;
-            $q['page_size'] = $p_s;
-            return urldecode(preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($q, null, '&')));
-        };
-
         $expand_numbers = function(int $n, int $k, int $min=1, int $max=10) {
-            $output = array($n);
+
+            $n = min(max($n, $min), $max);
+
+            $output = array(
+                $n
+            );
             
             $last_up = $n;
             $last_down = $n;
@@ -266,7 +316,7 @@ class HTMLSerializer extends Serializer {
         }
 
         foreach(array_keys($word_data) as $word) {
-            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\">$word</h3>";
+            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\"><a class=\"mot_titre\" href=\"".$protocol.$base_url."lexique/".$word."\">$word<a></h3>";
 
             foreach(array_keys($word_data[$word]) as $def_id) {
 
@@ -305,17 +355,17 @@ class HTMLSerializer extends Serializer {
 
                     $map = function($syn) use ($word, $protocol, $base_url, $word_data) {
 
-                            if (array_key_exists($syn[0], $word_data)) {
-                                $link = "#".$syn[0];
+                            if (array_key_exists($syn["value"], $word_data)) {
+                                $link = "#".$syn["value"];
                             } else {
-                                $link = ($protocol.$base_url."lexique/".urlencode($syn[0]));
+                                $link = ($protocol.$base_url."lexique/".urlencode($syn["value"]));
                             }
-                            return "<i><a href=\"".$link."\">".$syn[0]."</a></i>";
+                            return "<i><a href=\"".$link."\">".$syn["value"]."</a></i>";
                         };
 
                     
                     $txt .= implode(" ، ", array_map($map, array_filter($word_data[$word][$def_id]["syn"], function($el) use ($word) {
-                                if ($el[0] != $word)
+                                if ($el["value"] != $word)
                                     return true;
 
                                 return false;

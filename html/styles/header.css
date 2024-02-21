@@ -24,12 +24,17 @@ html, body {
         radial-gradient(100% 100% at 100% 0,var(--c1) 4%,var(--_g),#f5e7db 96%,#0000),
         radial-gradient(100% 100% at 0 100%,#0000, #f5e7db 4%,var(--_g),var(--c1) 96%)
         var(--c1);
-    background-size: var(--s) var(--s);   
+    background-size: var(--s) var(--s);
+    background-attachment: fixed;
       
 }
 
 .loaded {
   opacity : 1;
+}
+
+.barre {
+  box-shadow: 0px 0px 20px #301703e0;
 }
 
 @font-face {
@@ -46,7 +51,8 @@ html, body {
     width: 979px;
     flex: 1;
     display: table;
-    color: #301703; 
+    color: #301703;
+    box-shadow: 0px 0px 20px #301703e0;
 
 }
 
@@ -737,3 +743,13 @@ input:placeholder-shown {
     }
   
   }
+
+  button, input, a {
+    transition: transform 200ms ease-in-out;
+  }
+
+  button:hover, input:hover, a:hover {
+    transform: scale(1.02);
+    backface-visibility: hidden;
+  }
+

@@ -5,71 +5,73 @@
         <meta charset="UTF-8" />
         <title class="trad" id="title">Lexique libanais de Makki</title>
         <link rel="stylesheet" href="styles/recherche.css" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <script src="scripts/jquery.js"></script>
     </head>
 
-<body>
+    <body>
 
-    <div role="search" style="text-align: center;">
-        <h1 class="titre">Recherche avancée</h1>
+        <form id="search-form" role="search" method="GET">
+            <h1 class="titre">Recherche avancée</h1>
 
-        <form id="search-form">
-            <label for="search-form">Mot / Expression</label>
-            <input type="text" id="search-mot" name="search_mot" placeholder="Recherche par mot / expression">
-            <i class="fas fa-trash-alt" onclick="clearField('search-mot')"></i>
+            <div class="search-options">
+                
+                <div class="top">
+                    <label for="search-mot" id="search-mot" class="trad">Mot / Expression</label>
+                    <div class="title crit">
+                        <input type="text" id="search-mot" name="title" class="trad_placeholder champ" placeholder="Recherche par mot / expression">
+                        <i class="fas fa-trash-alt del">D</i>
+                    </div>
+                    <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
+                </div>
+
+                <div class="top">
+                    <label for="search-pronunciation" id="search-pronunciation" class="trad">Prononciation</label>
+                    <div class="pron crit">
+                        <input class="trad_placeholder champ" type="text" id="search-pronunciation" name="pron" placeholder="Prononciation">
+                        <i class="fas fa-trash-alt del">D</i>
+                    </div>
+                    <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
+                </div>
+
+                <div class="top">
+                    <label for="search-etymologie" id="search-etymologie" class="trad">Etymologie</label>
+                    <div class="etymo crit">
+                        <input type="text" id="search-etymologie" name="etymo" placeholder="Etymologie" class="trad_placeholder champ">
+                        <i class="fas fa-trash-alt del">D</i>
+                    </div>                    
+                    <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
+                </div>
+
+                <div class="top">
+                    <label for="search_thematique" id="recherche_theme" class="trad">Thématique</label>
+                    <div class="theme crit">
+                        <input type="text" list="search-thematique" id="recherche_theme" name="subject" class="trad_placeholder champ" placeholder="Thème" />
+                        <datalist id="search-thematique" class="theme">
+                            <option value="none" class="trad" id="valeur_aucune">Aucun</option>
+                        </datalist>
+                        <i class="fas fa-trash-alt del">D</i>
+                    </div>
+                    <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
+                </div>
+
+                <div class="top">
+                    <label for="search-lieu" id="recherche_lieu" class="trad">Lieu</label>
+                    <div class="lieu crit">
+                        <input type="text" list="search-lieu" id="recherche_lieu" name="coverage" class="trad_placeholder champ" placeholder="Lieu" />
+                        <datalist id="search-lieu" class="lieu">
+                            <option value="none" class="trad" id="valeur_aucune">Aucun</option>
+                        </datalist>
+                        <i class="fas fa-trash-alt del">D</i>
+                    </div>
+                    <button id="ajouter" type="button" class="trad ajout hidden">Ajouter</button>
+                </div>
+
+            </div>
+
+            <input type="submit" id="searching" value="Recherche Filtrée" class="trad_value" />
+
         </form>
-
-        <div class="search-options">
-        
-            <div>
-                <label for="search-pronunciation">Prononciation</label>
-                <input type="text" id="search-pronunciation" name="search_pronunciation" placeholder="Prononciation">
-                <i class="fas fa-trash-alt" onclick="clearField('search-pronunciation')"></i>
-            </div>
-
-            <div>
-                <label for="search-etymologie">Etymologie</label>
-                <input type="text" id="search-etymologie" name="search_etymologie" placeholder="Etymologie">
-                <i class="fas fa-trash-alt" onclick="clearField('search-etymologie')"></i>
-            </div>
-
-            <div>
-                <label for="search_thematique">Thématique</label>
-                <select type="text" id="search-thematique" name="search_thematique" placeholder="Thématique">
-                    <option value="">Tout</option>
-                    <option value="Jeu">Jeux</option>
-                    <option value="Commun">Commun</option>
-                    <option value="Outil">Outil</option>
-                    <option value="Ustensil">Ustensil</option>
-                    <option value="Musique">Musique</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="search-lieu">Lieu</label>
-                <select type="text" id="search-lieu" name="search_lieu" placeholder="Lieu">
-                    <option value="">Tout</option>
-                    <option value="Nord">Nord</option>
-                    <option value="Est">Est</option>
-                    <option value="Ouest">Ouest</option>
-                    <option value="Sud">Sud</option>
-                </select>
-            </div>
-
-        </div>
-
-        <form id="searchform" name= "search_form"onsubmit="return false;">
-            <input type="submit" id="searching" value="Recherche Filtrée" onclick="search()">
-            <i class="fas fa-search" onclick="search()"></i>
-        </form> 
-
-        <div id="results">
-            <!--Affichage des résultats de la recherche filtrée-->
-        </div>
-        
-    </div>
-    <script src="scripts/recherche.js"></script>
-</body>
+        <script src="scripts/recherche.js"></script>
+    </body>
 
 </html>
