@@ -8,3 +8,13 @@ CREATE TABLE IF NOT EXISTS `admin` (
     UNIQUE `login` (`login`)
     ) ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `contact` (
+  `contact_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  `subject` VARCHAR(100) NOT NULL,
+  `message` TEXT NOT NULL,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`contact_id`),
+  UNIQUE `email` (`email`)
+) ENGINE = InnoDB;
