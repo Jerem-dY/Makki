@@ -477,11 +477,19 @@ class RequestHandler {
                         if ($f_no_ext != $f_name) {
                             $contents = str_replace($f_name, $f_no_ext, $contents);
                         }
+
+                        $chunks = explode(".\n", $contents);
+                        $chunks = array_chunk($chunks, 1000);
+
+                        foreach($chunks as $ch) {
+
+                            $s = implode(".\n", $ch);
+
+                            $this->db->store->insert( $s, $this->protocol.$this->there, 0);
                         
-                        $this->db->store->insert( $contents, $this->protocol.$this->there, 0);
-                        
-                        if ($errs = $this->db->store->getErrors()) {
-                            $this->output .= var_dump($errs);
+                            if ($errs = $this->db->store->getErrors()) {
+                                $this->output .= var_dump($errs);
+                            }
                         }
 
                     }
