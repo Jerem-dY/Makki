@@ -448,6 +448,7 @@ input:placeholder-shown {
     background: #301703;
     font-style: normal;
     box-shadow: 0 4px 0 darken(#301703, 5%);
+    cursor: pointer; 
   
   }
   
@@ -493,6 +494,7 @@ input:placeholder-shown {
     margin-bottom: 5px;
     border: 0;
     outline: 0;
+    cursor: pointer; 
     background: #301703;
     color: #fff;
     font-weight: 300;
