@@ -34,6 +34,10 @@ class DB {
         return $out;
     }
 
+    public function insert(string $q, string $g) {
+        $this->store->insert(mb_convert_encoding($this->prefixes . $q, "UTF-8"), $g);
+    }
+
     public function check_credentials(string $login, string $pwd): int {
         $q = $this->pdo->prepare("SELECT password, admin_id FROM `admin` WHERE login = ?");
         $q->execute([$login]);

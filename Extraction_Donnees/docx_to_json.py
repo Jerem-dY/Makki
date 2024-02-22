@@ -2,7 +2,7 @@ import json
 from docx import Document
 from rdf_id import data_to_uuid
 import re 
-import html
+
 
 
 class ExtractData:
@@ -82,6 +82,8 @@ class ExtractData:
 
         # On utilise la regex `regex_definition` pour découper la définition en éléments reconnus
         for d in self.regex_definition.finditer(s):
+
+            d = d.groupdict()
             
             # On traite chaque cas possible
             if d['symbol'] == '*':
@@ -121,14 +123,16 @@ class ExtractData:
             elif not d['symbol']:
                 if d['def']:
 
-                    if d['tag']:
+                    if d['tag'] and d['tag'] != '':
+                    
+                        tg = d['tag'].split('/')[0].split(';')[0].strip().rstrip(']')
 
-                        if not (d['tag'] in tags):
+                        if not (tg in tags):
 
                             if 'subject' not in output:
                                 output['subject'] = []
 
-                            output['subject'].append((d['tag'][1:-1].strip(), lang))
+                            output['subject'].append((tg[1:].strip(), lang))
                         else:
                             output['abstract'][0] += d['tag'] + ' '
 
@@ -141,7 +145,7 @@ class ExtractData:
                     output['example'].append((d['example'].strip(), lang))
 
 
-        output['abstract'][0] = (html.escape(output['abstract'][0]), lang)
+        output['abstract'][0] = (output['abstract'][0], lang)
 
         return output
 
@@ -185,7 +189,7 @@ class ExtractData:
                         self.data[alt]["description"][term_uri] = self.make_term(alt, description_fr, description_ar)
 
 
-    def extract_definition(self):
+    def extract_definition(self, verbose=True):
 
         # On récupère le fichier de données et l'annexe des tags à éliminer
         document = Document(self.file_path)
@@ -196,6 +200,8 @@ class ExtractData:
             # Si l'on a suffisamment de colonnes, on itère sur les lignes
             if len(table.columns) >= 4:
                 for i, row in enumerate(table.rows):
+                    if verbose:
+                        print(f"\t\t| {i+1:05} / {len(table.rows):05} |")
                     self.parse_row(row, tags)
 
     def read_annotations_file(self):
@@ -204,7 +210,7 @@ class ExtractData:
         symbols = []
 
         try:
-            with open(self.annotations_file_path, "r", encoding="utf-8") as file:
+            with open(self.annotations_file_path, mode="r", encoding="utf-8") as file:
                 annotations_to_delete = file.readlines()
 
                 for annotation in annotations_to_delete:
@@ -213,10 +219,11 @@ class ExtractData:
                     else:
                         tags.append(annotation.strip())
         except:
+            print("Fichier d'exclusion INVALIDE :", self.annotations_file_path)
             pass
 
         return (set(tags), set(symbols))
 
     def write_json_to_file(self, file_path):
-        with open(file_path, "w", encoding="utf-8") as file:
+        with open(file_path, mode="w", encoding="utf-8") as file:
             json.dump(self.data, file, ensure_ascii=False, indent=4)

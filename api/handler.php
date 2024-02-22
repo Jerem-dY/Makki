@@ -60,6 +60,9 @@ class RequestHandler {
         // On s'occupe de charger les headers par défaut
         $headers = file_get_contents($headers);
 
+        // On désactive l'affichage des erreurs de type "Notice" (mineures) car elles gênent l'uplooad (des erreurs SQL sans conséquence)
+        error_reporting(E_ALL & ~E_NOTICE);
+
         if ($headers != false) {
             $data = json_decode($headers, true);
 
@@ -205,15 +208,9 @@ class RequestHandler {
                 }
 
                 if (isset($this->lang[0]) && isset($this->lang[0][0])) {
-                    $themes = $this->db->query("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                        @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-                        @prefix dc:    <http://purl.org/dc/terms/> .
-                        @prefix lex:   <lexique/> .
-                                
-                        SELECT DISTINCT ?subject WHERE {
+                    $themes = $this->db->query("SELECT DISTINCT ?subject WHERE {
                         
-                        ?in dc:subject ?subject .
+                        ?in dcterms:subject ?subject .
                         FILTER (lang(?subject) = \"". $this->lang[0][0] ."\")
                         
                         }");
@@ -358,11 +355,15 @@ class RequestHandler {
                 }    
 
                 if (isset($_FILES["uploadtrad"])) {
-                    $uploader = new FileUploader(array("xlsx"), $this->id, 500000);
+                    $uploader = new FileUploader(array("xlsx"), $this->id, 4000000);
 
-                    $uploader->upload($_FILES["uploadtrad"]);
 
-                    $ttl = "@prefix dcterms: <http://purl.org/dc/terms/> .\r\n@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\r\n@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\r\n";
+                    if (!$uploader->upload($_FILES["uploadtrad"])) {
+                        $this->redirect($this->protocol.$this->uri, "upload_err", 400);
+                        return;
+                    }
+
+                    $ttl = "";
 
                     foreach($uploader->get_filenames() as $file){
 
@@ -373,12 +374,8 @@ class RequestHandler {
                         $f_no_ext = current($f_no_ext);
                         $translations = array();
 
-                        $pre_q = "@prefix dcterms: <http://purl.org/dc/terms/> .
-                            @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                            @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                            
-                            SELECT ?out WHERE {?in dcterms:source ?out . FILTER(REGEX(?out, \"$f_no_ext( \([0-9]+\)|)\"))} GROUP BY ?out";
-                        $rows = $this->db->store->query($pre_q);
+                        $pre_q = "SELECT ?out WHERE {?in dcterms:source ?out . FILTER(REGEX(?out, \"$f_no_ext( \([0-9]+\)|)\"))} GROUP BY ?out";
+                        $rows = $this->db->query($pre_q);
 
                         $occs = count($rows['result']['rows']);
                         if ($occs > 0) {
@@ -446,26 +443,25 @@ class RequestHandler {
                     }
 
                     # ==> https://github.com/semsol/arc2/issues/122
-                    $this->db->store->insert(mb_convert_encoding($ttl, "UTF-8"), $this->protocol.$this->there, 0);
+                    $this->db->insert($ttl, $this->protocol.$this->there);
 
                     $uploader->delete();
                     $this->redirect($this->protocol.$this->uri, "upload_msg");
                 }
                 else if (isset($_FILES["uploaddata"])) {
-                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 2000000);
+                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 4000000);
 
-                    $uploader->upload($_FILES["uploaddata"]);
+                    if (!$uploader->upload($_FILES["uploaddata"])) {
+                        $this->redirect($this->protocol.$this->uri, "upload_err", 400);
+                        return;
+                    }
 
                     foreach($uploader->get_filenames() as $file){
 
                         $f_name = $f_no_ext = explode(".", basename($file))[0];
 
-                        $pre_q = "@prefix dcterms: <http://purl.org/dc/terms/> .
-                            @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                            @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                            
-                            SELECT ?out WHERE {?in dcterms:source ?out . FILTER(REGEX(?out, \"$f_no_ext( \([0-9]+\)|)\"))} GROUP BY ?out";
-                        $rows = $this->db->store->query($pre_q);
+                        $pre_q = "SELECT ?out WHERE {?in dcterms:source ?out . FILTER(REGEX(?out, \"$f_no_ext( \([0-9]+\)|)\"))} GROUP BY ?out";
+                        $rows = $this->db->query($pre_q);
 
                         $occs = count($rows['result']['rows']);
                         if ($occs > 0) {
@@ -478,19 +474,7 @@ class RequestHandler {
                             $contents = str_replace($f_name, $f_no_ext, $contents);
                         }
 
-                        $chunks = explode(".\n", $contents);
-                        $chunks = array_chunk($chunks, 1000);
-
-                        foreach($chunks as $ch) {
-
-                            $s = implode(".\n", $ch);
-
-                            $this->db->store->insert( $s, $this->protocol.$this->there, 0);
-                        
-                            if ($errs = $this->db->store->getErrors()) {
-                                $this->output .= var_dump($errs);
-                            }
-                        }
+                        $this->db->insert($contents, $this->protocol.$this->there);
 
                     }
 
@@ -516,11 +500,7 @@ class RequestHandler {
                     $file = $_DELETE['file'];
                     $lang = $_DELETE['lang'];
 
-                    $this->db->store->query("@prefix dcterms: <http://purl.org/dc/terms/> .
-                    @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                    
-                    DELETE {
+                    $this->db->query("DELETE {
                         ?truc dcterms:date \"$date\" .
                         ?truc dcterms:language \"$lang\" .
                         ?truc dcterms:source \"$file\" .
@@ -538,10 +518,6 @@ class RequestHandler {
                       FILTER( lang(?txt) = \"$lang\")
                     
                     }");
-
-                    if ($errs = $this->db->store->getErrors()) {
-                        http_response_code(400);
-                    }
                 }
                 else if ($_DELETE['type'] == "delete_data" && isset($_DELETE['file'])) {
                     
@@ -552,15 +528,13 @@ class RequestHandler {
                      * Ainsi, on supprime le lien entre le fichier et ces définitions, et l'on a alors les mains libre pour supprimer entièrement ce qui est
                      * uniquement issu de ce fichier.
                      */
-                    $pre_q = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
-
-                    SELECT DISTINCT ?el (COUNT(?src2) AS ?nb) WHERE { 
+                    $pre_q = "SELECT DISTINCT ?el (COUNT(?src2) AS ?nb) WHERE { 
                     
                       ?el dcterms:source ?src, ?src2 .
                       FILTER (?src = \"$file\")
                     
                     } GROUP BY ?el";
-                    $res = $this->db->store->query($pre_q);
+                    $res = $this->db->query($pre_q);
                     
                     $unlink = array();
                     foreach($res['result']['rows'] as $row) {
@@ -569,27 +543,13 @@ class RequestHandler {
                         }
                     }
 
-                    $del_assoc = "@prefix dcterms: <http://purl.org/dc/terms/> .
-                    @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                    
-                    DELETE {
+                    $del_assoc = "DELETE {
                         <".implode("> dcterms:source \"$file\" .<", $unlink)."> dcterms:source \"$file\" .
                     }";
 
-                    $this->db->store->query($del_assoc);
+                    $this->db->query($del_assoc);
 
-                    if ($errs = $this->db->store->getErrors()) {
-                        $this->output .= htmlentities($del_assoc);
-                        http_response_code(400);
-                        return;
-                    }
-
-                    $del_all = "@prefix dcterms: <http://purl.org/dc/terms/> .
-                    @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                    @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                    
-                    DELETE {
+                    $del_all = "DELETE {
                         ?in ?pred ?out .
                     }
                     
@@ -598,13 +558,7 @@ class RequestHandler {
                         ?in ?pred ?out .
                     }";
 
-                    $this->db->store->query($del_all);
-
-                    if ($errs = $this->db->store->getErrors()) {
-                        $this->output .= htmlentities($del_all);
-                        http_response_code(400);
-                        return;
-                    }
+                    $this->db->query($del_all);
                 }
                 else if ($_DELETE['type'] == "delete_contact" && isset($_DELETE['file'])) {
 
@@ -757,7 +711,7 @@ class RequestHandler {
             $clefs = json_decode(file_get_contents("secure/clefs.json"), true);
         }
 
-        $jwt = JWT::encode($id, '+30 minutes');
+        $jwt = JWT::encode($id, '+60 minutes');
         $jws = JWS::encode($jwt, base64_decode($clefs['keys']['sig-session']['key']));
         $jwe = JWE::encode($jws, get_public_key(base64_decode($clefs['keys']['enc-session']['key'])));
 
@@ -886,20 +840,14 @@ class RequestHandler {
     function search_query(array $query): array {
 
         $corres = array(
-            "subject" => "dc:subject",
-            "title" => "dc:title",
-            "coverage" => "dc:coverage",
+            "subject" => "dcterms:subject",
+            "title" => "dcterms:title",
+            "coverage" => "dcterms:coverage",
             "pron" => "lex:pron",
             "etymo" => "lex:etymo",
         );
 
-        $head = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-        @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-        @prefix dc:    <http://purl.org/dc/terms/> .
-        @prefix lex:   <lexique/> .";
-
-        $body = "WHERE { ?in dc:title ?title . ";
+        $body = "WHERE { ?in dcterms:title ?title . ";
 
         foreach(array_keys($query) as $criterion) {
             if(!array_key_exists($criterion, $corres) || sizeof($query[$criterion]) <= 0) {
@@ -914,13 +862,13 @@ class RequestHandler {
 
         $body .= "}";
 
-        $nb_results = $this->db->query("$head SELECT COUNT(?title) AS ?nb $body")['result']['rows'][0]['nb'];
+        $nb_results = (int)array_sum(array_map(function($item){return $item['nb'];}, $this->db->query("SELECT DISTINCT COUNT(?in) AS ?nb $body")['result']['rows']));
 
         $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : ceil((self::PAGE_SIZE_MAX - self::PAGE_SIZE_MIN) / 2);
         $offset    = (isset($query['page']) ? max((int)$query['page'][0]-1, 0) : 0)*$page_size;
         $nb_pages  = (int)ceil($nb_results / $page_size);
         
-        $q = "$head DESCRIBE ?in $body ORDER BY (?title) LIMIT $page_size OFFSET ".$offset;
+        $q = "DESCRIBE ?in $body ORDER BY (?title) LIMIT $page_size OFFSET ".$offset;
         return array("pagination" => array(
             "nb_results" => $nb_results,
             "page_size"  => $page_size,
@@ -963,14 +911,9 @@ class RequestHandler {
                 }
                 else if ($item == 'identifier') {
 
-                    $q_s = "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-                        @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-                        @prefix dc:    <http://purl.org/dc/terms/> .
-                        @prefix lex:   <lexique/> .
-                        SELECT ?title ?in WHERE {
-                            ?in dc:identifier \"".$res['result'][$def_id][$pred][0]["value"]."\" .
-                            ?in dc:title ?title .
+                    $q_s = "SELECT ?title ?in WHERE {
+                            ?in dcterms:identifier \"".$res['result'][$def_id][$pred][0]["value"]."\" .
+                            ?in dcterms:title ?title .
                         }
                         ";
                     

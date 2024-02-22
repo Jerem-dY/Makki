@@ -7,3 +7,4 @@ Extraction_Donnees/*.ttl
 Extraction_Donnees/*.json
 Extraction_Donnees/*.docx
 Extraction_Donnees/*.txt
+*.pyc

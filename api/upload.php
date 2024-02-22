@@ -44,7 +44,7 @@ class FileUploader {
         }
     }
 
-    public function upload(array $filelist) {
+    public function upload(array $filelist): bool {
 
         /**
          * Etape 2 : on vérifie les fichiers à uploader.
@@ -52,7 +52,7 @@ class FileUploader {
          * */
         if(!isset($filelist)){
             print "<br/>No files to upload. Aborting.<br/>";
-            http_response_code(400);
+            return false;
         }
 
         $size = 0;
@@ -63,13 +63,13 @@ class FileUploader {
             $fname = end($fname);
             if (!in_array($fname, $this->valid_ext)) {
                 echo "<br/>Wrong filetype. Aborting.<br/>";
-                http_response_code(400);
+                return false;
             }
         }
 
         if($size > $this->max_size){
             print "<br/>Upload size is too big : ".$size.". Aborting.<br/>";
-            http_response_code(400);
+            return false;
         }
 
 
@@ -88,11 +88,15 @@ class FileUploader {
                 array_push($this->files, $target_path);
                 if (!chmod($target_path, 0666)) {
                     echo "<br/>Something went wrong with permissions...<br/>";
+                    return false;
                 }
             } else {
                 echo "<br/>Possible file upload attack! File '".$filelist['name'][$i]."' not uploaded at $target_path.<br/>";
+                return false;
             }
         }
+
+        return true;
     }
 
     public function get_filenames(): array {

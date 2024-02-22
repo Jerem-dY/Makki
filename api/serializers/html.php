@@ -77,6 +77,9 @@ class HTMLSerializer extends Serializer {
         $recherche_poussee_link = $header->find("#recherche_poussee", 0);
         $recherche_poussee_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."recherche";
 
+        $lexique_entier_link = $header->find("#lexique_entier", 0);
+        $lexique_entier_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique";
+
         $lang_list->innertext = "";
         $sorted_langs = $langs;
         asort($sorted_langs);
@@ -87,7 +90,7 @@ class HTMLSerializer extends Serializer {
             $lang_list->innertext .= "<li><a ". ($c == $nb ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.$l[0]."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">".$l[0]."</a></li>";
         }
 
-        $themes_list->innertext = "";
+        $themes_list->innertext = "<li><a id=\"valeur_aucune\" class=\"trad\" href=\"".$protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique?subject=none\"></a></li>";
         $sorted_themes = $themes;
         asort($sorted_themes);
         $nb = count($sorted_themes);
@@ -200,7 +203,7 @@ class HTMLSerializer extends Serializer {
 
         foreach($html->find('table#table_fichier_trad>tbody') as $t) {
 
-            $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?language ?file ?date WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?file ?language ?date");
+            $rows = $this->db->query("SELECT ?language ?file ?date WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?file ?language ?date");
 
             foreach($rows['result']['rows'] as $r) {
                 $lang = $r['language'];
@@ -222,9 +225,7 @@ class HTMLSerializer extends Serializer {
 
         foreach($html->find('table#table_fichier_data>tbody') as $t) {
 
-            $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
-
-            SELECT ?file WHERE { ?in dcterms:source ?file . ?in dcterms:title ?title } GROUP BY ?file");
+            $rows = $this->db->query("SELECT ?file WHERE { ?in dcterms:source ?file . ?in dcterms:title ?title } GROUP BY ?file");
 
             foreach($rows['result']['rows'] as $r) {
                 $file = $r['file'];
