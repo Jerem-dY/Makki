@@ -319,11 +319,11 @@ class HTMLSerializer extends Serializer {
 
             $export_btn = $template->find("#export_data_btn", 0);
             $temp_q = $pagination['query'];
-            $export_btn->setAttribute("data-url", $protocol.$base_url."lexique?".$make_query_string($temp_q, (isset($temp_q['page']) ? $temp_q['page'][0] : 1), $pagination['page_size']));
+            $export_btn->setAttribute("data-url", $protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?".$make_query_string($temp_q, (isset($temp_q['page']) ? $temp_q['page'][0] : 1), $pagination['page_size']));
             $temp_q['mime'] = $mimes[0];
 
             
-            $export_btn->href = $protocol.$base_url."lexique?".$make_query_string($temp_q, isset($temp_q['page']) ? $temp_q['page'][0] : 1, $pagination['page_size']);
+            $export_btn->href = $protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?".$make_query_string($temp_q, isset($temp_q['page']) ? $temp_q['page'][0] : 1, $pagination['page_size']);
             
         }
         else {
@@ -378,7 +378,7 @@ class HTMLSerializer extends Serializer {
         }
 
         foreach(array_keys($word_data) as $word) {
-            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\"><a class=\"mot_titre\" href=\"".$protocol.$base_url."lexique/".$word."\">$word<a></h3>";
+            $ex->innertext .= "<ol id=\"$word\" class=\"thematiqueseule\"><h3 lang=\"ar\" dir=\"rtl\"><a class=\"mot_titre\" href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique/".$word."\">$word<a></h3>";
 
             foreach(array_keys($word_data[$word]) as $def_id) {
 
@@ -400,7 +400,7 @@ class HTMLSerializer extends Serializer {
                     foreach($word_data[$word][$def_id]["subject"] as $subject) {
                         if ($subject["lang"] == $langs[0][0]) {
                             $one = true;
-                            $txt .= "<li lang=\"".$subject["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?subject=".urlencode($subject["value"])."\">".$subject["value"]."</a></li>";
+                            $txt .= "<li lang=\"".$subject["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?subject=".urlencode($subject["value"])."\">".$subject["value"]."</a></li>";
                         }
                     }
 
@@ -415,12 +415,12 @@ class HTMLSerializer extends Serializer {
 
                     $txt = "<p class=\"trad\" id=\"synonyme\">Synonymes : </p><p lang=\"ar\" dir=\"rtl\"> ";
 
-                    $map = function($syn) use ($word, $protocol, $base_url, $word_data) {
+                    $map = function($syn) use ($word, $protocol, $base_url, $word_data, $req_lang) {
 
                             if (array_key_exists($syn["value"], $word_data)) {
                                 $link = "#".$syn["value"];
                             } else {
-                                $link = ($protocol.$base_url."lexique/".urlencode($syn["value"]));
+                                $link = $protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique/".urlencode($syn["value"]);
                             }
                             return "<i><a href=\"".$link."\">".$syn["value"]."</a></i>";
                         };
@@ -446,7 +446,7 @@ class HTMLSerializer extends Serializer {
                     foreach($word_data[$word][$def_id]["coverage"] as $coverage) {
                         if ($coverage["lang"] == $langs[0][0]) {
                             $one = true;
-                            $txt .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
+                            $txt .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
                         }
                     }
 
@@ -463,7 +463,7 @@ class HTMLSerializer extends Serializer {
                     foreach($word_data[$word][$def_id]["pron"] as $pron) {
                         if ($pron["lang"] == $langs[0][0]) {
                             $one = true;
-                            $txt .= "<li lang=\"".$pron["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?pron=".urlencode($pron["value"])."\">".$pron["value"]."</a></li>";
+                            $txt .= "<li lang=\"".$pron["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?pron=".urlencode($pron["value"])."\">".$pron["value"]."</a></li>";
                         }
                     }
 
@@ -479,7 +479,7 @@ class HTMLSerializer extends Serializer {
                     $one = false;
                     foreach($word_data[$word][$def_id]["etymo"] as $etymo) {
                         if ($etymo["lang"] == $langs[0][0]) {
-                            $txt .= "<li lang=\"".$etymo["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url."lexique?etymo=".urlencode($etymo["value"])."\">".$etymo["value"]."</a></li>";
+                            $txt .= "<li lang=\"".$etymo["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?etymo=".urlencode($etymo["value"])."\">".$etymo["value"]."</a></li>";
                         }
                     }
 
