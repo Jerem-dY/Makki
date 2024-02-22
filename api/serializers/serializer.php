@@ -1,15 +1,24 @@
 <?php 
 
+/**
+ * Classe abstraite réunissant les différents sérialiseurs, chargés de générer la représentation de ressource désirée.
+ */
 abstract class Serializer {
 
     protected const TRANSLATION_LANG = 0;
     protected const TRANSLATION_TEXT = 1;
     protected const TRANSLATION_DIR  = 2;
 
+    /**
+     * @param $db Accès à la base de données
+     */
     function __construct($db) {
         $this->db = $db;
     }
 
+    /**
+     * Méthode permettant de générer la représentation de ressource
+     */
     abstract public function make(
         string $page, 
         string $base_url, 
