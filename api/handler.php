@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class RequestHandler {
 
     const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
-    const PAGE_SIZE_MAX      = 200;
+    const PAGE_SIZE_MAX      = 30;
     const PAGE_SIZE_MIN      = 1;
 
     /**
@@ -83,7 +83,6 @@ class RequestHandler {
 
         // On commence par récupérer les langues disponibles
         // Il s'agit d'un premier tri ; pour chaque élément il faudra faire attention à effectuer les vérifications nécessaires
-        #TODO: ne récupérer que les littérales qui appartiennent à l'interface
         $rows = $this->db->query("SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
         $lang_available = array();
 
@@ -104,8 +103,7 @@ class RequestHandler {
             }
         }
 
-        if (!in_array("fr", $this->lang) && in_array("fr", $lang_available))
-            array_push($this->lang, "fr"); # Langue par défaut (si disponible)
+        $this->lang = array_merge($this->lang, array_diff($lang_available, $this->lang));
         
         // On récupère le sens de lecture `dir` associé à chaque langue
         $this->lang = array_map(
@@ -274,7 +272,6 @@ class RequestHandler {
                 
                 $token = $this->make_nonce();
 
-
                 $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes, array_keys($available));
             }
         }
@@ -355,7 +352,7 @@ class RequestHandler {
                 }    
 
                 if (isset($_FILES["uploadtrad"])) {
-                    $uploader = new FileUploader(array("xlsx"), $this->id, 4000000);
+                    $uploader = new FileUploader(array("xlsx"), $this->id, 2500000);
 
 
                     if (!$uploader->upload($_FILES["uploadtrad"])) {
@@ -449,7 +446,7 @@ class RequestHandler {
                     $this->redirect($this->protocol.$this->uri, "upload_msg");
                 }
                 else if (isset($_FILES["uploaddata"])) {
-                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 4000000);
+                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 2500000);
 
                     if (!$uploader->upload($_FILES["uploaddata"])) {
                         $this->redirect($this->protocol.$this->uri, "upload_err", 400);
@@ -864,16 +861,19 @@ class RequestHandler {
 
         $nb_results = (int)array_sum(array_map(function($item){return $item['nb'];}, $this->db->query("SELECT DISTINCT COUNT(?in) AS ?nb $body")['result']['rows']));
 
-        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : ceil((self::PAGE_SIZE_MAX - self::PAGE_SIZE_MIN) / 2);
+        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : self::PAGE_SIZE_MAX;
         $offset    = (isset($query['page']) ? max((int)$query['page'][0]-1, 0) : 0)*$page_size;
         $nb_pages  = (int)ceil($nb_results / $page_size);
+
+        
         
         $q = "DESCRIBE ?in $body ORDER BY (?title) LIMIT $page_size OFFSET ".$offset;
+
         return array("pagination" => array(
-            "nb_results" => $nb_results,
-            "page_size"  => $page_size,
-            "offset"     => $offset,
-            "nb_pages"   => $nb_pages,
+            "nb_results" => (int)$nb_results,
+            "page_size"  => (int)$page_size,
+            "offset"     => (int)$offset,
+            "nb_pages"   => (int)$nb_pages,
             "query"      => $query
         ), "data" => $this->db->query($q));
     }
