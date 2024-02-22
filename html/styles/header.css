@@ -448,6 +448,7 @@ input:placeholder-shown {
     background: #301703;
     font-style: normal;
     box-shadow: 0 4px 0 darken(#301703, 5%);
+    cursor: pointer; 
   
   }
   
@@ -473,18 +474,14 @@ input:placeholder-shown {
 
   .button_1 {
 
-    width: 100%;
-    margin-bottom: 5px;
-    border: 0;
-    outline: 0;
+    padding-left: 37px; 
+    padding-right: 37px;
+    color: #fff;
+    font-size: 15px;
     background: #B0C4DE;
-    font-weight: 300;
     border-radius: 2px;
     font-family: 'El Messiri', sans-serif;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  
+
   }
 
   .button_2 {
@@ -493,6 +490,7 @@ input:placeholder-shown {
     margin-bottom: 5px;
     border: 0;
     outline: 0;
+    cursor: pointer; 
     background: #301703;
     color: #fff;
     font-weight: 300;
