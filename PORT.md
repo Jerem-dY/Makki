@@ -44,10 +44,12 @@ Créez le fichier `config/db.json` avec la structure suivante :
 }
 ```
 
-Les deux derniers champs étant à laisser tels quels.
+Le premier et les deux derniers champs étant à laisser tels quels.
 
 De la même façon, **créez le fichier `config/server.txt` et inscrivez-y seulement l'adresse du serveur**.
-Par exemple, pour un serveur `www.example.com`, écrire `www.example.com`. Si le serveur est partagé, cela peut être `www.example.com/vous/` ou `www.example.com/vous/makki/` (en fonction de si vous avez plusieurs sites dans `public_html`).
+Par exemple, pour un serveur `www.example.com`, écrire `www.example.com`. Si le serveur est partagé, cela peut être `www.example.com/vous/` ou `www.example.com/vous/makki/` (en fonction de si vous avez plusieurs sites dans `public_html`). N'incluez pas le protocole dedans (`http://`, ...).  
+
+Créez ensuite les dossiers *secure* et *uploads* en donnant les droits en lecture et en écriture au serveur (par exemple, à *www-data* pour un serveur Apache sous distribution Linux).
 
 #### Etape 4 : Mise en place des dépendances PHP
 
@@ -58,7 +60,7 @@ Un simple `php composer update` est ensuite suffisant pour installer les dépend
 **/!\ NOTE :** en fonction de la version installée de *semsol/arc2*, il peut être nécessaire d'effectuer [une petite correction](https://github.com/semsol/arc2/issues/122) (un bug corrigé dans les versions plus récentes, mais indisponibles pour les versions de PHP < 8.0).
 Dans le fichier `ARC2_StoreLoadQueryHandler.php`, ligne 228, il faut changer `if (false !== empty($binaryValue)) {` par `if (false == empty($binaryValue)) {` (égal au lieu de strictement différent).
 
-#### Etape 4 : Ajout d'un administrateur
+#### Etape 5 : Ajout d'un administrateur
 
 Rendez-vous une première fois sur la version en ligne du site ; cela mettra en place la base de données automatiquement. 
 Une fois cela fait, accédez à votre base de données (via PHPmyadmin, en ligne de commande ou autre...) et ajoutez un enregistrement dans la table `admin` : 

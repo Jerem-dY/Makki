@@ -575,14 +575,30 @@ class RequestHandler {
 
     }
 
+    /**
+     * Ajoute un en-tête HTTP
+     * 
+     * @param string $h Le nom de l'en-tête (sans `:`)
+     * @param string $v La valeur de l'en-tête
+     */
     function add_header(string $h, string $v): void {
         $this->header[$h] = $v;
     }
 
+    /**
+     * Ajoute un cookie dans l'en-tête de la réponse
+     * 
+     * @param string $name Le nom du cookie (sans `:`)
+     * @param string $value La valeur du cookie
+     * @param int $t La date d'expiration du cookie
+     */
     function add_cookie(string $name, string $value, int $t) {
         $this->add_header("Set-Cookie", urlencode($name)."=".urlencode($value)."; Expires=".date("D, d M Y H:i:s", $t)."GMT"."; path=/; domain=".$GLOBALS['iss']."; HttpOnly; SameSite=Strict");
     }
 
+    /** 
+     * Méthode envoyant les en-têtes définies durant le traitement de la requête.
+     */
     function send_header(): void {
 
         foreach(array_keys($this->header) as $h) {
@@ -590,6 +606,11 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Méthode permettant de récupérer l'URL complète de la page d'accueil
+     * 
+     * @return string L'URL de la page d'accueil
+     */
     function get_homepage(): string {
         return $this->protocol . $this->there . (isset($this->request['lang']) ? $this->request['lang'].'/' : "" );
     }
@@ -621,16 +642,28 @@ class RequestHandler {
         http_response_code($code);
     }
 
+    /**
+     * Déconnecte l'utilisateur en définissant une redirection, un message spécifique ainsi qu'en supprimant le cookie de session.
+     */
     function disconnect() {
         $this->redirect($this->protocol.$this->uri, "deco_msg");
         $this->add_cookie("makki_user", "", 1);
     }
 
+    /**
+     * Défini une redirection et un message spécifiques à un problème d'authentification
+     */
     function unauthorized() {
         $this->redirect("", "unauth_err", 401);
         return;
     }
 
+    /**
+     * Génère un eTag, ou timestamp (horodatage) permettant de définir quand la ressource a été modifiée pour la dernière fois, à partir de la date de modification du fichier.
+     * 
+     * @param string $filepath Le chemin vers le fichier concerné
+     * @return array|bool Un tuple (timestamp ; eTag) ou false si le fichier n'existe pas. Le timestamp est souvent utilisé pour l'en-tête `Expires`
+     */
     function make_etag(string $filepath) {
 
         if (is_file($filepath)) {
@@ -646,6 +679,13 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Permet de vérifier si une ressource a été modifiée et, le cas échéant, de fournir la nouvelle version de la ressource.
+     * 
+     * @param string $filepath Le chemin vers la ressource
+     * @param string $content_type Le type MIME de la ressource
+     * @return int Le code de réponse HTTP requis
+     */
     function cache(string $filepath, string $content_type) {
 
         $etag = $this->make_etag($filepath);
@@ -695,6 +735,11 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Génère un token de session pour l'utilisateur, sous la forme d'un JSONWebToken envoyé en cookie.
+     * 
+     * @param int $id L'id de l'utilisateur dans la base de données
+     */
     function make_session(int $id) {
 
         if (!file_exists("secure/clefs.json")) {
@@ -716,6 +761,11 @@ class RequestHandler {
         $this->add_cookie("makki_user", $jwe, $dec['exp']);
     }
 
+    /**
+     * Méthode validant ou non la session de l'utilisateur (sous la forme du cookie `makki_user` reçu)
+     * 
+     * @return array Un tuple authentifié? (bool) et id utilisateur (int, -1 si pas authentifié)
+     */
     function retrieve_session(): array {
 
         if (isset($_COOKIE["makki_user"])) {
@@ -752,6 +802,11 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Méthode générant un jeton anti-CSRF
+     * 
+     * @return string Le jeton encodé (à destination des formulaires ; un cookie est aussi ajouté pour le double-send)
+     */
     function make_nonce(): string {
 
         if (!file_exists("secure/clefs.json")) {
@@ -774,6 +829,12 @@ class RequestHandler {
         return $jws;
     }
 
+    /**
+     * Permet de récupérer un jeton anti-CSRF
+     * 
+     * @param string $nonce Le jeton à décoder
+     * @return string|false Le jeton décodé ou false si rejeté
+     */
     function retrieve_nonce(string $nonce) {
 
         if (!isset($nonce)) {
@@ -802,7 +863,12 @@ class RequestHandler {
         return $decoded;
     }
 
-    function validate_tokens() {
+    /**
+     * Méthode validant les jetons anti-CSRF
+     * 
+     * @return bool Si les jetons sont identiques ou non
+     */
+    function validate_tokens(): bool {
 
         if ($this->method == "DELETE") {
             parse_str(file_get_contents('php://input'), $_DELETE);
@@ -833,7 +899,12 @@ class RequestHandler {
         return true;
     }
 
-
+    /**
+     * Génère les résultats de recherche de l'utilsateur
+     * 
+     * @param array $query La query string traitée par le `RequestParser`
+     * @return array Les données brutes récupérées
+     */
     function search_query(array $query): array {
 
         $corres = array(
@@ -878,7 +949,14 @@ class RequestHandler {
         ), "data" => $this->db->query($q));
     }
 
-    function get_data(array $query, bool $raw = false) {
+    /**
+     * Met en forme les données de search_query() si besoin
+     * 
+     * @param array $query La query string traitée par le `RequestParser`
+     * @param bool $raw Permet de bypass la mise en forme (utilisé pour les représentations comme RDF)
+     * @return array Les données formatées ou non
+     */
+    function get_data(array $query, bool $raw = false): array {
 
         // On prépare puis effectue la requête pour récupérer les infos :
 
@@ -957,6 +1035,4 @@ class RequestHandler {
     }
 
 }
-
-
 ?>

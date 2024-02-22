@@ -3,9 +3,9 @@ config/db.json
 config/server.txt
 py
 .venv
-Extraction_Donnees/*.ttl
-Extraction_Donnees/*.json
-Extraction_Donnees/*.docx
-Extraction_Donnees/*.txt
-Extraction_Donnees/__pycache__
+/Extraction_Donnees/*.ttl
+/Extraction_Donnees/*.json
+/Extraction_Donnees/*.docx
+/Extraction_Donnees/*.txt
+/Extraction_Donnees/__pycache__
 *.pyc
