@@ -132,6 +132,12 @@ to {
     }
 } 
 
+@supports (-moz-appearance:none) {
+  header.top-header {
+      animation: g4 infinite linear;
+  }
+}
+
 /* Barre de navigation */
 .menu {
 
