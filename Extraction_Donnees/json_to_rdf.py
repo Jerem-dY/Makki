@@ -24,7 +24,7 @@ def convert_to_rdf(input_json, source_file_name):
         {abstract} .
         """
 
-    with open(input_json, 'r', encoding='utf-8') as json_file:
+    with open(input_json, mode='r', encoding='utf-8') as json_file:
         data = json.load(json_file)
 
     source_file_name = os.path.basename(source_file_name)

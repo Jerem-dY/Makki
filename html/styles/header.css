@@ -744,12 +744,15 @@ input:placeholder-shown {
   
   }
 
-  button, input, a {
-    transition: transform 200ms ease-in-out;
+  div.msg {
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+    background-color: #fce5d3;
+    border-radius: 4px;
+    font-size:12px;
+    border: 1.5px solid black;
+    vertical-align: middle;
+    max-height: 30px;
+    text-align:left;
   }
-
-  button:hover, input:hover, a:hover {
-    transform: scale(1.02);
-    backface-visibility: hidden;
-  }
-

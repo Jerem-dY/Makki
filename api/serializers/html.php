@@ -49,6 +49,18 @@ class HTMLSerializer extends Serializer {
         $html = $output->find('html', 0);
         $body = $html->find('body', 0);
 
+        if(isset($request['query']['msg'])) {
+
+            foreach($request['query']['msg'] as $id) {
+                $ts = $this->fetch_translation($id, $langs, $base_url, $protocol);
+                $lang = $ts[self::TRANSLATION_LANG];
+                $dir = $ts[self::TRANSLATION_DIR];
+                $value = $ts[self::TRANSLATION_TEXT];
+
+                $body->innertext = "<div class=\"msg\"><p lang=\"$lang\" dir=\"$dir\">$value</p><button class=\"msg_btn\">x</button></div>" . $body->innertext;
+            }
+        }
+
         $bar = $header->find('.barre', 0);
         $lang_list = $bar->find('ul#lang_liste', 0);
         $themes_list = $bar->find('ul#thematiques_liste', 0);
@@ -65,6 +77,9 @@ class HTMLSerializer extends Serializer {
         $recherche_poussee_link = $header->find("#recherche_poussee", 0);
         $recherche_poussee_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."recherche";
 
+        $lexique_entier_link = $header->find("#lexique_entier", 0);
+        $lexique_entier_link->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique";
+
         $lang_list->innertext = "";
         $sorted_langs = $langs;
         asort($sorted_langs);
@@ -75,7 +90,7 @@ class HTMLSerializer extends Serializer {
             $lang_list->innertext .= "<li><a ". ($c == $nb ? "class=\"arrondie\"" : "") ." href=\"".$protocol.$base_url.$l[0]."/". (isset($request['collection']) ? $request['collection'] . "/" : ""). (isset($request['target']) ? $request['target'] . "/" : "") ."\">".$l[0]."</a></li>";
         }
 
-        $themes_list->innertext = "";
+        $themes_list->innertext = "<li><a id=\"valeur_aucune\" class=\"trad\" href=\"".$protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."lexique?subject=none\"></a></li>";
         $sorted_themes = $themes;
         asort($sorted_themes);
         $nb = count($sorted_themes);
@@ -88,7 +103,7 @@ class HTMLSerializer extends Serializer {
         if ($connected) {
             $header->find('.login-wrapper', 0)->outertext = "";
             $header->find(".login-wrapper_connecte", 0)->removeAttribute("hidden");
-            $header->find("#form_admin", 0)->action = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."administration";
+            $header->find("#bouton_admin", 0)->href = $protocol.$base_url.(isset($request['lang']) ? $request['lang']."/" : "")."administration";
         }
         else {
             $header->find(".login-wrapper_connecte", 0)->outertext = "";
@@ -128,6 +143,7 @@ class HTMLSerializer extends Serializer {
             $output->find("html", 0)->setAttribute("data-nonce", urlencode($token));
             $output = $this->make_table_trad($output, $protocol, $base_url);
             $output = $this->make_table_data($output, $protocol, $base_url);
+            $output = $this->make_table_contact($output, $protocol, $base_url);
         }
         $output = $output->save();
         $output = str_get_html($output);
@@ -187,7 +203,7 @@ class HTMLSerializer extends Serializer {
 
         foreach($html->find('table#table_fichier_trad>tbody') as $t) {
 
-            $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . SELECT ?language ?file ?date WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?file ?language ?date");
+            $rows = $this->db->query("SELECT ?language ?file ?date WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?file ?language ?date");
 
             foreach($rows['result']['rows'] as $r) {
                 $lang = $r['language'];
@@ -209,15 +225,43 @@ class HTMLSerializer extends Serializer {
 
         foreach($html->find('table#table_fichier_data>tbody') as $t) {
 
-            $rows = $this->db->query("@prefix dcterms: <http://purl.org/dc/terms/> . @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
-
-            SELECT ?file WHERE { ?in dcterms:source ?file . ?in dcterms:title ?title } GROUP BY ?file");
+            $rows = $this->db->query("SELECT ?file WHERE { ?in dcterms:source ?file . ?in dcterms:title ?title } GROUP BY ?file");
 
             foreach($rows['result']['rows'] as $r) {
                 $file = $r['file'];
                 $t->innertext .= "<tr>
                                     <td>$file</td>
                                     <td><button class=\"delete_data trad boutons_fichiers\" data-url=\"".$protocol.$base_url."lexique\" data-file=\"".$file."\" id=\"btn_suppr\">Delete</button></td>
+                                </tr>";
+            }
+        }
+
+        return $html;
+    }
+
+    function make_table_contact($html, $protocol, $base_url) {
+
+        foreach($html->find('table#table_contacts>tbody') as $t) {
+
+            $stt = $this->db->pdo->prepare("SELECT * FROM `contact`");
+            $stt->execute();
+
+            $resultat = $stt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($resultat as $r) {
+
+                $name = $r['name'];
+                $email = $r['email'];
+                $subject = $r['subject'];
+                $message = $r['message'];
+                $id = $r["contact_id"];
+
+                $t->innertext .= "<tr>
+                                    <td>$name</td>
+                                    <td>$email</td>
+                                    <td>$subject</td>
+                                    <td>$message</td>
+                                    <td><button class=\"delete_contact trad boutons_fichiers\" data-file=\"$id\" data-url=\"".$protocol.$base_url."contact\" id=\"btn_suppr\">Delete</button></td>
                                 </tr>";
             }
         }

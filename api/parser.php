@@ -126,13 +126,20 @@ class RequestParser {
         foreach ($pairs as $i) {
 
           // On récupère le nom et la valeur
-          list($name,$value) = explode('=', $i, 2);
-          
-          if (!isset($output[$name])) {
-            $output[$name] = array();
-          }
-          
-          array_push($output[$name], $value);
+          $ex = explode('=', $i, 2);
+
+            if (sizeof($ex) == 2) {
+                list($name,$value) = $ex;
+            }
+            else {
+                continue;
+            }
+            
+            if (!isset($output[$name])) {
+                $output[$name] = array();
+            }
+            
+            array_push($output[$name], $value);
         }
       
         return $output;

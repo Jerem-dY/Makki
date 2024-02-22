@@ -81,7 +81,7 @@ cursor: pointer;
 
 
 .search-options {
-    display:inline-block;;
+    display:grid;
     align-items: center;
 }
 
@@ -103,4 +103,12 @@ cursor: pointer;
 
 .hidden {
     display: none;
+}
+
+.bouton_suppr {
+
+    width: 25px;
+    vertical-align:middle;
+    padding-right: 30px;
+
 }
