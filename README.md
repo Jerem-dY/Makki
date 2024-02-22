@@ -6,7 +6,7 @@ Le lexique de Makki, une compilation lexicale de grande ampleur, constitue un pr
 
 ## Documentation
 
-- [**Manuel d'utilisation**](manuel.pdf)
+- [**Manuel d'utilisation**](Guide.md)
 - [Note de portabilité](PORT.md)
 - [Note d'architecture](ARCH.md)
 - [Note de sécurité](SECURITY.md)
