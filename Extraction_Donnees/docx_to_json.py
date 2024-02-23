@@ -53,7 +53,7 @@ class ExtractData:
     def parse_coverage(self, s: str, lang: str):
 
         output = []
-
+        s = s.lower()
         # On utilise la regex `regex_coverage` pour découper la chaîne en différentes informations
         for m in self.regex_coverage.finditer(s.strip()):
 
@@ -63,15 +63,15 @@ class ExtractData:
                 output.append((m['first_loc'], lang, prec))
 
             elif m['loc1']:
-                output.append((m['loc1'], lang, m['prec1'] if m['prec1'] else prec))
-                output.append((m['loc2'], lang, m['prec2'] if m['prec2'] else prec))
+                output.append((m['loc1'].lower(), lang, m['prec1'] if m['prec1'] else prec))
+                output.append((m['loc2'].lower(), lang, m['prec2'] if m['prec2'] else prec))
             
             elif m['loc_glob']:
-                output.append((m['loc_glob'], lang, prec))
-                output.append((m['loc'], lang, prec))
+                output.append((m['loc_glob'].lower(), lang, prec))
+                output.append((m['loc'].lower(), lang, prec))
             
             elif m['loca']:
-                output.append((m['loca'], lang, m['prec3'] if m['prec3'] else prec))
+                output.append((m['loca'].lower(), lang, m['prec3'] if m['prec3'] else prec))
         
         return output
 
