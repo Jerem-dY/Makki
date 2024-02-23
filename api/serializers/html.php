@@ -444,7 +444,11 @@ class HTMLSerializer extends Serializer {
 
                     $one = false;
                     foreach($word_data[$word][$def_id]["coverage"] as $coverage) {
-                        if ($coverage["lang"] == $langs[0][0]) {
+                        #if ($coverage["lang"] == $langs[0][0]) {
+                            #$one = true;
+                            #$txt .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
+                        #}
+                        if (strcasecmp($coverage["lang"], $langs[0][0]) === 0) {
                             $one = true;
                             $txt .= "<li lang=\"".$coverage["lang"]."\" dir=\"".$langs[0][1]."\"><a href=\"".$protocol.$base_url.(isset($req_lang) ? $req_lang."/" : "")."lexique?coverage=".urlencode($coverage["value"])."\">".$coverage["value"]."</a></li>";
                         }
