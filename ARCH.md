@@ -27,7 +27,7 @@ L'étape suivante est la **négociation de langue** : définir un ordre de prior
 - On récupère dans la base de données les langues d'interface disponibles
 - Si une langue est précisée dans l'url et qu'elle est disponible, on la considère comme étant la plus importante
 - Les langues définies à travers [l'en-tête HTTP *Accept-Language*](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Accept-Language) et disponibles sont classées selon l'ordre défini par le navigateur (grâce au coefficient *q*)
-- Si le français est disponible et pas déjà présent dans les langues précédemment ajoutées, on lui donne la plus petite priorité (en dernier recours) 
+- Toutes les autres langues disponibles sont ensuite ajoutées, avec la plus faible priorité. 
 
 Une fois cela fait, on passe au traitement de la requête proprement dit. Le système gère trois **méthodes HTTP** :
 - [GET](https://developer.mozilla.org/fr/docs/Web/HTTP/Methods/GET), qui permet de récupérer des informations du serveur sous la forme de documents (on parle de "représentation de ressource") ; il peut s'agir d'images, de scripts, d'html, de json, de xml... Le type de contenu ([dit aussi type MIME](https://fr.wikipedia.org/wiki/Type_de_m%C3%A9dias), et défini dans la réponse par [l'en-tête HTTP *Content-Type*](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Type)) est défini de deux manières possibles : si la `collection` est `images`, `scripts`, `styles` ou `fonts`, il s'agit d'une ressource visuelle ou interactive, on détermine le type par rapport au fichier ciblé. Autrement, le type est défini via [l'en-tête HTTP *Accept*](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Accept). 
@@ -38,7 +38,7 @@ DELETE nécessite obligatoirement d'être authentifié, ce qui est aussi le cas 
 
 Le système s'occupe après de récupérer ou de verser les données nécessaires depuis ou vers la base de données à travers [DB](api/db.php). Si des fichiers sont à télécharger, ils sont temporairement stockés par [FileUploader](api/upload.php) dans `/uploads/<id_utilisateur>` puis supprimés. Enfin, si une représentation doit être générée dynamiquement, cela se fait à travers le [sérialiseur](api/serializers/) correspondant au type demandé (association définie dans [`mimes.json`](config/mimes.json)).
 
-[`index.php`](index.php) génère ensuite les en-tête de réponse nécessaires à partir du [RequestHandler](api/handler.php) puis envoie le corps généré.  
+[`index.php`](index.php) envoit ensuite les en-tête de réponse nécessaires à partir du [RequestHandler](api/handler.php) puis envoie le corps généré.  
 
 ```mermaid
 ---
@@ -48,9 +48,27 @@ flowchart LR
     index[index.php]
     RequestHandler
     RequestParser
-    index -->|"(1) Lance"| RequestHandler
-    RequestHandler ----|"(2) Découpe l'URL"| RequestParser
-    RequestHandler --> index
+    Serializer
+    DB[(DB)]
+    JsonWebProcess
+    FileUploader
+    JWT -.->|isa| JsonWebProcess
+    JWS -.->|isa| JsonWebProcess
+    JWE -.->|isa| JsonWebProcess
+    HTMLSerializer -.->|isa| Serializer
+    TEISerializer -.->|isa| Serializer
+    JSONSerializer -.->|isa| Serializer
+    RDFSerializer -.->|isa| Serializer
+    TTLSerializer -.->|isa| Serializer
+    index -->|"Lance"| RequestHandler
+    HTMLSerializer -->|"Récupère les traductions" | DB 
+    RequestHandler -->|"Génère la représentation de ressource"| Serializer
+    RequestHandler -->|"Découpe l'URL, les queries"| RequestParser
+    RequestHandler -->|"Récupère les langues, les données"| DB
+    RequestHandler -->|"Signe les tokens"| JWS
+    RequestHandler -->|"Chiffre les tokens"| JWE
+    RequestHandler -->|"Met en forme les tokens"| JWT
+    RequestHandler -->|"Télécharge les fichiers temporaires"| FileUploader
 ```
 
 ## Arborescence
@@ -67,6 +85,9 @@ flowchart LR
 |[*config*](config)|Contient les différents fichiers de configuration du système.|
 |[*html*](html)|Contient les ressources nécessaires à la génération des sorties, comme les patrons html, les feuilles de style, les scripts et les polices d'écriture.|
 |[*traductions*](traductions)|Contient les fichiers de traduction du site.|
+|[*Extraction_Donnees*](Extraction_Donnees)| Scripts python destinés à extraire les donneés des fichiers .docx du lexique. |
+|[*uploads*](/Extraction_Donnees/uploads)|*(à créer, voir [la note de portabilité](PORT.md#etape-3--configuration))* Dossier accueillant des sous-dossiers pour chaque administrateur, stockant temporairement les fichiers téléversés. |
+|[*secure*](/Extraction_Donnees/secure)|*(à créer, voir [la note de portabilité](PORT.md#etape-3--configuration))* Dossier accueillant les fichiers de clés pour le chiffrement, déchiffrement et signature des tokens. |
 
 ### ./api
 
@@ -98,7 +119,20 @@ flowchart LR
 |[`headers.json`](/config/headers.json)| Définit les headers HTTP par défaut, à inclure dans chaque requête. |
 |[`mimes.json`](/config/mimes.json)| Définit les types mimes acceptés pour les sorties, et les sérialiseurs associés. |
 |[`pages.json`](/config/pages.json)| Permet d'associer un patron HTML à une collection (premier élément de l'URI si pas de langue spécifiée). |
+|[`prefixes.ttl`](/config/prefixes.ttl)| Préfixes RDF à inclure dans chaque requête au TripleStore. |
 |[`server.txt`](/config/server.txt)| *(à créer, voir [la note de portabilité](PORT.md#etape-3--configuration))* Permet au système de connaître l'URL de base, sans le path. Cela est particulièrement nécessaire dans le cas où le site se trouve dans un sous-dossier de *public_html*. |
+
+### ./Extraction_Donnees
+
+|  | Description |
+|---------|-------------|
+|[`annotations.txt`](/Extraction_Donnees/annotations.txt)| Fichier contenant les annotations à ne pas considérer comme des thématiques. |
+|[`docx_to_json.py`](/Extraction_Donnees/docx_to_json.py)| Permet de convertir un fichier docx en un fichier JSON contenant les données du lexique. |
+|[`json_to_rdf.py`](/Extraction_Donnees/json_to_rdf.py)| Permet de convertir une structure JSON du lexique en un fichier rdf importable. |
+|[`rdf_id.py`](/Extraction_Donnees/rdf_id.py)| Utilitaire permettant de générer ddes UUID pour les mots et les définitions. |
+|[`requirements.txt`](/Extraction_Donnees/requirements.txt)| Fichier destiné à être importé par *pip* pour permettre le fonctionnement des scripts en listant les dépendances. |
+|[`main.py`](/Extraction_Donnees/main.py)| Fichier permettant de lancer l'extraction de données du lexique via la ligne de commande. |
+
 
 ### ./html
 

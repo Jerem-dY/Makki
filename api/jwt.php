@@ -316,40 +316,4 @@ class JWT implements JsonWebProcess {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-$test = array(
-    "a" => "truc",
-    "b" => "machin",
-    "c" => "bidule",
-);
-
-$jwt = JWT::encode("test", '+6 minutes');
-
-$jws = JWS::encode($jwt, "aaaaaaaaaaaaaaaaaaaaaaa");
-
-//$jws = str_replace("wiOi", "iiii", $jws);
-
-
-
-$key = openssl_pkey_new(array(
-    "private_key_bits" => 4096,
-    "private_key_type" => OPENSSL_KEYTYPE_RSA,
-));
-
-if (!$key) {
-    echo "Oh no.";
-}
-
-$public_key_pem = openssl_pkey_get_details($key)['key'];
-$public_key = openssl_pkey_get_public($public_key_pem);
-
-$jwe = JWE::encode($jws, $public_key);
-//echo $jwe;
-//$jwe = str_replace("i", "o", $jwe);
-
-$decrypted = JWE::decode($jwe, $key);
-$validated = JWS::decode($decrypted, "aaaaaaaaaaaaaaaaaaaaaaa");
-echo JWT::decode($validated, '');
-*/
 ?>

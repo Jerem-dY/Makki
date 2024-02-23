@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class RequestHandler {
 
     const RESOURCES_COLL = array("images", "scripts", "styles", "fonts", "clefs");
-    const PAGE_SIZE_MAX      = 200;
+    const PAGE_SIZE_MAX      = 30;
     const PAGE_SIZE_MIN      = 1;
 
     /**
@@ -83,7 +83,6 @@ class RequestHandler {
 
         // On commence par récupérer les langues disponibles
         // Il s'agit d'un premier tri ; pour chaque élément il faudra faire attention à effectuer les vérifications nécessaires
-        #TODO: ne récupérer que les littérales qui appartiennent à l'interface
         $rows = $this->db->query("SELECT ?language WHERE { ?in dcterms:source ?file . ?in dcterms:language ?language . ?in dcterms:date ?date } GROUP BY ?language");
         $lang_available = array();
 
@@ -104,8 +103,7 @@ class RequestHandler {
             }
         }
 
-        if (!in_array("fr", $this->lang) && in_array("fr", $lang_available))
-            array_push($this->lang, "fr"); # Langue par défaut (si disponible)
+        $this->lang = array_merge($this->lang, array_diff($lang_available, $this->lang));
         
         // On récupère le sens de lecture `dir` associé à chaque langue
         $this->lang = array_map(
@@ -274,7 +272,6 @@ class RequestHandler {
                 
                 $token = $this->make_nonce();
 
-
                 $this->output .= $builder->make($page, $this->there, $this->lang, $this->request, $this->protocol, $this->auth, $token, isset($word_data) ? $word_data : array(), $themes, array_keys($available));
             }
         }
@@ -355,7 +352,7 @@ class RequestHandler {
                 }    
 
                 if (isset($_FILES["uploadtrad"])) {
-                    $uploader = new FileUploader(array("xlsx"), $this->id, 4000000);
+                    $uploader = new FileUploader(array("xlsx"), $this->id, 2500000);
 
 
                     if (!$uploader->upload($_FILES["uploadtrad"])) {
@@ -449,7 +446,7 @@ class RequestHandler {
                     $this->redirect($this->protocol.$this->uri, "upload_msg");
                 }
                 else if (isset($_FILES["uploaddata"])) {
-                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 4000000);
+                    $uploader = new FileUploader(array("ttl", ".rdf", ".xml"),$this->id, 2500000);
 
                     if (!$uploader->upload($_FILES["uploaddata"])) {
                         $this->redirect($this->protocol.$this->uri, "upload_err", 400);
@@ -578,14 +575,30 @@ class RequestHandler {
 
     }
 
+    /**
+     * Ajoute un en-tête HTTP
+     * 
+     * @param string $h Le nom de l'en-tête (sans `:`)
+     * @param string $v La valeur de l'en-tête
+     */
     function add_header(string $h, string $v): void {
         $this->header[$h] = $v;
     }
 
+    /**
+     * Ajoute un cookie dans l'en-tête de la réponse
+     * 
+     * @param string $name Le nom du cookie (sans `:`)
+     * @param string $value La valeur du cookie
+     * @param int $t La date d'expiration du cookie
+     */
     function add_cookie(string $name, string $value, int $t) {
         $this->add_header("Set-Cookie", urlencode($name)."=".urlencode($value)."; Expires=".date("D, d M Y H:i:s", $t)."GMT"."; path=/; domain=".$GLOBALS['iss']."; HttpOnly; SameSite=Strict");
     }
 
+    /** 
+     * Méthode envoyant les en-têtes définies durant le traitement de la requête.
+     */
     function send_header(): void {
 
         foreach(array_keys($this->header) as $h) {
@@ -593,6 +606,11 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Méthode permettant de récupérer l'URL complète de la page d'accueil
+     * 
+     * @return string L'URL de la page d'accueil
+     */
     function get_homepage(): string {
         return $this->protocol . $this->there . (isset($this->request['lang']) ? $this->request['lang'].'/' : "" );
     }
@@ -624,16 +642,28 @@ class RequestHandler {
         http_response_code($code);
     }
 
+    /**
+     * Déconnecte l'utilisateur en définissant une redirection, un message spécifique ainsi qu'en supprimant le cookie de session.
+     */
     function disconnect() {
         $this->redirect($this->protocol.$this->uri, "deco_msg");
         $this->add_cookie("makki_user", "", 1);
     }
 
+    /**
+     * Défini une redirection et un message spécifiques à un problème d'authentification
+     */
     function unauthorized() {
         $this->redirect("", "unauth_err", 401);
         return;
     }
 
+    /**
+     * Génère un eTag, ou timestamp (horodatage) permettant de définir quand la ressource a été modifiée pour la dernière fois, à partir de la date de modification du fichier.
+     * 
+     * @param string $filepath Le chemin vers le fichier concerné
+     * @return array|bool Un tuple (timestamp ; eTag) ou false si le fichier n'existe pas. Le timestamp est souvent utilisé pour l'en-tête `Expires`
+     */
     function make_etag(string $filepath) {
 
         if (is_file($filepath)) {
@@ -649,6 +679,13 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Permet de vérifier si une ressource a été modifiée et, le cas échéant, de fournir la nouvelle version de la ressource.
+     * 
+     * @param string $filepath Le chemin vers la ressource
+     * @param string $content_type Le type MIME de la ressource
+     * @return int Le code de réponse HTTP requis
+     */
     function cache(string $filepath, string $content_type) {
 
         $etag = $this->make_etag($filepath);
@@ -698,6 +735,11 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Génère un token de session pour l'utilisateur, sous la forme d'un JSONWebToken envoyé en cookie.
+     * 
+     * @param int $id L'id de l'utilisateur dans la base de données
+     */
     function make_session(int $id) {
 
         if (!file_exists("secure/clefs.json")) {
@@ -719,6 +761,11 @@ class RequestHandler {
         $this->add_cookie("makki_user", $jwe, $dec['exp']);
     }
 
+    /**
+     * Méthode validant ou non la session de l'utilisateur (sous la forme du cookie `makki_user` reçu)
+     * 
+     * @return array Un tuple authentifié? (bool) et id utilisateur (int, -1 si pas authentifié)
+     */
     function retrieve_session(): array {
 
         if (isset($_COOKIE["makki_user"])) {
@@ -755,6 +802,11 @@ class RequestHandler {
         }
     }
 
+    /**
+     * Méthode générant un jeton anti-CSRF
+     * 
+     * @return string Le jeton encodé (à destination des formulaires ; un cookie est aussi ajouté pour le double-send)
+     */
     function make_nonce(): string {
 
         if (!file_exists("secure/clefs.json")) {
@@ -777,6 +829,12 @@ class RequestHandler {
         return $jws;
     }
 
+    /**
+     * Permet de récupérer un jeton anti-CSRF
+     * 
+     * @param string $nonce Le jeton à décoder
+     * @return string|false Le jeton décodé ou false si rejeté
+     */
     function retrieve_nonce(string $nonce) {
 
         if (!isset($nonce)) {
@@ -805,7 +863,12 @@ class RequestHandler {
         return $decoded;
     }
 
-    function validate_tokens() {
+    /**
+     * Méthode validant les jetons anti-CSRF
+     * 
+     * @return bool Si les jetons sont identiques ou non
+     */
+    function validate_tokens(): bool {
 
         if ($this->method == "DELETE") {
             parse_str(file_get_contents('php://input'), $_DELETE);
@@ -836,7 +899,12 @@ class RequestHandler {
         return true;
     }
 
-
+    /**
+     * Génère les résultats de recherche de l'utilsateur
+     * 
+     * @param array $query La query string traitée par le `RequestParser`
+     * @return array Les données brutes récupérées
+     */
     function search_query(array $query): array {
 
         $corres = array(
@@ -864,21 +932,31 @@ class RequestHandler {
 
         $nb_results = (int)array_sum(array_map(function($item){return $item['nb'];}, $this->db->query("SELECT DISTINCT COUNT(?in) AS ?nb $body")['result']['rows']));
 
-        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : ceil((self::PAGE_SIZE_MAX - self::PAGE_SIZE_MIN) / 2);
+        $page_size = isset($query['page_size']) ? min(self::PAGE_SIZE_MAX, max(self::PAGE_SIZE_MIN, $query['page_size'][0])) : self::PAGE_SIZE_MAX;
         $offset    = (isset($query['page']) ? max((int)$query['page'][0]-1, 0) : 0)*$page_size;
         $nb_pages  = (int)ceil($nb_results / $page_size);
+
+        
         
         $q = "DESCRIBE ?in $body ORDER BY (?title) LIMIT $page_size OFFSET ".$offset;
+
         return array("pagination" => array(
-            "nb_results" => $nb_results,
-            "page_size"  => $page_size,
-            "offset"     => $offset,
-            "nb_pages"   => $nb_pages,
+            "nb_results" => (int)$nb_results,
+            "page_size"  => (int)$page_size,
+            "offset"     => (int)$offset,
+            "nb_pages"   => (int)$nb_pages,
             "query"      => $query
         ), "data" => $this->db->query($q));
     }
 
-    function get_data(array $query, bool $raw = false) {
+    /**
+     * Met en forme les données de search_query() si besoin
+     * 
+     * @param array $query La query string traitée par le `RequestParser`
+     * @param bool $raw Permet de bypass la mise en forme (utilisé pour les représentations comme RDF)
+     * @return array Les données formatées ou non
+     */
+    function get_data(array $query, bool $raw = false): array {
 
         // On prépare puis effectue la requête pour récupérer les infos :
 
@@ -957,6 +1035,4 @@ class RequestHandler {
     }
 
 }
-
-
 ?>

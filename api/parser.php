@@ -3,6 +3,9 @@
 require_once("tools.php");
 require_once("vendor/autoload.php");
 
+/**
+ * Classe permettant de traiter tout ce qui a trait à une requête : URI, query string, en-tête Accept et Accept-Language...
+ */
 class RequestParser {
 
     function __construct() {}
@@ -11,7 +14,6 @@ class RequestParser {
      * Cette méthode traite une uri et renvoie un tableau associatif des données qu'elle contient.
      * 
      * @param string $uri L'URI à traiter
-     * 
      * @return array Un tableau associatif donnée => valeur dans l'URI 
      */
     public function parse_uri(string $uri, string $server): array {
@@ -23,8 +25,7 @@ class RequestParser {
         // Permettant ainsi de ne pas nécessiter de connaissance a priori du nom du serveur (pratique pour migrer le site)
         // Ex : 
         // uri = 		"i3l.univ-grenoble-alpes.fr/~makki/lexique"
-        // PHP_SELF = 	"i3l.univ-grenoble-alpes.fr/~makki/index.php"
-        // On récupère `dirname` de PHP_SELF, soit "i3l.univ-grenoble-alpes.fr/~makki"
+        // server = 	"i3l.univ-grenoble-alpes.fr/~makki/"
         // En faisant la différence, on obtient : "/lexique"
 
 
@@ -60,7 +61,6 @@ class RequestParser {
      * Méthode permettant de récupérer les types MIME d'un champ `Accept`.
      * 
      * @param string $str La chaîne de caractères à traiter
-     * 
      * @return array Les types acceptés par le client dans l'ordre de préférence
      */
     public function parse_mime(string $str): array {
@@ -100,7 +100,6 @@ class RequestParser {
      * Méthode permettant de récupérer les langues d'un champ `Accept-Language` (alias de `parse_mime()` !).
      * 
      * @param string $str La chaîne de caractères à traiter
-     * 
      * @return array Les langues acceptés par le client dans l'ordre de préférence
      */
     public function parse_lang(string $str): array {
@@ -113,7 +112,6 @@ class RequestParser {
      * Honteusement volé sur https://www.php.net/manual/en/function.parse-str.php#76792 pour gagner du temps.
      * 
      * @param string $str La chaîne de caractères à traiter
-     * 
      * @return array Un tableau associatif liant un nom de variable à sa ou ses valeurs
      */
     public function parse_query(string $str): array {

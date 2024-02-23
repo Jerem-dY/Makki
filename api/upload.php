@@ -14,6 +14,11 @@ const NORMALIZE_CHARS = array(
 
 class FileUploader {
 
+    /**
+     * @param array $valid_ext Liste des extensions de fichier acceptées
+     * @param int $user_id ID de l'utilisateur
+     * @param int $max_size Taille maximale de l'ensemble des fichiers
+     */
     function __construct(array $valid_ext, int $user_id, int $max_size=500000) {
 
         $this->valid_ext = $valid_ext;
@@ -44,6 +49,12 @@ class FileUploader {
         }
     }
 
+    /**
+     * Prend une liste de fichiers, les valide puis les déplace temporairement dans le dossier /uploads/<id_user>
+     * 
+     * @param array $filelist La lsite des fichiers
+     * @return bool Si l'opérationa réussi ou non
+     */
     public function upload(array $filelist): bool {
 
         /**
@@ -99,11 +110,18 @@ class FileUploader {
         return true;
     }
 
+    /**
+     * Retourne les chemins des fichiers mis en ligne
+     * 
+     * @return array La liste des chemins
+     */
     public function get_filenames(): array {
         return $this->files;
     }
 
-
+    /**
+     * Supprime les fichiers stockés temporairement
+     */
     public function delete() {
         /**
          * Etape 5 : on supprime les fichiers temporaires du serveur.

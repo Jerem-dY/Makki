@@ -25,28 +25,26 @@ class TEISerializer extends Serializer {
                     </persName>";}, $item));
             }, $this->get_values_of($this->word_data, "creator")));
 
+        $sources =  array_unique(array_map(function($item){return $item['value'];}, array_merge(...$this->get_values_of($this->word_data, "source"))));
+
         $this->sources = array_merge(...array_map(
                 function($item) use ($title){
 
-                    $out = array();
-
-                    foreach($item as $el) {
-                        $out[$el['value']] = "<TEI>
+                    return [$item => "<TEI>
                         <teiHeader>
                             <fileDesc>
                                 <titleStmt>
-                                    <title>".$el['value']."</title>
+                                    <title>".$item."</title>
                                 </titleStmt>
                             </fileDesc>
                         </teiHeader>
                         <text>
                             <body>
                                 <div>
-                                    <head>$title</head>";
-                    }
-                    return $out;
+                                    <head>$title</head>"];
+
                 }, 
-                array_unique($this->get_values_of($this->word_data, "source"))));
+                $sources));
 
         $corpus_header = "<!-- <!DOCTYPE teiCorpus PUBLIC \"-// TEI P5 //EN\" \"http://www.tei-c.org/release/xml/tei/custom/schema/dtd/tei_all.dtd\"> -->
         <!DOCTYPE teiCorpus SYSTEM \"tei_all.dtd\">
@@ -66,6 +64,7 @@ class TEISerializer extends Serializer {
 
 
         $this->def_ids = array();
+        $this->w_ids = array();
         foreach(array_keys($this->word_data['data']) as $w) {
 
             $src_to_xml = $this->make_entry($w);
@@ -74,8 +73,6 @@ class TEISerializer extends Serializer {
                 $this->sources[$src] .= $src_to_xml[$src];
             }
         }
-
-        $xml = "";
 
         foreach(array_keys($this->sources) as $src) {
             $xml .= $this->sources[$src] . "</div></body></text></TEI>";
@@ -93,17 +90,17 @@ class TEISerializer extends Serializer {
 
         $w_id = $this->get_word_id($w);
 
-        $word = "<entry xml:id=\"$w_id\">";
-
-        $word .= "<form><orth>$w</orth></form>";
 
         $src_to_xml = array();
 
         foreach(array_keys($this->word_data['data'][$w]) as $def) {
             $id = $this->get_def_id($def);
 
+            if(array_key_exists($id, $this->def_ids)) {
+                continue;
+            }
 
-            $d = "<sense xml:id=\"$id\">". (isset($this->def_ids[$id]) ? "<xr type=\"cf\"><ptr target=\"#$id\"/></xr>" : "");
+            $d = "";
 
             $this->def_ids[$id] = true;
 
@@ -136,17 +133,17 @@ class TEISerializer extends Serializer {
             }
 
             foreach($this->word_data['data'][$w][$def]['syn'] as $syn) {
-                $id = $this->get_word_id($syn['value']);
+                $wid = $this->get_word_id($syn['value']);
 
-                if ($id != $w_id) {
-                    if ($id != false) {
-                        $d .= "<xr type=\"syn\"><ptr target=\"#$id\"/></xr>";
+                if ($wid != $w_id) {
+                    if ($wid != false) {
+                        $d .= "<xr type=\"syn\"><ptr target=\"#$wid\"/></xr>";
                     }
                     else {
                         $cut = explode("/", $syn['URI']);
-                        $id = end($cut);
+                        $wid = end($cut);
                         $url = implode('/', array_slice($cut, 0, -1)) . "/" . $syn['value'];
-                        $d .= "<xr type=\"syn\"><ptr target=\"#$id\" url=\"$url\"/></xr>";
+                        $d .= "<xr type=\"syn\"><ptr target=\"#$wid\" url=\"$url\"/></xr>";
                     }
                         
                     
@@ -155,15 +152,30 @@ class TEISerializer extends Serializer {
 
             $d .= "</sense>";
 
+            $first = true;
             foreach($this->word_data['data'][$w][$def]['source'] as $src) {
-                if (!isset($src_to_xml[$src['value']])) {
-                    $src_to_xml[$src['value']] = $word;
+
+                if (array_key_exists($w_id, $this->w_ids)) {
+                    $src_to_xml[$src['value']] = "<entry><form><orth>$w</orth></form><ptr target=\"#$w_id\"></ptr>";
+                }
+                else {
+                    $src_to_xml[$src['value']] = "<entry xml:id=\"$w_id\"><form><orth>$w</orth></form>";
+                    $this->w_ids[$w_id] = true;
                 }
 
-                $src_to_xml[$src['value']] .= $d;
+                if ($first && !array_key_exists($id, $this->def_ids)) {
+                    $head = "<sense xml:id=\"$id\">";
+                    $first = false;
+                    $this->def_ids[$id] = true;
+                }
+                else {
+                    $head = "<sense><xr type=\"cf\"><ptr target=\"#$id\"/></xr>";
+                }
+
+                $src_to_xml[$src['value']] .= $head . $d;
+                
             }
 
-            #$word .= $d;
         }
 
         foreach(array_keys($src_to_xml) as $src) {
@@ -173,7 +185,7 @@ class TEISerializer extends Serializer {
         return $src_to_xml;
     }
 
-    function get_values_of(array $ar, string $key): array {
+    function get_values_of(array $ar, string $key, bool $deep = true): array {
 
         $output = array();
 
@@ -182,7 +194,14 @@ class TEISerializer extends Serializer {
             foreach(array_keys($ar['data'][$w]) as $def) {
                 if (array_key_exists($key, $ar['data'][$w][$def])) {
                     if (!in_array($ar['data'][$w][$def][$key], $output)) {
-                        array_push($output, $ar['data'][$w][$def][$key]); 
+
+                        if ($deep) {
+                            array_push($output, $ar['data'][$w][$def][$key]); 
+                        }
+                        else {
+                            array_push($output, $ar['data'][$w][$def][$key][0]);
+                        }
+
                     }
                 }
             }
