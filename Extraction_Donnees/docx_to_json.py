@@ -152,7 +152,7 @@ class ExtractData:
     def parse_row(self, row, tags):
 
         # On itère sur les lignes qui ont un mot de présent dans la première colonne
-        if row.cells[0].text.strip() != "":
+        if row.cells[0].text.strip() != "" and row.cells[2].text.strip() != "":
 
             # On récupère le terme et les examples
             terme, examples = self.parse_term(row.cells[0].text)

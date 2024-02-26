@@ -276,8 +276,8 @@ class HTMLSerializer extends Serializer {
 
                 $t->innertext .= "<tr>
                                     <td>$name</td>
-                                    <td>$email</td>
                                     <td>$subject</td>
+                                    <td>$email</td>
                                     <td>$message</td>
                                     <td><button class=\"delete_contact trad boutons_fichiers\" data-file=\"$id\" data-url=\"".$protocol.$base_url."contact\" id=\"btn_suppr\">Delete</button></td>
                                 </tr>";
@@ -306,7 +306,7 @@ class HTMLSerializer extends Serializer {
         $pagination = $word_data['pagination'];
         $word_data  = $word_data['data'];
 
-        if ($pagination["nb_results"] > 1) {
+        if ($pagination["nb_results"] > 0) {
             $r = $template->find("div.resultats", 0);
             $r->innertext .= $pagination["nb_results"];
 

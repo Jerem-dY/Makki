@@ -338,7 +338,6 @@ class RequestHandler {
                 $stt->bindParam(":email", $mail);
                 $stt->bindParam(":subject", $sub);
                 $stt->bindParam(":message", $msg);
-                $stt->bindParam(":name", $name);
 
                 $stt->execute();
 
@@ -923,7 +922,9 @@ class RequestHandler {
             }
 
             $body .= implode(" UNION ", array_map(function($val) use ($corres, $criterion) {
-                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." ?$criterion . FILTER (REGEX(?$criterion, \"".urldecode($val)."\")) .}";
+                $regex = "REGEX(str(?$criterion), \"" . urldecode($val) . "\", \"i\")";
+               
+                return ($val == "none") ? "{ OPTIONAL {?in ".$corres[$criterion]." ?out} FILTER ( !BOUND(?out) ) }" : "{?in ".$corres[$criterion]." ?$criterion . FILTER ($regex) .}";
             }, $query[$criterion]));
 
         }
